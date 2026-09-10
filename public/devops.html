@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DevOps Hub · חיים קריספין</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/devops.css" />
+</head>
+<body>
+<div class="do-wrap">
+
+  <header class="top-header">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="24,4 41,14 41,34 24,44 7,34 7,14" stroke="currentColor" stroke-width="2.5"/>
+        <circle cx="24" cy="24" r="5" fill="currentColor"/>
+        <path d="M24 9v6M24 33v6M9 24h6M33 24h6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <h1>DevOps Hub</h1>
+        <div class="tagline">n8n מקומי · תשתית · הרצת פרויקטים · צנרת CI</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <button class="btn ghost" id="do-refresh">רענן</button>
+      <button class="btn ghost" onclick="location.href='/'">חזרה ללוח הבקרה</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <a href="/">לוח בקרה</a>
+    <a href="/daily.html">מענה יומי</a>
+    <a href="/jarvis.html">עוזר JARVIS</a>
+    <a href="/housing.html">דיור</a>
+    <a href="/jobs.html">דרושים</a>
+    <a href="/finance.html">פיננסים</a>
+    <a href="/health.html">בריאות</a>
+    <a href="/fitness.html">כושר</a>
+    <a href="/devops.html" class="active">DevOps</a>
+    <a href="/aia.html">עיצוב AIA</a>
+    <a href="/library.html">אוצר לחג</a>
+    <a href="/device.html">המכשיר</a>
+    <a href="/graphology.html">גרפולוגיה</a>
+    <a href="/astro-full.html">אסטרולוגיה</a>
+    <a href="/editor.html">עורך מסגרות</a>
+    <a href="/mail.html">מיילים</a>
+    <a href="/setup.html">הגדרות</a>
+  </nav>
+
+  <div class="do-tabbar">
+    <button class="do-tab active" data-panel="ops">מבט־על</button>
+    <button class="do-tab" data-panel="n8n">n8n</button>
+    <button class="do-tab" data-panel="projects">פרויקטים</button>
+    <button class="do-tab" data-panel="infra">תשתית</button>
+  </div>
+
+  <main id="do-main">
+    <div class="do-loading" id="do-loading">טוען מצב מערכת…</div>
+
+    <!-- מבט־על -->
+    <section class="do-panel" id="panel-ops" hidden>
+      <div class="do-grid" id="ops-grid"></div>
+      <div class="do-card" id="ops-pipeline-card" hidden>
+        <h3>הרצת CI אחרונה</h3>
+        <div id="ops-pipeline"></div>
+      </div>
+    </section>
+
+    <!-- n8n -->
+    <section class="do-panel" id="panel-n8n" hidden>
+      <div class="do-card" id="n8n-connect" hidden>
+        <h3>חיבור ל-n8n המקומי</h3>
+        <p class="do-muted">
+          כדי לשלוט ב-workflows מכאן צריך מפתח API של n8n (חד־פעמי).
+          פותחים את n8n → <b>Settings → n8n API → Create an API key</b>, מעתיקים ומדביקים כאן.
+        </p>
+        <div class="do-field-row">
+          <input type="text" id="n8n-base" dir="ltr" placeholder="http://localhost:5680" />
+          <input type="password" id="n8n-key" dir="ltr" placeholder="מפתח API של n8n — נשמר במחשב בלבד" />
+          <button class="btn primary" id="n8n-save">שמור ובדוק</button>
+        </div>
+        <div class="do-inline-result" id="n8n-save-result"></div>
+        <div class="do-embed-wrap">
+          <div class="do-muted" style="margin-bottom:6px">בינתיים — עורך n8n מוטמע:</div>
+          <iframe id="n8n-embed" title="n8n" src="about:blank"></iframe>
+        </div>
+      </div>
+
+      <div id="n8n-panel" hidden>
+        <div class="do-card">
+          <div class="do-card-head">
+            <h3>Workflows</h3>
+            <div class="do-card-actions">
+              <span class="do-pill" id="n8n-count">—</span>
+              <a class="do-linkbtn" id="n8n-open" target="_blank" rel="noopener">פתח עורך ↗</a>
+            </div>
+          </div>
+          <div class="do-wf-list" id="n8n-wf-list"></div>
+        </div>
+        <div class="do-card">
+          <h3>הרצות אחרונות</h3>
+          <div class="do-exec-list" id="n8n-exec-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- פרויקטים -->
+    <section class="do-panel" id="panel-projects" hidden>
+      <div class="do-card-list" id="projects-list"></div>
+    </section>
+
+    <!-- תשתית -->
+    <section class="do-panel" id="panel-infra" hidden>
+      <div class="do-grid" id="infra-services"></div>
+      <div class="do-card">
+        <div class="do-card-head">
+          <h3>קונטיינרים</h3>
+          <span class="do-pill" id="infra-ctr-count">—</span>
+        </div>
+        <div class="do-table-wrap"><table class="do-table" id="infra-ctr-table"></table></div>
+      </div>
+      <div class="do-card" id="infra-sys-card"></div>
+    </section>
+  </main>
+
+</div>
+
+<!-- מודל לוגים / פרטים -->
+<div class="do-modal" id="do-modal" hidden>
+  <div class="do-modal-box">
+    <div class="do-modal-head">
+      <span id="do-modal-title">לוג</span>
+      <button id="do-modal-close">✕</button>
+    </div>
+    <pre class="do-modal-body" id="do-modal-body"></pre>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="/js/devops.js"></script>
+<script src="/js/dockbar.js" defer></script>
+</body>
+</html>

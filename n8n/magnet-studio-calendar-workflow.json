@@ -1,0 +1,69 @@
+{
+  "name": "סטודיו מגנטים - מצב יומן",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "minutes", "minutesInterval": 20 }]
+        }
+      },
+      "id": "trigger-schedule",
+      "name": "כל 20 דקות",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [-40, 200]
+    },
+    {
+      "parameters": {
+        "resource": "event",
+        "operation": "getAll",
+        "calendar": { "mode": "list", "value": "REPLACE_WITH_YOUR_CALENDAR_EMAIL" },
+        "returnAll": false,
+        "limit": 30,
+        "timeMin": "={{ $now.toISO() }}",
+        "timeMax": "={{ $now.plus({days: 14}).toISO() }}",
+        "options": { "singleEvents": true, "orderBy": "startTime" }
+      },
+      "id": "gcal-get-events",
+      "name": "שליפת אירועים קרובים",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [200, 200],
+      "credentials": {
+        "googleCalendarOAuth2Api": { "id": "REPLACE_WITH_YOUR_GOOGLE_CREDENTIAL", "name": "Google Calendar account" }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst events = items.map(i => ({\n  summary: i.json.summary || '(ללא כותרת)',\n  start: i.json.start?.dateTime || i.json.start?.date,\n  end: i.json.end?.dateTime || i.json.end?.date\n}));\nreturn [{\n  json: {\n    account: 'REPLACE_WITH_YOUR_EMAIL',\n    events,\n    source: 'n8n'\n  }\n}];"
+      },
+      "id": "build-summary",
+      "name": "בניית סיכום",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:4420/api/calendar/status",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "id": "http-push",
+      "name": "עדכון לוח הבקרה",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 200]
+    }
+  ],
+  "connections": {
+    "כל 20 דקות": { "main": [[{ "node": "שליפת אירועים קרובים", "type": "main", "index": 0 }]] },
+    "שליפת אירועים קרובים": { "main": [[{ "node": "בניית סיכום", "type": "main", "index": 0 }]] },
+    "בניית סיכום": { "main": [[{ "node": "עדכון לוח הבקרה", "type": "main", "index": 0 }]] }
+  },
+  "pinData": {},
+  "meta": { "instanceId": "magnet-studio-local" }
+}

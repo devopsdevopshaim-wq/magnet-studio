@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>עיצוב AIA · חיים קריספין</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/aia.css" />
+</head>
+<body>
+<div class="aia-wrap">
+
+  <header class="top-header">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="24,4 41,14 41,34 24,44 7,34 7,14" stroke="currentColor" stroke-width="2.5"/>
+        <path d="M16 30l6-14 6 14M18 25h8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <h1>עיצוב AIA</h1>
+        <div class="tagline">בריף → חבילת הפקה: קונספט · פרומפטים לתמונה · סטוריבורד · פרומפטים לוידאו</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <button class="btn ghost" onclick="location.href='/'">חזרה ללוח הבקרה</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <a href="/">לוח בקרה</a>
+    <a href="/daily.html">מענה יומי</a>
+    <a href="/jarvis.html">עוזר JARVIS</a>
+    <a href="/housing.html">דיור</a>
+    <a href="/jobs.html">דרושים</a>
+    <a href="/finance.html">פיננסים</a>
+    <a href="/health.html">בריאות</a>
+    <a href="/fitness.html">כושר</a>
+    <a href="/devops.html">DevOps</a>
+    <a href="/aia.html" class="active">עיצוב AIA</a>
+    <a href="/library.html">אוצר לחג</a>
+    <a href="/device.html">המכשיר</a>
+    <a href="/graphology.html">גרפולוגיה</a>
+    <a href="/astro-full.html">אסטרולוגיה</a>
+    <a href="/editor.html">עורך מסגרות</a>
+    <a href="/mail.html">מיילים</a>
+    <a href="/setup.html">הגדרות</a>
+  </nav>
+
+  <div class="aia-note">
+    <b>שני פלטים:</b> (1) חבילת הפקה — קונספט, פרומפטים לתמונה, סטוריבורד ופרומפטים מוכנים ל-Seedance / Runway / Kling.
+    (2) <b>מונטאז' וידאו אמיתי (MP4)</b> — נבנה מתמונות הייחוס שלך עם תנועת מצלמה, מעברים, כותרות ומוזיקה.
+    לוידאו שנוצר מ-AI (לא מהתמונות שלך) עדיין צריך שירות חיצוני.
+  </div>
+
+  <main class="aia-main">
+    <!-- בריף -->
+    <section class="aia-brief">
+      <h2>הבריף</h2>
+
+      <label class="aia-lbl">סוג תוצר</label>
+      <div class="aia-typegrid" id="aia-type">
+        <button class="aia-type active" data-v="animation">🎞️ אנימציה קצרה</button>
+        <button class="aia-type" data-v="video">🎬 סרטון קולנועי</button>
+        <button class="aia-type" data-v="images">🖼️ סדרת תמונות</button>
+        <button class="aia-type" data-v="logo_reveal">✨ לוגו רוול</button>
+      </div>
+
+      <label class="aia-lbl">שם / נושא</label>
+      <input type="text" id="aia-title" placeholder="לדוגמה: קמפיין השקה למגנטים מותאמים אישית" />
+
+      <div class="aia-row">
+        <div>
+          <label class="aia-lbl">סגנון</label>
+          <input type="text" id="aia-style" placeholder="קולנועי · מינימליסטי · ניאון · אקוורל…" />
+        </div>
+        <div>
+          <label class="aia-lbl">מצב רוח</label>
+          <input type="text" id="aia-mood" placeholder="חמים · אנרגטי · חלומי · דרמטי…" />
+        </div>
+      </div>
+
+      <div class="aia-row">
+        <div>
+          <label class="aia-lbl">יחס מסך</label>
+          <select id="aia-aspect">
+            <option value="16:9">16:9 — רחב</option>
+            <option value="9:16">9:16 — סטורי / רילס</option>
+            <option value="1:1">1:1 — ריבוע</option>
+            <option value="4:5">4:5 — פוסט</option>
+            <option value="21:9">21:9 — סינמסקופ</option>
+          </select>
+        </div>
+        <div>
+          <label class="aia-lbl">אורך (שניות)</label>
+          <input type="number" id="aia-duration" value="8" min="2" max="60" />
+        </div>
+      </div>
+
+      <label class="aia-lbl">תיאור / מסמך / מלל</label>
+      <textarea id="aia-text" rows="6" placeholder="הדבק כאן טקסט, תסריט, נקודות מפתח, או תיאור של מה שאתה רוצה. אפשר להדביק מסמך שלם."></textarea>
+
+      <label class="aia-lbl">תמונות ייחוס <span id="aia-maxnote" class="aia-lbl-note"></span></label>
+      <div class="aia-drop" id="aia-drop">
+        <input type="file" id="aia-files" accept="image/*" multiple hidden />
+        גרור תמונות לכאן, או לחץ לבחירה — כמה שתרצה
+      </div>
+      <div class="aia-refcount" id="aia-refcount"></div>
+      <div class="aia-refs" id="aia-refs"></div>
+
+      <button class="btn primary aia-go" id="aia-generate">✦ צור חבילת הפקה</button>
+      <div class="aia-status" id="aia-status"></div>
+    </section>
+
+    <!-- תוצאה -->
+    <section class="aia-result" id="aia-result" hidden>
+      <div class="aia-result-head">
+        <h2 id="aia-result-title">חבילת הפקה</h2>
+        <div>
+          <a class="btn ghost" id="aia-dl" download>⤓ Markdown</a>
+        </div>
+      </div>
+      <div id="aia-blocks"></div>
+      <div class="aia-studio" id="aia-studio" hidden></div>
+    </section>
+  </main>
+
+  <!-- גלריה -->
+  <section class="aia-gallery">
+    <h2>הפקות קודמות</h2>
+    <div class="aia-gallery-grid" id="aia-gallery"></div>
+  </section>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="/js/aia.js"></script>
+<script src="/js/dockbar.js" defer></script>
+</body>
+</html>

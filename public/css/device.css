@@ -1,0 +1,102 @@
+/* "המכשיר הזה" — לוח מכשירים על המכשיר שמסתכלים ממנו. tokens מ-style.css. */
+
+.dv-wrap { max-width: 900px; margin: 0 auto; padding: 30px 22px 90px; }
+
+.dv-hero { padding: 20px 0 4px; }
+.dv-hero .kicker {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sage);
+}
+.dv-hero h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.7rem, 1.1rem + 2.6vw, 2.4rem);
+  margin: 6px 0 8px;
+  color: var(--cream);
+}
+.dv-hero .lead { color: var(--cream-dim); font-size: 0.98rem; line-height: 1.7; max-width: 56ch; margin: 0; }
+
+.dv-liveflag {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--font-mono); font-size: 0.72rem; color: var(--sage);
+  margin-top: 12px;
+}
+.dv-liveflag .pip { width: 7px; height: 7px; border-radius: 50%; background: var(--sage); }
+@media (prefers-reduced-motion: no-preference) { .dv-liveflag .pip { animation: pulse-glow 1.8s ease-in-out infinite; } }
+
+.dv-note {
+  border-inline-start: 2px solid var(--line);
+  padding: 8px 14px;
+  margin: 18px 0 24px;
+  font-size: 0.86rem;
+  color: var(--cream-dim);
+  line-height: 1.65;
+}
+.dv-note b { color: var(--brass-soft); font-weight: 600; }
+
+.dv-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+.dv-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.dv-card .dv-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 8px;
+}
+.dv-card.span2 { grid-column: span 2; }
+@media (max-width: 560px) { .dv-card.span2 { grid-column: span 1; } }
+
+.dv-big {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--brass-soft);
+}
+.dv-big .unit { font-size: 0.9rem; color: var(--cream-dim); margin-inline-start: 3px; }
+.dv-sub { font-size: 0.82rem; color: var(--cream-dim); margin-top: 4px; line-height: 1.5; }
+
+.dv-rows { display: flex; flex-direction: column; gap: 7px; margin-top: 2px; }
+.dv-row { display: flex; justify-content: space-between; gap: 12px; font-size: 0.88rem; align-items: baseline; }
+.dv-row .k { color: var(--cream-dim); }
+.dv-row .v { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--cream); text-align: end; }
+
+/* battery ring */
+.dv-battery { display: flex; align-items: center; gap: 16px; }
+.dv-ring { flex: none; width: 84px; height: 84px; transform: rotate(-90deg); }
+.dv-ring .track { stroke: var(--line); fill: none; stroke-width: 8; }
+.dv-ring .fill { stroke: var(--sage); fill: none; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 0.6s ease, stroke 0.4s ease; }
+.dv-ring.low .fill { stroke: var(--danger); }
+.dv-ring.mid .fill { stroke: var(--accent-warm); }
+.dv-ring.charging .fill { stroke: var(--ember); }
+
+/* usage bar */
+.dv-bar { height: 8px; border-radius: 999px; background: var(--surface-2); overflow: hidden; margin-top: 10px; }
+.dv-bar > i { display: block; height: 100%; background: var(--brass); border-radius: 999px; transition: width 0.6s ease; }
+
+.dv-unavailable { color: var(--cream-dim); font-size: 0.84rem; font-style: italic; }
+
+.dv-foot {
+  margin-top: 42px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  font-size: 0.8rem;
+  color: var(--cream-dim);
+  line-height: 1.7;
+}

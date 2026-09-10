@@ -1,0 +1,48 @@
+# ═══ סודות ומפתחות — לעולם לא ב-git ═══
+.env
+.env.*
+!.env.example
+data/devops-config.json
+data/devops-runtime.json
+data/aia-video-config.json
+data/tts-config.json
+data/jarvis-config.json
+data/auth-config.json
+
+# ═══ נתונים אישיים / ספציפיים-למחשב (מוגדרים מחדש בכל התקנה) ═══
+data/astro-config.json
+data/astro-natal-cache.json
+data/user-config.json
+data/profile.json
+
+# ═══ מצב ריצה ומטמונים — נבנים מחדש ═══
+data/daily-brief-*.json
+data/learning-*.json
+data/lotto-*.json
+data/sync-status.json
+data/email-status.json
+data/calendar-status.json
+data/n8n-inbox.json
+data/*.bak
+data/*.pre-import-*.bak
+data/tehillim-cache/
+data/devops-logs/
+data/aia/
+
+# ═══ תלויות ובנייה ═══
+node_modules/
+public/downloads/
+dist-web/
+scratchpad/
+public/_yttest.html
+public/_pocket-preview.html
+
+# ═══ קבצי מקור זמניים (הועתקו כבר ל-public/library/) ═══
+/PDF_GO_*.pdf
+/*.mht
+
+# ═══ מערכת ═══
+.DS_Store
+Thumbs.db
+npm-debug.log*
+*.log

@@ -1,0 +1,49 @@
+/* אוצר לחג */
+.lib-wrap { max-width: 1000px; margin: 0 auto; padding: 0 20px 60px; }
+
+.lib-note {
+  background: color-mix(in srgb, var(--brass) 7%, var(--surface));
+  border: 1px solid var(--line); border-radius: 10px;
+  padding: 12px 16px; margin: 18px 0 22px;
+  font-size: 0.84rem; color: var(--cream-dim); line-height: 1.7;
+}
+.lib-note b { color: var(--brass-soft); }
+
+.lib-loading { text-align: center; color: var(--cream-dim); padding: 50px; font-family: var(--font-mono); }
+
+.lib-board { margin-bottom: 26px; }
+.lib-board h2 { font-family: var(--font-display); font-size: 1.1rem; color: var(--cream); margin: 0 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+.lib-board-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.lib-hol { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; text-align: center; }
+.lib-hol.near { border-color: var(--ember); }
+.lib-hol-name { font-family: var(--font-display); color: var(--cream); font-size: 0.95rem; }
+.lib-hol-date { font-size: 0.72rem; color: var(--cream-dim); margin: 3px 0; }
+.lib-hol-count { font-size: 0.78rem; color: var(--brass-soft); }
+.lib-hol.near .lib-hol-count { color: var(--ember); font-weight: 600; }
+
+.lib-cat { margin-bottom: 26px; }
+.lib-cat h2 {
+  font-family: var(--font-display); font-size: 1.1rem; color: var(--cream);
+  margin: 0 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--line);
+}
+.lib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+
+.lib-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+  padding: 16px 18px; display: flex; flex-direction: column; gap: 8px;
+}
+.lib-card.active { border-color: var(--ember); box-shadow: 0 0 0 1px color-mix(in srgb, var(--ember) 40%, transparent); }
+.lib-card.missing { opacity: 0.6; }
+.lib-card-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.lib-card-title { font-family: var(--font-display); font-size: 1.02rem; color: var(--cream); }
+.lib-occ { font-size: 0.72rem; color: var(--cream-dim); border: 1px solid var(--line); border-radius: 8px; padding: 1px 8px; flex: none; }
+.lib-card-desc { font-size: 0.84rem; color: var(--cream-dim); line-height: 1.6; }
+.lib-badge {
+  align-self: flex-start; font-size: 0.72rem; color: var(--ember);
+  border: 1px solid var(--ember); border-radius: 10px; padding: 1px 10px;
+}
+.lib-badge.miss { color: var(--danger); border-color: var(--danger); }
+.lib-card-actions { display: flex; gap: 8px; margin-top: 4px; }
+.lib-card-actions .btn { font-size: 0.8rem; padding: 5px 14px; }
+
+@media (max-width: 560px) { .lib-wrap { padding: 0 12px 60px; } .lib-grid { grid-template-columns: 1fr; } }

@@ -1,0 +1,66 @@
+/* דמות JARVIS — פנים מצוירות (SVG). פלטת "חדר עבודה בערב". */
+
+.jarvis-face {
+  --mouth: 0.12;          /* 0..1 פתיחת פה (מונע מ-js בזמן דיבור) */
+  --tilt: 0deg;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.jarvis-face .fx-head {
+  transform-box: fill-box;
+  transform-origin: 50% 60%;
+  transform: rotate(var(--tilt));
+  transition: transform 0.5s ease;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .jarvis-face .fx-breathe { animation: jf-breathe 4.4s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+}
+@keyframes jf-breathe {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-1.4px) scale(1.006); }
+}
+
+/* עיניים ומצמוץ */
+.jarvis-face .lid { transform-box: fill-box; transform-origin: 50% 0%; transform: scaleY(0.06); transition: transform 0.12s ease; }
+.jarvis-face.blink .lid { transform: scaleY(1); }
+.jarvis-face.state-listening .lid { transform: scaleY(0.02); }        /* עיניים פקוחות יותר */
+.jarvis-face .pupil { transition: transform 0.6s cubic-bezier(.5,0,.3,1); }
+.jarvis-face.state-thinking .pupil { transform: translate(2px, -3.5px); }
+.jarvis-face.state-listening .pupil { transform: translate(0, -1px); }
+
+/* פה */
+.jarvis-face .mouth-open {
+  transform-box: fill-box;
+  transform-origin: 50% 45%;
+  transform: scaleY(calc(0.15 + var(--mouth) * 1.6)) scaleX(calc(0.9 + var(--mouth) * 0.25));
+  transition: transform 0.06s linear;
+}
+.jarvis-face .lips { transition: d 0.3s ease; }
+
+/* טבעת הקשבה */
+.jarvis-face .aura { opacity: 0; transition: opacity 0.4s ease; }
+.jarvis-face.state-listening .aura { opacity: 0.55; }
+@media (prefers-reduced-motion: no-preference) {
+  .jarvis-face.state-listening .aura { animation: jf-aura 2.6s ease-in-out infinite; }
+  .jarvis-face.state-thinking .fx-head { animation: jf-think 3s ease-in-out infinite; }
+}
+@keyframes jf-aura { 0%,100% { opacity: 0.25; r: 62px; } 50% { opacity: 0.6; r: 68px; } }
+@keyframes jf-think { 0%,100% { transform: rotate(-1.5deg); } 50% { transform: rotate(2deg); } }
+
+/* גדלים */
+.jarvis-face-wrap { position: relative; display: inline-flex; }
+.jarvis-face-wrap.lg { width: 190px; height: 190px; }
+.jarvis-face-wrap.sm { width: 54px; height: 54px; }
+
+.jarvis-face-caption {
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  color: var(--cream-dim);
+  letter-spacing: 0.06em;
+  margin-top: 6px;
+}
+.jarvis-face-wrap.lg + .jarvis-face-caption .state { color: var(--ember); }

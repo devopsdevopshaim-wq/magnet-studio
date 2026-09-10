@@ -1,0 +1,85 @@
+/* כושר יומי — במערכת "חדר עבודה בערב". tokens מ-style.css. --sage = אקצנט הבריאות/תנועה. */
+
+.ft-wrap { max-width: 900px; margin: 0 auto; padding: 30px 22px 90px; }
+
+.ft-hero { padding: 18px 0 4px; }
+.ft-hero .kicker { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sage); }
+.ft-hero h1 { font-family: var(--font-display); font-weight: 500; font-size: clamp(1.7rem, 1.1rem + 2.6vw, 2.4rem); margin: 6px 0 8px; color: var(--cream); }
+.ft-hero .lead { color: var(--cream-dim); font-size: 0.98rem; line-height: 1.7; max-width: 58ch; margin: 0; }
+
+.ft-section { margin-top: 40px; }
+.ft-head { display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid var(--line); padding-bottom: 7px; margin-bottom: 14px; }
+.ft-head h2 { font-family: var(--font-display); font-weight: 500; font-size: 1.4rem; margin: 0; color: var(--cream); }
+.ft-head .sub { margin-inline-start: auto; font-size: 0.78rem; color: var(--cream-dim); font-family: var(--font-mono); }
+
+.ft-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-card); padding: 20px; }
+
+/* ── אימון היום ── */
+.ft-today { border-inline-start: 3px solid var(--sage); }
+.ft-today .ft-focus { font-family: var(--font-display); font-size: 1.25rem; color: var(--cream); margin: 0 0 2px; }
+.ft-today .ft-focus-sub { font-size: 0.88rem; color: var(--cream-dim); margin-bottom: 14px; }
+.ft-routine-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.ft-routine-item {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--bg); border: 1px solid var(--line); border-radius: 2px; padding: 9px 12px;
+}
+.ft-routine-item .n { font-family: var(--font-mono); font-size: 0.78rem; color: var(--sage); flex: none; width: 1.4em; }
+.ft-routine-item .nm { color: var(--cream); font-size: 0.94rem; flex: 1; }
+.ft-routine-item .ds { font-family: var(--font-mono); font-size: 0.76rem; color: var(--cream-dim); flex: none; }
+.ft-routine-item a { color: inherit; text-decoration: none; }
+.ft-routine-item a:hover .nm { color: var(--brass-soft); }
+
+.ft-done-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.ft-streak {
+  font-family: var(--font-mono); font-size: 0.84rem; color: var(--cream-dim);
+}
+.ft-streak b { color: var(--sage); font-size: 1.1rem; }
+.btn.ft-done.is-done { background: var(--sage); color: var(--bg); border-color: var(--sage); }
+
+/* ── תוכנית שבועית ── */
+.ft-week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+@media (max-width: 620px) { .ft-week { grid-template-columns: repeat(3, 1fr); } }
+.ft-day {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 2px;
+  padding: 10px 8px; text-align: center;
+}
+.ft-day.today { border-color: var(--sage); background: color-mix(in srgb, var(--sage) 10%, var(--surface)); }
+.ft-day.done::after { content: "✓"; display: block; color: var(--sage); font-size: 0.8rem; margin-top: 2px; }
+.ft-day .dn { font-family: var(--font-display); font-size: 0.86rem; color: var(--cream); }
+.ft-day .df { font-size: 0.68rem; color: var(--cream-dim); line-height: 1.4; margin-top: 3px; }
+
+/* ── ספריית תרגילים ── */
+.ft-lib { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.ft-ex {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-card);
+  overflow: hidden; display: flex; flex-direction: column;
+}
+.ft-ex-img {
+  aspect-ratio: 4 / 3; width: 100%; object-fit: cover; display: block;
+  background: var(--surface-2); border-bottom: 1px solid var(--line);
+}
+.ft-ex-fallback {
+  aspect-ratio: 4 / 3; display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(circle at 50% 40%, var(--surface-2), var(--bg));
+  border-bottom: 1px solid var(--line); padding: 10px;
+}
+.ft-ex-fallback svg { width: 100%; height: 100%; }
+.ft-ex-fallback > svg[role="img"] { max-height: 150px; }
+.ft-ex-body { padding: 15px 16px 16px; display: flex; flex-direction: column; gap: 6px; }
+.ft-ex h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.1rem; color: var(--cream); margin: 0; }
+.ft-ex .ft-meta { display: flex; flex-wrap: wrap; gap: 5px; }
+.ft-tag {
+  font-family: var(--font-mono); font-size: 0.68rem; color: var(--cream-dim);
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 2px 9px;
+}
+.ft-ex .ft-dose { font-family: var(--font-mono); font-size: 0.8rem; color: var(--sage); }
+.ft-ex details { margin-top: 4px; }
+.ft-ex summary { cursor: pointer; font-size: 0.86rem; color: var(--brass-soft); list-style-position: inside; }
+.ft-ex details[open] summary { margin-bottom: 8px; }
+.ft-ex ol, .ft-ex ul { margin: 4px 0 10px; padding-inline-start: 1.2em; }
+.ft-ex li { font-size: 0.88rem; line-height: 1.6; color: var(--cream); margin: 4px 0; }
+.ft-ex .ft-sub-h { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--cream-dim); margin: 8px 0 2px; }
+.ft-ex .ft-mistakes li { color: var(--cream-dim); }
+
+.ft-foot { margin-top: 44px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 0.8rem; color: var(--cream-dim); line-height: 1.7; }
+.ft-foot a { color: var(--brass-soft); }

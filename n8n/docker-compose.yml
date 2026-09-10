@@ -1,0 +1,20 @@
+name: magnet-studio-n8n
+
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: magnet-studio-n8n
+    restart: unless-stopped
+    ports:
+      - "5680:5678"
+    environment:
+      - N8N_USER_MANAGEMENT_DISABLED=true
+      - N8N_SECURE_COOKIE=false
+      - TZ=Asia/Jerusalem
+      - GENERIC_TIMEZONE=Asia/Jerusalem
+    volumes:
+      - magnet_studio_n8n_data:/home/node/.n8n
+
+volumes:
+  magnet_studio_n8n_data:
+    name: magnet_studio_n8n_data

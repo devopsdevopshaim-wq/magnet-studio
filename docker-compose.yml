@@ -1,0 +1,72 @@
+# הפנקס היומי — כל המערכת במחשב חדש בפקודה אחת:
+#     docker compose up -d
+# ואז פותחים http://localhost:4420/daily.html
+#
+# מפתחות/סודות: צרו קובץ .env ליד הקובץ הזה (ראו .env.example). לעולם לא בתוך הקובץ הזה.
+
+name: magnet-studio
+
+services:
+  app:
+    build: .
+    image: magnet-studio:latest
+    container_name: magnet-studio
+    restart: unless-stopped
+    ports:
+      - "${PORT:-4420}:4420"
+    environment:
+      PORT: 4420
+      DISABLE_DOCKER_ORCHESTRATION: "1"
+      HOUSING_DB_URL: postgres://dira:dira_local@housing-db:5432/dira
+      # יעד JARVIS המקומי (שירות n8n למטה). אפשר להשאיר ריק ולהשתמש ב-n8n Cloud / Ollama.
+      JARVIS_LOCAL_BASE: http://n8n:5678
+      # כל שאר המפתחות מגיעים מ-.env (MATON_API_KEY, AZURE_SPEECH_KEY, OPENAI_API_KEY, ...)
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      # שמירת מצב (הגדרות, מטמון יומי, גיבויים) מחוץ לקונטיינר
+      - ms_data:/app/data
+      # אופציונלי: תיקיית העיצובים של המארח — בטלו את ההערה והתאימו את הנתיב
+      # - "${MAGNET_ROOT_HOST:-/nonexistent}:/magnets:ro"
+    depends_on:
+      housing-db:
+        condition: service_healthy
+
+  housing-db:
+    image: postgres:16-alpine
+    container_name: magnet-studio-housing-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: dira
+      POSTGRES_PASSWORD: dira_local
+      POSTGRES_DB: dira
+    volumes:
+      - housing_db:/var/lib/postgresql/data
+      - ./db/01-schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./db/02-seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dira -d dira"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # n8n מקומי ל-JARVIS. לא חובה — הפעילו עם:  docker compose --profile n8n up -d
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: magnet-studio-n8n
+    restart: unless-stopped
+    profiles: ["n8n"]
+    ports:
+      - "5680:5678"
+    environment:
+      N8N_SECURE_COOKIE: "false"
+      N8N_RUNNERS_ENABLED: "true"
+      GENERIC_TIMEZONE: Asia/Jerusalem
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+volumes:
+  ms_data:
+  housing_db:
+  n8n_data:

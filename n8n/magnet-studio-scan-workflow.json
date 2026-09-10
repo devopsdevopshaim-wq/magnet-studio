@@ -1,0 +1,91 @@
+{
+  "name": "סטודיו מגנטים - סריקת תיקיות",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "minutes", "minutesInterval": 30 }]
+        }
+      },
+      "id": "trigger-schedule",
+      "name": "כל 30 דקות",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [-40, 260]
+    },
+    {
+      "parameters": {},
+      "id": "trigger-manual",
+      "name": "הפעלה ידנית",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [-40, 80]
+    },
+    {
+      "parameters": {
+        "url": "http://host.docker.internal:4420/api/n8n/scan",
+        "options": {}
+      },
+      "id": "http-scan",
+      "name": "סריקת תיקיית העיצובים",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 170]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "msg-1",
+              "name": "message",
+              "type": "string",
+              "value": "=נסרקו {{$json.eventCount}} אירועים ({{$json.totalPhotos}} תמונות, {{$json.frameCount}} מסגרות זמינות)"
+            },
+            {
+              "id": "msg-2",
+              "name": "eventCount",
+              "type": "number",
+              "value": "={{$json.eventCount}}"
+            },
+            {
+              "id": "msg-3",
+              "name": "totalPhotos",
+              "type": "number",
+              "value": "={{$json.totalPhotos}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-summary",
+      "name": "בניית סיכום",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [460, 170]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:4420/api/n8n/notify",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "id": "http-notify",
+      "name": "עדכון לוח הבקרה",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [700, 170]
+    }
+  ],
+  "connections": {
+    "כל 30 דקות": { "main": [[{ "node": "סריקת תיקיית העיצובים", "type": "main", "index": 0 }]] },
+    "הפעלה ידנית": { "main": [[{ "node": "סריקת תיקיית העיצובים", "type": "main", "index": 0 }]] },
+    "סריקת תיקיית העיצובים": { "main": [[{ "node": "בניית סיכום", "type": "main", "index": 0 }]] },
+    "בניית סיכום": { "main": [[{ "node": "עדכון לוח הבקרה", "type": "main", "index": 0 }]] }
+  },
+  "pinData": {},
+  "meta": { "instanceId": "magnet-studio-local" }
+}

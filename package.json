@@ -1,0 +1,25 @@
+{
+  "name": "magnet-studio",
+  "version": "1.0.0",
+  "description": "מערכת ההפעלה המתקדמת של חיים קריספין - לוח בקרה אישי מקומי: תוכנות, מגנטים, מיילים, יומן ולוח שנה עברי",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "icons": "node scripts/gen-icons.js",
+    "docker": "docker compose up -d --build"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@hebcal/core": "^6.9.2",
+    "astronomy-engine": "^2.1.19",
+    "dotenv": "^17.4.2",
+    "express": "^4.19.2",
+    "ffmpeg-static": "^5.3.0",
+    "pg": "^8.23.0",
+    "qrcode": "^1.5.4"
+  }
+}

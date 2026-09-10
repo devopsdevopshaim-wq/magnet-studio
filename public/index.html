@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>חיים קריספין · מערכת הפעלה מתקדמת</title>
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+<div class="shell has-ai-panel">
+
+  <header class="top-header">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="24,4 41,14 41,34 24,44 7,34 7,14" stroke="currentColor" stroke-width="2.5"/>
+        <polygon points="24,16 32,20.5 32,29.5 24,34 16,29.5 16,20.5" fill="currentColor" opacity="0.85"/>
+      </svg>
+      <div>
+        <h1>חיים קריספין</h1>
+        <div class="tagline">מערכת הפעלה מתקדמת · לוח בקרה מקומי</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <div><span class="dot"></span>ניטור חי על התיקייה</div>
+      <div id="clock"></div>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <a href="/" class="active">לוח בקרה</a>
+    <a href="/daily.html">מענה יומי</a>
+    <a href="/jarvis.html">עוזר JARVIS</a>
+    <a href="/housing.html">דיור</a>
+    <a href="/jobs.html">דרושים</a>
+    <a href="/finance.html">פיננסים</a>
+    <a href="/health.html">בריאות</a>
+    <a href="/fitness.html">כושר</a>
+    <a href="/devops.html">DevOps</a>
+    <a href="/aia.html">עיצוב AIA</a>
+    <a href="/library.html">אוצר לחג</a>
+    <a href="/device.html">המכשיר</a>
+    <a href="/graphology.html">גרפולוגיה</a>
+    <a href="/astro-full.html">אסטרולוגיה</a>
+    <a href="/editor.html">עורך מסגרות</a>
+    <a href="/mail.html">מיילים</a>
+    <a href="/setup.html">הגדרות</a>
+  </nav>
+
+  <div class="setup-banner pending hidden" id="setup-nudge">
+    המערכת עדיין לא הוגדרה במלואה למחשב הזה - <a href="/setup.html" style="color:inherit; text-decoration:underline;">להשלמת ההגדרה</a>
+  </div>
+
+  <aside class="side-panel" id="side-panel">
+    <div class="side-card">
+      <h4>לוח שנה עברי</h4>
+      <div class="hebrew-date" id="hebrew-date">—</div>
+      <div class="side-meta" id="greg-date"></div>
+      <div class="side-meta parasha-line" id="parasha-line"></div>
+      <p class="parasha-content" id="parasha-content"></p>
+      <div class="shabbat-mini" id="shabbat-mini" hidden></div>
+      <div class="holiday-list" id="holiday-list"></div>
+    </div>
+
+    <div class="side-card" id="lotto-card">
+      <h4>לוטו · ההגרלה הקרובה</h4>
+      <div class="side-meta" id="lotto-next">טוען…</div>
+      <div class="lotto-primary" id="lotto-primary"></div>
+      <div class="lotto-systems" id="lotto-systems"></div>
+      <a href="/daily.html#lotto" class="side-meta" style="color:var(--brass-soft)">כל הניחושים והמספרים החמים →</a>
+    </div>
+
+    <div class="side-card" id="tehillim-card">
+      <h4>תהילים ליום</h4>
+      <div class="side-meta" id="tehillim-line">טוען…</div>
+      <a href="/library/tehillim.html" class="btn ghost" style="display:block;text-align:center;width:100%;margin-top:8px;padding:7px 12px;font-size:0.78rem;text-decoration:none;box-sizing:border-box;">פתיחת הפרקים</a>
+    </div>
+
+    <div class="side-card" id="market-card">
+      <h4>שוק ההון</h4>
+      <div class="side-meta" id="market-mood">טוען…</div>
+      <div class="market-mini" id="market-mini"></div>
+      <a href="/finance.html" class="side-meta" style="color:var(--brass-soft)">מצפן פיננסי מלא →</a>
+    </div>
+
+    <div class="side-card">
+      <h4>אירועים קרובים</h4>
+      <div class="side-meta" id="calendar-updated">אין עדיין נתוני יומן</div>
+      <div class="event-list" id="calendar-events"></div>
+    </div>
+
+    <div class="side-card">
+      <h4>מצב המחשב</h4>
+      <div class="gauge">
+        <div class="gauge-label"><span>זיכרון (RAM)</span><span id="mem-text">—</span></div>
+        <div class="gauge-bar"><div class="gauge-fill" id="mem-fill"></div></div>
+      </div>
+      <div class="gauge">
+        <div class="gauge-label"><span>דיסק (C:)</span><span id="disk-text">—</span></div>
+        <div class="gauge-bar"><div class="gauge-fill" id="disk-fill"></div></div>
+      </div>
+      <div class="gauge">
+        <div class="gauge-label"><span>מעבד</span><span id="cpu-text">—</span></div>
+        <div class="gauge-bar"><div class="gauge-fill" id="cpu-fill"></div></div>
+      </div>
+      <div class="side-meta" id="uptime-text"></div>
+    </div>
+
+    <div class="side-card">
+      <h4>מיילים</h4>
+      <div class="email-count" id="email-count">—</div>
+      <div class="side-meta" id="email-updated"></div>
+      <div class="email-breakdown" id="email-breakdown"></div>
+      <div class="email-list" id="email-list"></div>
+      <a href="/mail.html" class="btn primary" style="display:block; text-align:center; width:100%; margin-top:12px; padding:8px 14px; font-size:0.78rem; text-decoration:none; box-sizing:border-box;">כניסה לתיבת הדואר</a>
+      <button class="btn ghost" id="btn-refresh-outlook" style="width:100%; margin-top:8px; padding:8px 14px; font-size:0.78rem;">רענון מ-Outlook</button>
+    </div>
+
+    <div class="side-card">
+      <h4>Maton · חשבונות מחוברים</h4>
+      <div class="side-meta" id="maton-status">בודק…</div>
+      <div id="maton-setup" class="hidden" style="margin-top:10px; font-size:0.72rem; color:var(--cream-dim); line-height:1.6;">
+        לא הוגדר מפתח API. יש להגדיר משתנה סביבה מקומי בשם <code class="mono">MATON_API_KEY</code> ולהפעיל מחדש את השרת - לא להדביק את המפתח כאן או בצ'אט.
+      </div>
+      <div id="maton-connect-row" class="hidden" style="display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;"></div>
+      <div class="alert-list" id="maton-summary"></div>
+    </div>
+
+    <div class="side-card">
+      <h4>התראות אבטחה</h4>
+      <div class="side-meta" id="security-status">בודק…</div>
+      <div class="alert-list" id="security-list"></div>
+    </div>
+
+    <div class="side-card">
+      <h4>המלצות לשיפור המערכת</h4>
+      <div class="alert-list" id="recommendations-list"></div>
+    </div>
+
+    <div class="side-card">
+      <h4>מדפסות מותקנות</h4>
+      <div class="side-meta" id="printers-list-dash">בודק…</div>
+    </div>
+  </aside>
+
+  <section class="block" id="apps-block">
+    <div class="block-heading">
+      <h2><span class="num">01</span> הפעלה מהירה</h2>
+      <span class="sub">לחיצה על מגנט פותחת את התוכנה במחשב · תוכנות חדשות מתגלות אוטומטית</span>
+    </div>
+    <div class="magnet-row" id="apps-row">
+      <!-- app tiles injected by dashboard.js -->
+    </div>
+  </section>
+
+  <section class="block" id="events-block">
+    <div class="block-heading">
+      <h2><span class="num">02</span> אירועים</h2>
+      <span class="sub" id="events-sub">טוען אירועים…</span>
+    </div>
+    <div class="event-grid" id="events-grid"></div>
+  </section>
+
+  <section class="block" id="system-apps-block">
+    <div class="block-heading">
+      <h2><span class="num">03</span> כל התוכנות במחשב</h2>
+      <span class="sub" id="system-apps-sub">סורק תפריט התחלה…</span>
+    </div>
+    <div class="chip-row" id="category-chips"></div>
+    <div class="system-app-grid" id="system-app-grid"></div>
+  </section>
+
+  <section class="block" id="n8n-block">
+    <div class="block-heading">
+      <h2><span class="num">04</span> אוטומציה · n8n</h2>
+      <span class="sub">סריקת תיקיות אוטומטית וחיבור לוורקפלואים</span>
+    </div>
+    <div class="panel">
+      <div class="panel-row">
+        <div class="stat-strip" id="scan-stats">
+          <div class="stat"><span class="num">—</span><span class="label">אירועים</span></div>
+          <div class="stat"><span class="num">—</span><span class="label">תמונות סה"כ</span></div>
+          <div class="stat"><span class="num">—</span><span class="label">מסגרות זמינות</span></div>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn ghost" id="btn-endpoint">כתובת ל-n8n</button>
+          <button class="btn primary" id="btn-scan">סרוק עכשיו</button>
+        </div>
+      </div>
+      <div class="panel-row" id="n8n-local-row" style="border-top:1px solid var(--line); padding-top:14px; margin-top:14px;">
+        <div class="side-meta" id="n8n-local-status">בודק את n8n המקומי…</div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn ghost" id="btn-n8n-open">פתח n8n מקומי</button>
+          <button class="btn ghost" id="btn-n8n-up">הפעל n8n</button>
+          <button class="btn ghost" id="btn-openclaw-open">OpenClaw</button>
+        </div>
+      </div>
+      <div class="inbox" id="inbox">
+        <div class="empty-state" style="border:none; padding:14px 0;">אין עדיין הודעות מ-n8n</div>
+      </div>
+    </div>
+  </section>
+
+  <aside class="ai-panel" id="ai-panel">
+    <div class="side-card">
+      <h4>שאל את כל ה-AI בבת אחת</h4>
+      <div class="ai-source-chips" id="ai-source-chips">בודק מקורות זמינים…</div>
+      <div class="ai-ask-box">
+        <textarea id="ai-question" placeholder="כתוב שאלה, ולחיצה אחת תשלח אותה לכל מנוע ה-AI הזמין…"></textarea>
+        <button class="btn primary" id="ai-ask-btn">שאל את כולם</button>
+      </div>
+      <div class="ai-status-line" id="ai-status-line"></div>
+      <div id="ai-synth-wrap"></div>
+      <div class="ai-answer-list" id="ai-answer-list"></div>
+    </div>
+  </aside>
+
+  <footer class="credit">חיים קריספין · מערכת הפעלה מתקדמת · פועל מקומית על המחשב שלך</footer>
+</div>
+
+<div class="modal-backdrop hidden" id="event-modal">
+  <div class="modal">
+    <button class="close-x" id="modal-close">×</button>
+    <h2 id="modal-title"></h2>
+    <div class="sub" id="modal-sub" style="color:var(--cream-dim); font-size:0.85rem;"></div>
+    <div class="file-grid" id="modal-files"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop hidden" id="maton-modal">
+  <div class="modal">
+    <button class="close-x" id="maton-modal-close">×</button>
+    <h2 id="maton-modal-title"></h2>
+    <div class="sub" style="color:var(--cream-dim); font-size:0.8rem; margin-bottom:12px;">לחיצה על פריט פותחת אותו ישירות בשירות המקורי</div>
+    <div id="maton-modal-list" class="maton-item-list"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="/js/dashboard.js"></script>
+<script src="/js/aiPanel.js"></script>
+<script src="/js/dockbar.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>הפנקס היומי — כניסה</title>
+<link rel="manifest" href="/manifest.webmanifest" />
+<meta name="theme-color" content="#1b1611" />
+<style>
+  :root {
+    --bg: #1b1611; --surface: #241d16; --surface-2: #2c231a;
+    --brass: #c69a63; --brass-soft: #ddc39a; --ember: #db8b42;
+    --cream: #f1e7d4; --cream-dim: #a3927a; --danger: #c9564c;
+    --line: rgba(198,154,99,0.22);
+    --font-display: "Frank Ruhl Libre", "Times New Roman", serif;
+    --font-body: "Assistant", "Segoe UI", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; background: var(--bg); color: var(--cream);
+    font-family: var(--font-body); display: grid; place-items: center; padding: 1.5rem;
+  }
+  .card {
+    width: 100%; max-width: 22rem; background: var(--surface);
+    border: 1px solid var(--line); border-radius: 16px; padding: 2rem 1.6rem;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .mark { display: block; width: 46px; height: 46px; margin: 0 auto 1rem; color: var(--brass); }
+  h1 { font-family: var(--font-display); font-weight: 700; font-size: 1.35rem; text-align: center; margin: 0 0 0.3rem; }
+  p.sub { text-align: center; color: var(--cream-dim); font-size: 0.88rem; margin: 0 0 1.5rem; }
+  label { display: block; font-size: 0.82rem; color: var(--cream-dim); margin-bottom: 0.4rem; }
+  input {
+    width: 100%; background: var(--surface-2); color: var(--cream);
+    border: 1px solid var(--line); border-radius: 9px; padding: 0.7rem 0.8rem;
+    font-family: var(--font-body); font-size: 1rem;
+  }
+  input:focus-visible { outline: 2px solid var(--ember); outline-offset: 1px; }
+  button {
+    width: 100%; margin-top: 1rem; padding: 0.75rem; border: 0; border-radius: 9px;
+    background: var(--brass); color: #201810; font-family: var(--font-body);
+    font-weight: 700; font-size: 0.98rem; cursor: pointer;
+  }
+  button:hover { background: var(--brass-soft); }
+  button:disabled { opacity: 0.6; cursor: wait; }
+  .msg { margin-top: 0.9rem; font-size: 0.85rem; text-align: center; min-height: 1.2em; color: var(--danger); }
+</style>
+</head>
+<body>
+  <form class="card" id="f">
+    <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="24,4 41,14 41,34 24,44 7,34 7,14" stroke="currentColor" stroke-width="2.5"/>
+      <path d="M17 30c3 3 11 3 14 0M17 30V19m14 11V19M24 15v4M20 22h8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+    </svg>
+    <h1>הַפִּנְקָס הַיּוֹמִי</h1>
+    <p class="sub">המערכת מוגנת. הזינו את סיסמת הגישה.</p>
+    <label for="pw">סיסמה</label>
+    <input type="password" id="pw" autocomplete="current-password" autofocus />
+    <button type="submit" id="btn">כניסה</button>
+    <div class="msg" id="msg"></div>
+  </form>
+  <script>
+    var f = document.getElementById("f"), msg = document.getElementById("msg"), btn = document.getElementById("btn");
+    var next = new URLSearchParams(location.search).get("next") || "/daily.html";
+    if (!/^\/[^\/]/.test(next)) next = "/daily.html";
+    f.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      btn.disabled = true; msg.textContent = "";
+      try {
+        var r = await fetch("/api/auth/login", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password: document.getElementById("pw").value })
+        });
+        var j = await r.json();
+        if (r.ok && j.ok) { location.href = next; return; }
+        msg.textContent = j.error || "סיסמה שגויה";
+      } catch (err) { msg.textContent = "שגיאת רשת — נסו שוב"; }
+      btn.disabled = false;
+    });
+  </script>
+</body>
+</html>

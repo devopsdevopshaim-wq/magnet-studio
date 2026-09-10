@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>מיילים · חיים קריספין</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/mail.css" />
+</head>
+<body>
+<div class="shell" style="max-width:1180px;">
+
+  <header class="top-header">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="24,4 41,14 41,34 24,44 7,34 7,14" stroke="currentColor" stroke-width="2.5"/>
+        <polygon points="24,16 32,20.5 32,29.5 24,34 16,29.5 16,20.5" fill="currentColor" opacity="0.85"/>
+      </svg>
+      <div>
+        <h1>מיילים</h1>
+        <div class="tagline">תיבת הדואר שלך</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <button class="btn ghost" onclick="location.href='/'">חזרה ללוח הבקרה</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <a href="/">לוח בקרה</a>
+    <a href="/daily.html">מענה יומי</a>
+    <a href="/jarvis.html">עוזר JARVIS</a>
+    <a href="/housing.html">דיור</a>
+    <a href="/jobs.html">דרושים</a>
+    <a href="/finance.html">פיננסים</a>
+    <a href="/health.html">בריאות</a>
+    <a href="/fitness.html">כושר</a>
+    <a href="/devops.html">DevOps</a>
+    <a href="/aia.html">עיצוב AIA</a>
+    <a href="/library.html">אוצר לחג</a>
+    <a href="/device.html">המכשיר</a>
+    <a href="/graphology.html">גרפולוגיה</a>
+    <a href="/astro-full.html">אסטרולוגיה</a>
+    <a href="/editor.html">עורך מסגרות</a>
+    <a href="/mail.html" class="active">מיילים</a>
+    <a href="/setup.html">הגדרות</a>
+  </nav>
+
+  <div class="mail-toolbar">
+    <span class="sub" id="mail-summary">טוען מיילים…</span>
+    <button class="btn ghost" id="btn-refresh-mail">רענון</button>
+  </div>
+
+  <div class="mail-grid">
+    <div class="mail-list" id="mail-list"></div>
+    <div class="mail-reader" id="mail-reader">
+      <div class="empty-state">בחרו מייל מהרשימה כדי לקרוא אותו</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="/js/mail.js"></script>
+<script src="/js/dockbar.js" defer></script>
+</body>
+</html>

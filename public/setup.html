@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>הגדרות · חיים קריספין</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/setup.css" />
+</head>
+<body>
+<div class="shell" style="max-width:900px;">
+
+  <header class="top-header">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="24,4 41,14 41,34 24,44 7,34 7,14" stroke="currentColor" stroke-width="2.5"/>
+        <polygon points="24,16 32,20.5 32,29.5 24,34 16,29.5 16,20.5" fill="currentColor" opacity="0.85"/>
+      </svg>
+      <div>
+        <h1>הגדרת המערכת</h1>
+        <div class="tagline">מתאימים את המערכת למחשב הזה</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <button class="btn ghost" onclick="location.href='/'">חזרה ללוח הבקרה</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <a href="/">לוח בקרה</a>
+    <a href="/daily.html">מענה יומי</a>
+    <a href="/jarvis.html">עוזר JARVIS</a>
+    <a href="/housing.html">דיור</a>
+    <a href="/jobs.html">דרושים</a>
+    <a href="/finance.html">פיננסים</a>
+    <a href="/health.html">בריאות</a>
+    <a href="/fitness.html">כושר</a>
+    <a href="/devops.html">DevOps</a>
+    <a href="/aia.html">עיצוב AIA</a>
+    <a href="/library.html">אוצר לחג</a>
+    <a href="/device.html">המכשיר</a>
+    <a href="/graphology.html">גרפולוגיה</a>
+    <a href="/astro-full.html">אסטרולוגיה</a>
+    <a href="/editor.html">עורך מסגרות</a>
+    <a href="/mail.html">מיילים</a>
+    <a href="/setup.html" class="active">הגדרות</a>
+  </nav>
+
+  <div class="setup-banner" id="status-banner"></div>
+
+  <section class="block">
+    <div class="block-heading">
+      <h2><span class="num">00</span> פרופיל — התאמה למחשב הזה</h2>
+      <span class="sub">השם מופיע בכותרות ובלשוניות. כשמעבירים את המערכת למחשב אחר — מגדירים כאן מחדש.</span>
+    </div>
+    <div class="panel">
+      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
+        <label class="field" style="flex:1; min-width:200px; margin:0;">שם תצוגה
+          <input type="text" id="profile-name" placeholder="חיים קריספין" />
+        </label>
+        <label class="field" style="flex:1; min-width:160px; margin:0;">עיר (לאסטרולוגיה, אופציונלי)
+          <input type="text" id="profile-city" placeholder="תל אביב" />
+        </label>
+        <button class="btn primary" id="btn-save-profile">שמור פרופיל</button>
+      </div>
+      <div class="validate-result" id="profile-result"></div>
+      <p style="font-size:0.78rem; color:var(--cream-dim); margin-top:10px;">
+        המחשב הזה: <code class="mono" id="profile-host">…</code>
+      </p>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-heading">
+      <h2><span class="num">01</span> תיקיית עיצובים</h2>
+      <span class="sub">אופציונלי - רק אם יש לך תיקיית עיצובי מגנטים/תמונות לניהול</span>
+    </div>
+    <div class="panel">
+      <label class="field" style="margin-bottom:14px;">נתיב מלא לתיקייה
+        <input type="text" id="magnet-root-input" placeholder="לדוגמה: C:\Users\שם\Desktop\עיצובים" />
+      </label>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <button class="btn ghost" id="btn-validate-folder">בדיקת תיקייה</button>
+        <label style="display:flex; align-items:center; gap:6px; font-size:0.82rem; color:var(--cream-dim); cursor:pointer;">
+          <input type="checkbox" id="skip-folder-checkbox" /> אין לי תיקיית עיצובים - דלג על השלב הזה
+        </label>
+      </div>
+      <div class="validate-result" id="validate-result"></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-heading">
+      <h2><span class="num">02</span> תוכנות להפעלה מהירה</h2>
+      <span class="sub" id="apps-scan-sub">סורק תוכנות מותקנות במחשב הזה…</span>
+    </div>
+    <div class="setup-app-grid" id="setup-app-grid"></div>
+  </section>
+
+  <section class="block">
+    <button class="btn primary" id="btn-save-setup" style="padding:14px 40px; font-size:0.95rem;">שמירת הגדרות</button>
+    <div class="save-result" id="save-result"></div>
+  </section>
+
+  <section class="block">
+    <div class="block-heading">
+      <h2><span class="num">03</span> גיבוי והעברה בין מחשבים</h2>
+      <span class="sub">המערכת מקומית — אין ענן. מייצאים קובץ הגדרות במחשב אחד, מייבאים בשני. לא כולל סודות/מפתחות.</span>
+    </div>
+    <div class="panel">
+      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+        <button class="btn ghost" id="btn-export">⤓ ייצוא גיבוי (JSON)</button>
+        <label class="btn ghost" style="cursor:pointer;">
+          ⤒ ייבוא גיבוי…
+          <input type="file" id="import-file" accept="application/json,.json" style="display:none;" />
+        </label>
+      </div>
+      <div class="validate-result" id="backup-result"></div>
+      <p style="font-size:0.8rem; color:var(--cream-dim); line-height:1.7; margin-top:12px;">
+        מה נכנס: תאריך/שעת/עיר לידה (אסטרולוגיה), הגדרות JARVIS, נתיב תיקיית העיצובים, ורשימת מוזיקת הרקע.
+        <b>לא</b> נכנס: מפתחות API (הם רק ב-<code class="mono">setx</code> שלך), מטמוני היום (נבנים מחדש), ומסד הדיור.
+      </p>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-heading">
+      <h2><span class="num">04</span> קובץ התקנה למחשב אחר</h2>
+      <span class="sub">קובץ אמיתי להורדה — להעברה למחשב שני (Windows / Mac / Linux).</span>
+    </div>
+    <div class="panel">
+      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+        <a class="btn primary" id="btn-download-install" href="/downloads/magnet-studio-install.zip" download>⤓ הורדת חבילת ההתקנה (ZIP)</a>
+        <span id="install-zip-meta" style="font-size:0.8rem; color:var(--cream-dim);"></span>
+      </div>
+      <ol style="font-size:0.84rem; color:var(--cream-dim); line-height:1.9; padding-inline-start:20px; margin:12px 0 0;">
+        <li>מעבירים את ה-ZIP למחשב השני (מייל לעצמך / דיסק / Drive) ומחלצים.</li>
+        <li>עם Docker: <code class="mono">docker compose up -d</code></li>
+        <li>בלי Docker (Node.js 20+): לחיצה ימנית על <code class="mono">install\install.ps1</code> ← Run with PowerShell, ואז <code class="mono">npm start</code></li>
+        <li>פותחים <code class="mono">http://localhost:4420/daily.html</code> ומגדירים ב"הגדרות" את התיקיות של אותו מחשב.</li>
+      </ol>
+      <p style="font-size:0.8rem; color:var(--cream-dim); margin-top:12px;">
+        המערכת רצה על המחשב בלבד. ההורדה כאן היא של הקוד + פרטי הלידה + הגדרות JARVIS. בלי מפתחות API ובלי מטמונים.
+      </p>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-heading">
+      <h2><span class="num">05</span> התקנה בטלפון (אפליקציה)</h2>
+      <span class="sub">סורקים מהטלפון — נפתח בדפדפן, ואז "הוסף למסך הבית". הטלפון חייב להיות על אותה רשת Wi-Fi כמו המחשב.</span>
+    </div>
+    <div class="panel">
+      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:14px;">
+        <button class="btn primary" id="btn-open-access">1 · פְּתַח גישה לטלפון (חומת אש)</button>
+        <span id="access-state" style="font-size:0.82rem; color:var(--cream-dim);"></span>
+      </div>
+
+      <div style="display:flex; gap:18px; flex-wrap:wrap; align-items:center;">
+        <img id="phone-qr" alt="קוד QR להתקנה בטלפון" width="180" height="180"
+             style="border-radius:12px; background:var(--cream); padding:6px;" src="/api/network/qr" />
+        <div style="min-width:220px; flex:1;">
+          <div style="font-size:0.85rem; color:var(--cream-dim);">2 · בטלפון, פְּתַח את הכתובת בכרום / ספארי (או סרוק QR):</div>
+          <code class="mono" id="phone-url" style="font-size:0.95rem; word-break:break-all; display:block; margin:6px 0;">…</code>
+          <button class="btn ghost" id="btn-copy-url">העתק כתובת</button>
+          <div id="phone-hint" style="font-size:0.8rem; color:var(--cream-dim); margin-top:10px;"></div>
+        </div>
+      </div>
+      <ol style="font-size:0.84rem; color:var(--cream-dim); line-height:1.9; padding-inline-start:20px; margin:14px 0 0;">
+        <li><b>הזיפ לא מיועד לטלפון</b> — בטלפון לא מתקינים קובץ. פותחים את הכתובת למעלה בדפדפן.</li>
+        <li>אחרי שהעמוד נטען בטלפון: תפריט הדפדפן ← <b>"הוסף למסך הבית"</b> / "Add to Home Screen". נוצר אייקון אפליקציה.</li>
+        <li>תן לאפליקציה 10 שניות עם חיבור בפעם הראשונה — משם היא עצמאית וגם עובדת במצב טיסה.</li>
+        <li>אם לא נטען אחרי כפתור 1 — בדקו בראוטר שאין "בידוד לקוחות" / "AP Isolation", ושהטלפון על אותה רשת Wi-Fi.</li>
+      </ol>
+      <p style="font-size:0.8rem; color:var(--cream-dim); margin-top:12px;">
+        <b>עצמאי בכל מכשיר.</b> אחרי התקנה ראשונה, האפליקציה בטלפון עובדת גם כשהמחשב כבוי וגם מחוץ לרשת:
+        המענה היומי (תאריך עברי, פרשה, תהילים, ספירה לחג), הקריאה (הגדה / מגילה / תהילים),
+        מחשבון הכספים והדיבוב הקולי — הכל מחושב במכשיר עצמו. נתוני שוק, לוטו וסיכום ה-AI מוצגים
+        מהעדכון האחרון שנשמר. עיצוב וידאו AI ו-DevOps נשארים במחשב.
+      </p>
+    </div>
+  </section>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="/js/setup.js"></script>
+<script src="/js/dockbar.js" defer></script>
+</body>
+</html>

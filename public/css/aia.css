@@ -1,0 +1,175 @@
+/* עיצוב AIA — סטודיו חבילות הפקה */
+.aia-wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px 60px; }
+
+.aia-note {
+  background: color-mix(in srgb, var(--ember) 8%, var(--surface));
+  border: 1px solid var(--line); border-radius: 10px;
+  padding: 12px 16px; margin: 18px 0 20px;
+  font-size: 0.84rem; color: var(--cream-dim); line-height: 1.7;
+}
+.aia-note b { color: var(--brass-soft); }
+
+.aia-main { display: grid; grid-template-columns: minmax(320px, 420px) 1fr; gap: 20px; align-items: start; }
+@media (max-width: 900px) { .aia-main { grid-template-columns: 1fr; } }
+
+.aia-brief, .aia-result {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px;
+}
+.aia-brief h2, .aia-result h2, .aia-gallery h2 {
+  font-family: var(--font-display); font-size: 1.15rem; color: var(--cream); margin: 0 0 14px;
+}
+
+.aia-lbl { display: block; font-size: 0.78rem; color: var(--cream-dim); margin: 12px 0 5px; font-weight: 600; }
+.aia-brief input[type=text], .aia-brief input[type=number], .aia-brief select, .aia-brief textarea {
+  width: 100%; background: var(--bg-texture); border: 1px solid var(--line); border-radius: 8px;
+  padding: 9px 12px; color: var(--cream); font-family: var(--font-body); font-size: 0.88rem;
+}
+.aia-brief textarea { resize: vertical; line-height: 1.6; }
+.aia-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.aia-typegrid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.aia-type {
+  background: var(--bg-texture); border: 1px solid var(--line); border-radius: 8px;
+  padding: 9px 8px; color: var(--cream-dim); font-family: var(--font-body); font-size: 0.82rem; cursor: pointer;
+}
+.aia-type:hover { color: var(--cream); border-color: var(--brass); }
+.aia-type.active { color: var(--ember); border-color: var(--ember); background: color-mix(in srgb, var(--ember) 12%, var(--bg-texture)); }
+
+.aia-drop {
+  border: 1.5px dashed var(--line); border-radius: 10px; padding: 22px 14px;
+  text-align: center; color: var(--cream-dim); font-size: 0.84rem; cursor: pointer;
+}
+.aia-drop.over { border-color: var(--ember); color: var(--cream); background: color-mix(in srgb, var(--ember) 8%, transparent); }
+
+.aia-lbl-note { font-weight: 400; color: var(--cream-dim); font-size: 0.72rem; }
+.aia-refcount { font-size: 0.74rem; color: var(--brass-soft); margin: 6px 0 0; }
+.aia-refs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.aia-ref { width: 92px; }
+.aia-ref img { width: 92px; height: 70px; object-fit: cover; border-radius: 6px; border: 1px solid var(--line); display: block; }
+.aia-ref-ph { width: 92px; height: 70px; border-radius: 6px; border: 1px dashed var(--line); display: flex; align-items: center; justify-content: center; color: var(--cream-dim); }
+.aia-ref.busy { opacity: 0.55; }
+.aia-ref input { width: 92px; margin-top: 3px; font-size: 0.68rem; background: var(--bg-texture); border: 1px solid var(--line); border-radius: 5px; color: var(--cream-dim); padding: 2px 5px; }
+.aia-ref .x { position: relative; }
+.aia-ref .x button { position: absolute; top: 2px; inset-inline-end: 2px; background: rgba(0,0,0,0.6); border: none; color: #fff; border-radius: 50%; width: 16px; height: 16px; font-size: 0.7rem; cursor: pointer; line-height: 1; }
+
+/* אולפן הפקה — מונטאז' וידאו */
+.aia-studio[hidden] { display: none; }
+.aia-studio { margin-top: 18px; border: 1px solid var(--ember); border-radius: 12px; padding: 18px; background: color-mix(in srgb, var(--ember) 6%, var(--surface)); }
+.aia-studio h3 { font-family: var(--font-display); color: var(--cream); margin: 0 0 14px; font-size: 1.05rem; }
+.aia-mode-pick { display: flex; gap: 6px; margin-bottom: 14px; }
+.aia-mode-pick button {
+  flex: 1; background: var(--bg-texture); border: 1px solid var(--line); border-radius: 8px;
+  padding: 9px 10px; color: var(--cream-dim); font-family: var(--font-body); font-size: 0.84rem; cursor: pointer;
+}
+.aia-mode-pick button:hover:not(:disabled) { color: var(--cream); border-color: var(--brass); }
+.aia-mode-pick button.on { color: var(--ember); border-color: var(--ember); background: color-mix(in srgb, var(--ember) 12%, var(--bg-texture)); }
+.aia-mode-pick button:disabled { opacity: 0.4; cursor: not-allowed; }
+.aia-studio-grid select { background: var(--bg-texture); border: 1px solid var(--line); border-radius: 7px; padding: 7px 10px; color: var(--cream); font-family: var(--font-body); font-size: 0.85rem; }
+.aia-studio-grid label[hidden] { display: none; }
+.aia-studio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.aia-studio-grid label { display: flex; flex-direction: column; gap: 4px; font-size: 0.8rem; color: var(--cream-dim); }
+.aia-studio-grid label.aia-check { flex-direction: row; align-items: center; gap: 7px; }
+.aia-studio-grid input[type=text], .aia-studio-grid input[type=file] { background: var(--bg-texture); border: 1px solid var(--line); border-radius: 7px; padding: 7px 10px; color: var(--cream); font-family: var(--font-body); font-size: 0.85rem; }
+.aia-studio-grid input[type=range] { accent-color: var(--ember); }
+.aia-audio-name { font-size: 0.72rem; color: var(--sage); }
+.aia-est { font-size: 0.78rem; color: var(--cream-dim); margin-bottom: 10px; }
+.aia-render-status { margin-top: 12px; font-size: 0.84rem; color: var(--cream-dim); display: flex; flex-direction: column; gap: 6px; }
+.aia-render-status.bad { color: var(--danger); }
+.aia-bar { height: 8px; background: var(--bg-texture); border-radius: 5px; overflow: hidden; }
+.aia-bar > div { height: 100%; background: var(--ember); transition: width 0.4s; }
+.aia-video { width: 100%; max-height: 60vh; margin-top: 14px; border-radius: 10px; border: 1px solid var(--line); background: #000; display: block; }
+.aia-video-actions { margin-top: 10px; }
+@media (max-width: 620px) { .aia-studio-grid { grid-template-columns: 1fr; } }
+
+.aia-go { width: 100%; margin-top: 18px; padding: 12px; font-size: 0.95rem; }
+.aia-status { margin-top: 10px; font-size: 0.82rem; color: var(--cream-dim); min-height: 1em; text-align: center; }
+.aia-status.bad { color: var(--danger); }
+.aia-status .spin { display: inline-block; animation: aia-spin 1s linear infinite; }
+@keyframes aia-spin { to { transform: rotate(360deg); } }
+
+.aia-result-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.aia-result-head h2 { margin: 0; }
+
+.aia-block {
+  border: 1px solid var(--line); border-radius: 10px; margin-bottom: 10px; overflow: hidden;
+}
+.aia-block > summary {
+  list-style: none; cursor: pointer; padding: 12px 14px; background: var(--surface-2);
+  font-family: var(--font-display); color: var(--cream); font-size: 0.98rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.aia-block > summary::-webkit-details-marker { display: none; }
+.aia-block[open] > summary { border-bottom: 1px solid var(--line); }
+.aia-block-body { padding: 14px; }
+
+.aia-concept { color: var(--cream); line-height: 1.8; font-size: 0.92rem; }
+
+.aia-prompt {
+  background: var(--bg-texture); border: 1px solid var(--line); border-radius: 8px;
+  padding: 10px 12px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.78rem;
+  color: var(--cream-dim); line-height: 1.6; position: relative; white-space: pre-wrap; word-break: break-word;
+}
+.aia-prompt .copy {
+  position: absolute; top: 6px; inset-inline-end: 6px; background: var(--surface); border: 1px solid var(--line);
+  color: var(--brass-soft); border-radius: 5px; font-size: 0.68rem; padding: 2px 7px; cursor: pointer;
+}
+.aia-prompt .eng { color: var(--brass); font-family: var(--font-body); font-weight: 700; display: block; margin-bottom: 4px; }
+
+.aia-sb-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.aia-sb-table td, .aia-sb-table th { padding: 7px 9px; border-bottom: 1px solid var(--line-soft); text-align: start; vertical-align: top; }
+.aia-sb-table th { color: var(--cream-dim); font-size: 0.72rem; }
+.aia-sb-table td:first-child { color: var(--brass); font-family: var(--font-mono); }
+
+.aia-swatches { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0; }
+.aia-swatch { width: 34px; height: 34px; border-radius: 6px; border: 1px solid var(--line); }
+.aia-style-line { font-size: 0.84rem; color: var(--cream-dim); margin: 4px 0; }
+.aia-style-line b { color: var(--cream); }
+.aia-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+.aia-chip { font-size: 0.72rem; border: 1px solid var(--line); border-radius: 20px; padding: 2px 9px; color: var(--brass-soft); }
+
+/* גלריה */
+.aia-gallery { margin-top: 30px; }
+.aia-gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; }
+.aia-gcard {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; cursor: pointer;
+}
+.aia-gcard:hover { border-color: var(--brass); }
+.aia-gcard .t { color: var(--cream); font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; }
+.aia-gcard .m { font-size: 0.72rem; color: var(--cream-dim); font-family: var(--font-mono); }
+.aia-gcard .del { float: inline-end; background: none; border: none; color: var(--cream-dim); cursor: pointer; font-size: 0.8rem; }
+.aia-gcard .del:hover { color: var(--danger); }
+
+@media (max-width: 620px) { .aia-wrap { padding: 0 12px 60px; } .aia-row, .aia-typegrid { grid-template-columns: 1fr; } }
+
+/* ---------- מנועי וידאו AI (Seedance 2.5 · Deevid.AI) ---------- */
+.aia-aivideo { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
+.aia-aivideo h3 { margin: 0 0 8px; font-family: var(--font-display); color: var(--brass-soft); }
+.aia-note.bad { color: var(--danger); }
+.btn.tiny { padding: 5px 11px; font-size: 0.8rem; }
+.aiv-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-top: 10px; }
+.aiv-card { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: var(--surface); display: flex; flex-direction: column; gap: 9px; }
+.aiv-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.aiv-head b { font-size: 1.02rem; color: var(--cream); }
+.aiv-status { font-size: 0.72rem; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+.aiv-status.ok { background: rgba(139,160,124,0.18); color: var(--sage); }
+.aiv-status.off { background: rgba(219,139,66,0.16); color: var(--ember); }
+.aiv-vendor { font-size: 0.78rem; color: var(--cream-dim); }
+.aiv-vendor a { color: var(--brass-soft); }
+.aiv-controls { display: flex; gap: 12px; flex-wrap: wrap; font-size: 0.82rem; color: var(--cream-dim); }
+.aiv-controls select { margin: 0 4px; background: var(--surface-2); color: var(--cream); border: 1px solid var(--line); border-radius: 7px; padding: 4px 6px; }
+.aiv-keyrow { display: flex; gap: 6px; }
+.aiv-keyrow.done { opacity: 0.6; }
+.aiv-key { flex: 1; min-width: 0; background: var(--surface-2); color: var(--cream); border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; font-size: 0.8rem; }
+.aiv-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.aiv-actions .btn { flex: 1; min-width: 130px; }
+.aiv-msg { font-size: 0.82rem; color: var(--cream-dim); min-height: 1.2em; }
+.aiv-msg.ok { color: var(--sage); }
+.aiv-msg.bad { color: var(--danger); }
+.aiv-msg .aia-bar { margin-bottom: 5px; }
+
+/* Deevid — מצב handoff (בלי API) */
+.aiv-status.hand { background: rgba(198,154,99,0.16); color: var(--brass-soft); }
+.aiv-steps { margin: 4px 0 2px; padding-inline-start: 18px; font-size: 0.83rem; color: var(--cream-dim); line-height: 1.7; }
+.aiv-steps b { color: var(--cream); }
+.aiv-upload { display: flex; flex-direction: column; gap: 5px; font-size: 0.82rem; color: var(--cream-dim); margin-top: 4px; }
+.aiv-upload input[type=file] { font-size: 0.8rem; color: var(--cream); }

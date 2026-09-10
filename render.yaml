@@ -1,0 +1,34 @@
+# Render Blueprint — פריסת "הפנקס היומי" לכתובת ציבורית.
+# איך: render.com → New → Blueprint → מחברים את ה-repo מ-GitHub → Apply.
+# חובה למלא PNKS_AUTH_PASSWORD (סיסמת גישה) לפני שהאתר עולה.
+#
+# מה עובד בענן:  מענה יומי, לוח עברי, תהילים, קריאה, כספים, שוק ההון, לוטו, דיבוב קולי (Google TTS).
+# מה לא (דורש את המחשב):  סיכום ה-AI מ-Ollama המקומי, DevOps/Docker/n8n, קריאת תיקיות עיצוב, Outlook.
+
+services:
+  - type: web
+    name: hapinkas-hayomi
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free            # שנו ל-starter אם רוצים בלי "הירדמות" אחרי חוסר פעילות
+    region: frankfurt
+    healthCheckPath: /healthz
+    autoDeploy: true       # כל push ל-branch הראשי מפרסם מחדש
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4420
+      - key: DISABLE_DOCKER_ORCHESTRATION
+        value: "1"
+      - key: PNKS_AUTH_PASSWORD
+        sync: false        # מגדירים ידנית בלוח של Render — לא נשמר ב-git
+      - key: PNKS_AUTH_SECRET
+        generateValue: true
+      # אופציונלי — הקראה אנושית יותר:
+      - key: AZURE_SPEECH_KEY
+        sync: false
+      - key: AZURE_SPEECH_REGION
+        value: westeurope
+    # אין דיסק קבוע (התוכנית החינמית לא תומכת). מצב ריצה (מטמונים, פרופיל) מתאפס
+    # בכל פרסום ונבנה מחדש. נתוני המשתמש בכספים נשמרים ב-localStorage של הדפדפן.

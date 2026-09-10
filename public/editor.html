@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>עורך מסגרות · חיים קריספין</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/editor.css" />
+</head>
+<body>
+<div class="shell" style="max-width:1320px;">
+
+  <header class="top-header">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="24,4 41,14 41,34 24,44 7,34 7,14" stroke="currentColor" stroke-width="2.5"/>
+        <polygon points="24,16 32,20.5 32,29.5 24,34 16,29.5 16,20.5" fill="currentColor" opacity="0.85"/>
+      </svg>
+      <div>
+        <h1>עורך מסגרות</h1>
+        <div class="tagline">עצבו את המגנט לפני ייצוא</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <button class="btn ghost" onclick="location.href='/'">חזרה ללוח הבקרה</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <a href="/">לוח בקרה</a>
+    <a href="/daily.html">מענה יומי</a>
+    <a href="/jarvis.html">עוזר JARVIS</a>
+    <a href="/housing.html">דיור</a>
+    <a href="/jobs.html">דרושים</a>
+    <a href="/finance.html">פיננסים</a>
+    <a href="/health.html">בריאות</a>
+    <a href="/fitness.html">כושר</a>
+    <a href="/devops.html">DevOps</a>
+    <a href="/aia.html">עיצוב AIA</a>
+    <a href="/library.html">אוצר לחג</a>
+    <a href="/device.html">המכשיר</a>
+    <a href="/graphology.html">גרפולוגיה</a>
+    <a href="/astro-full.html">אסטרולוגיה</a>
+    <a href="/editor.html" class="active">עורך מסגרות</a>
+    <a href="/mail.html">מיילים</a>
+    <a href="/setup.html">הגדרות</a>
+  </nav>
+
+  <div class="editor-grid">
+
+    <aside class="editor-side">
+      <h3>פריסת קולאז'</h3>
+      <div class="layout-grid">
+        <div class="layout-thumb active" data-layout="single">
+          <div class="layout-preview single"><span></span></div>
+          <span class="layout-label">בודדת</span>
+        </div>
+        <div class="layout-thumb" data-layout="split-v">
+          <div class="layout-preview split-v"><span></span><span></span></div>
+          <span class="layout-label">2 אנכי</span>
+        </div>
+        <div class="layout-thumb" data-layout="split-h">
+          <div class="layout-preview split-h"><span></span><span></span></div>
+          <span class="layout-label">2 אופקי</span>
+        </div>
+        <div class="layout-thumb" data-layout="strip-3">
+          <div class="layout-preview strip-3"><span></span><span></span><span></span></div>
+          <span class="layout-label">3 רצועות</span>
+        </div>
+        <div class="layout-thumb" data-layout="grid-4">
+          <div class="layout-preview grid-4"><span></span><span></span><span></span><span></span></div>
+          <span class="layout-label">רשת 2×2</span>
+        </div>
+        <div class="layout-thumb" data-layout="hero-2">
+          <div class="layout-preview hero-2"><span class="hero"></span><span></span><span></span></div>
+          <span class="layout-label">מרכזית+2</span>
+        </div>
+      </div>
+
+      <div class="custom-grid-row">
+        <input type="number" id="grid-rows" min="1" max="12" value="2" title="שורות"/>
+        <span>×</span>
+        <input type="number" id="grid-cols" min="1" max="12" value="3" title="עמודות"/>
+        <button class="btn ghost small" id="btn-apply-custom-grid">גריד מותאם</button>
+      </div>
+      <button class="btn ghost small" id="btn-add-free-photo" style="width:100%; margin-bottom:24px;">+ תמונה חופשית (ללא הגבלה)</button>
+
+      <h3>מסגרות</h3>
+      <div class="thumb-grid" id="frames-grid"></div>
+
+      <h3>קליפ-ארט</h3>
+      <div class="thumb-grid" id="clipart-grid"></div>
+
+      <h3>צורות</h3>
+      <div class="file-actions" style="margin-bottom:24px;">
+        <button class="btn ghost small" id="shape-rect">מלבן</button>
+        <button class="btn ghost small" id="shape-circle">עיגול</button>
+        <button class="btn ghost small" id="shape-line">קו</button>
+      </div>
+    </aside>
+
+    <main class="editor-main">
+      <div class="editor-toolbar">
+        <button class="btn ghost" id="btn-pick-photo">בחירת תמונה מאירוע</button>
+        <button class="btn ghost" id="btn-add-text">הוספת טקסט</button>
+        <button class="btn ghost" id="btn-duplicate">שכפול</button>
+        <button class="btn ghost" id="btn-front">קדימה</button>
+        <button class="btn ghost" id="btn-back">אחורה</button>
+        <button class="btn ghost" id="btn-delete">מחיקת רכיב</button>
+        <button class="btn ghost" id="btn-undo" title="בטל (Ctrl+Z)">↶ בטל</button>
+        <button class="btn ghost" id="btn-redo" title="בצע שוב (Ctrl+Y)">↷ שוב</button>
+        <span class="spacer"></span>
+        <button class="btn ghost" id="btn-print">🖶 הדפסה</button>
+        <button class="btn primary" id="btn-save">שמירת עיצוב</button>
+      </div>
+      <div class="zoom-row">
+        <span>זום:</span>
+        <button class="btn ghost small" id="btn-zoom-out">－</button>
+        <span id="zoom-level">100%</span>
+        <button class="btn ghost small" id="btn-zoom-in">＋</button>
+        <button class="btn ghost small" id="btn-zoom-reset">איפוס</button>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="magnet-canvas" width="560" height="560"></canvas>
+      </div>
+      <p class="hint" id="canvas-hint">בחרו תמונה מאירוע, ואז גררו מסגרת מהצד כדי לשלב אותה מעל התמונה.</p>
+    </main>
+
+    <aside class="editor-side">
+      <h3>שקיפות רכיב</h3>
+      <div id="opacity-props" class="text-props hidden">
+        <label>שקיפות<input type="range" id="obj-opacity" min="0" max="100" value="100"/></label>
+      </div>
+      <div class="empty-state" id="opacity-props-empty">בחרו רכיב כלשהו</div>
+
+      <h3 style="margin-top:26px;">עריכת תמונה</h3>
+      <div id="photo-props" class="text-props hidden">
+        <label>בהירות<input type="range" id="photo-brightness" min="-100" max="100" value="0"/></label>
+        <label>ניגודיות<input type="range" id="photo-contrast" min="-100" max="100" value="0"/></label>
+        <label>רוויית צבע<input type="range" id="photo-saturation" min="-100" max="100" value="0"/></label>
+        <label>טשטוש<input type="range" id="photo-blur" min="0" max="100" value="0"/></label>
+        <label>גוון (Hue)<input type="range" id="photo-hue" min="-180" max="180" value="0"/></label>
+        <div class="file-actions">
+          <button class="btn ghost small" id="photo-grayscale">שחור-לבן</button>
+          <button class="btn ghost small" id="photo-sepia">גוון עתיק</button>
+          <button class="btn ghost small" id="photo-invert">היפוך צבע</button>
+          <button class="btn ghost small" id="photo-sharpen">חידוד</button>
+        </div>
+        <div class="file-actions">
+          <button class="btn ghost small" id="photo-rotate">סיבוב 90°</button>
+          <button class="btn ghost small" id="photo-flip-h">הפוך אופקית</button>
+          <button class="btn ghost small" id="photo-flip-v">הפוך אנכית</button>
+        </div>
+        <h4 class="mini-heading">אפקטים אמנותיים</h4>
+        <div class="file-actions">
+          <button class="btn ghost small" id="photo-cartoon">קומיקס</button>
+          <button class="btn ghost small" id="photo-sketch">סקיצה</button>
+          <button class="btn ghost small" id="photo-vintage">וינטג'</button>
+        </div>
+        <button class="btn ghost small" id="photo-reset" style="width:100%; margin-top:8px;">איפוס עריכה</button>
+      </div>
+      <div class="empty-state" id="photo-props-empty">בחרו תמונה כדי לערוך אותה</div>
+
+      <h3 style="margin-top:26px;">מאפייני טקסט</h3>
+      <div id="text-props" class="text-props hidden">
+        <label>צבע<input type="color" id="text-color" value="#f3ecdd"/></label>
+        <label>גודל<input type="range" id="text-size" min="12" max="120" value="36"/></label>
+        <label class="field">גופן
+          <select id="text-font">
+            <option value="Frank Ruhl Libre, serif">Frank Ruhl Libre</option>
+            <option value="Heebo, sans-serif">Heebo</option>
+            <option value="Georgia, serif">Georgia</option>
+            <option value="Arial, sans-serif">Arial</option>
+            <option value="'Comic Sans MS', cursive">Comic Sans</option>
+          </select>
+        </label>
+        <div class="file-actions">
+          <button class="btn ghost small" id="text-bold">B מודגש</button>
+          <button class="btn ghost small" id="text-italic">I נטוי</button>
+        </div>
+        <label>קו מתאר<input type="color" id="text-stroke" value="#000000"/></label>
+      </div>
+      <div class="empty-state" id="text-props-empty">בחרו רכיב טקסט כדי לערוך</div>
+
+      <h3 style="margin-top:26px;">הדפסה</h3>
+      <div class="empty-state" id="printers-info">בודק מדפסות זמינות…</div>
+      <label class="field">גודל הדפסה
+        <select id="print-size">
+          <option value="8">8×8 ס"מ (מגנט קטן)</option>
+          <option value="10" selected>10×10 ס"מ (מגנט רגיל)</option>
+          <option value="15">15×15 ס"מ (מגנט גדול)</option>
+          <option value="21">A4 מלא</option>
+        </select>
+      </label>
+
+      <h3 style="margin-top:26px;">פרטי שמירה</h3>
+      <label class="field">שם קובץ
+        <input type="text" id="save-name" placeholder="מגנט-01"/>
+      </label>
+      <div class="empty-state" id="event-context">לא נבחר אירוע</div>
+    </aside>
+
+  </div>
+</div>
+
+<div class="modal-backdrop hidden" id="picker-modal">
+  <div class="modal">
+    <button class="close-x" id="picker-close">×</button>
+    <h2>בחירת תמונה מאירוע</h2>
+    <div id="picker-events"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="/vendor/fabric.min.js"></script>
+<script src="/js/editor.js"></script>
+<script src="/js/dockbar.js" defer></script>
+</body>
+</html>

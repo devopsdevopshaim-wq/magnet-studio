@@ -1,0 +1,83 @@
+{
+  "_note": "שידורי YouTube חיים למוזיקת רקע. כולם נבדקו לניגון מוטמע (embeddable). mood = לבורר מצב-הרוח. הנגן מדלג אוטומטית אם שידור נופל; מוסיפים/מחליפים בחופשיות (id = מה שאחרי v=).",
+  "moods": [
+    { "key": "dream",      "he": "חלום",     "emoji": "🌫️", "desc": "אמביינט חולמני · dreamcore · מרחבים" },
+    { "key": "trance",     "he": "טראנס",    "emoji": "🌀", "desc": "פרוגרסיב · אפטליפטינג · פסיי" },
+    { "key": "house",      "he": "האוס",     "emoji": "🌴", "desc": "דיפ האוס · לאונג' · צ'יל" },
+    { "key": "ambient",    "he": "אמביינט",  "emoji": "🚀", "desc": "אמביינט חלל · מרקמים · drone" },
+    { "key": "meditation", "he": "מדיטציה",  "emoji": "🧘", "desc": "528Hz · קערות טיבטיות · ריפוי" },
+    { "key": "piano",      "he": "פסנתר",    "emoji": "🎹", "desc": "פסנתר רגוע · מיתרים" },
+    { "key": "jazz",       "he": "ג'אז",     "emoji": "🎷", "desc": "ג'אז · בוסה נובה · בית קפה" },
+    { "key": "lofi",       "he": "לו-פיי",   "emoji": "🎧", "desc": "לו-פיי היפ-הופ · ג'אזי" },
+    { "key": "focus",      "he": "ריכוז",    "emoji": "⚡", "desc": "סינת'ווייב · יער גשם · פוקוס עמוק" },
+    { "key": "fantasy",    "he": "פנטזיה",   "emoji": "🏰", "desc": "ימי הביניים · אגדות · פונדק" },
+    { "key": "nature",     "he": "טבע",      "emoji": "🌊", "desc": "גשם · ים · יער" },
+    { "key": "classical",  "he": "קלאסי",    "emoji": "🎻", "desc": "קלאסי לריכוז" }
+  ],
+  "tracks": [
+    { "id": "S_MOd40zlYU", "title": "dark ambient radio — music to escape/dream to", "mood": "dream" },
+    { "id": "xORCbIptqcc", "title": "sleep ambient music — relaxing radio", "mood": "dream" },
+    { "id": "h32oLk7NOkI", "title": "Liminal Dreamcore Radio — cozy nostalgiacore 24/7", "mood": "dream" },
+    { "id": "UDcWuv6SX3g", "title": "liminal dream radio — dreamcore music 24/7", "mood": "dream" },
+    { "id": "GSfT7H87zq4", "title": "synth ambient radio — deep space music to sleep to", "mood": "dream" },
+    { "id": "AXvnFk38sDQ", "title": "Cosmic Ambient Transmission — sleep, dream, focus 24/7", "mood": "dream" },
+    { "id": "rAmgQdRPPns", "title": "Magical Ambience — fairy tale music to relax & dream", "mood": "dream" },
+
+    { "id": "0T1FPUV2wRQ", "title": "Enhanced — Progressive & Trance Radio 24/7", "mood": "trance" },
+    { "id": "IvuwTft-0cM", "title": "Anjunabeats Radio — best of trance & progressive", "mood": "trance" },
+    { "id": "1J4ZnM0h3kc", "title": "Nocturnal Flow — melodic & progressive house 24/7", "mood": "trance" },
+    { "id": "X0y-w4Vf7kk", "title": "Chillgressive Radio — live progressive chill", "mood": "trance" },
+    { "id": "P1U4KsyPVb8", "title": "Progressive Trance 24/7 — deep, melodic & hypnotic", "mood": "trance" },
+    { "id": "5LFCrs_3XrQ", "title": "24/7 Psytrance Radio — tribal & progressive psytrance", "mood": "trance" },
+    { "id": "v_fREvy367w", "title": "Non Stop Psytrance Radio 24/7 — full-on, goa, forest", "mood": "trance" },
+
+    { "id": "36YnV9STBqc", "title": "The Good Life Radio — relax house & chillout 24/7", "mood": "house" },
+    { "id": "QrX_hJVIOrE", "title": "Summer Chillout Lounge — deep chill house mix 24/7", "mood": "house" },
+    { "id": "e_clC2RXABs", "title": "Deep House Radio — chill & intimate feelings 24/7", "mood": "house" },
+    { "id": "7kdmNZwVLrw", "title": "Summer Sunset Deep House — ocean lounge & chillout", "mood": "house" },
+    { "id": "AYBJjZXuVGc", "title": "Summer Deep House — luxury ocean lounge & poolside", "mood": "house" },
+    { "id": "UcrtmnGBUjM", "title": "ChillYourMind Radio — chill house & tropical 24/7", "mood": "house" },
+    { "id": "WsDyRAPFBC8", "title": "Deep & Melodic House 24/7 — relaxing chill study music", "mood": "house" },
+    { "id": "-r3Wdas86P8", "title": "Deep House — chill out & lounge music mix 24/7", "mood": "house" },
+    { "id": "2GV9zyOUrLc", "title": "Deep House — chill out & relax house mix 24/7", "mood": "house" },
+    { "id": "7Ze_5QegRiQ", "title": "Deep House — chill out & lounge music mix 24/7", "mood": "house" },
+
+    { "id": "X7X3UDwyyqo", "title": "Space Ambient Music LIVE 24/7 — epic mix to relax & focus", "mood": "ambient" },
+    { "id": "QOzC_AbsPlw", "title": "Space Ambient Music — space traveling background 24/7", "mood": "ambient" },
+    { "id": "BLIKwfIJIyo", "title": "Space Ambient Music — cosmic background 24/7", "mood": "ambient" },
+    { "id": "TPzradusPKQ", "title": "Ambient Guitar Radio — Pink Floyd style, deep sleep", "mood": "ambient" },
+
+    { "id": "4YcEdZj6kRA", "title": "528 Hz Solfeggio — Tibetan singing bowls meditation", "mood": "meditation" },
+    { "id": "yEP2YrD-dyY", "title": "528 Hz — big Tibetan singing bowl for healing & meditation", "mood": "meditation" },
+
+    { "id": "TtkFsfOP9QI", "title": "peaceful piano radio — music to focus/study to", "mood": "piano" },
+    { "id": "77ZozI0rw7w", "title": "Soothing Relaxation — relaxing piano & water sounds", "mood": "piano" },
+
+    { "id": "S8w3hg3kKuA", "title": "Bossa Nova Radio LIVE — smooth jazz for study & coffee", "mood": "jazz" },
+    { "id": "DSGyEsJ17cI", "title": "Rainy Jazz — relaxing jazz & bossa nova, piano & guitar", "mood": "jazz" },
+    { "id": "Mn08hG1CbMI", "title": "Coffee Shop Jazz — 24/7 summer bossa nova", "mood": "jazz" },
+    { "id": "2HIcp1J4sMg", "title": "Bossa Nova Covers of Popular Songs — relaxing jazz 24/7", "mood": "jazz" },
+    { "id": "PpVjmKBWyOI", "title": "Relaxing Bossa Nova Covers — 100 best hits 24/7", "mood": "jazz" },
+    { "id": "lP26UCnoH9s", "title": "Coffee Shop Radio — 24/7 lofi & jazzy hip-hop beats", "mood": "jazz" },
+
+    { "id": "DWcJFNfaw9c", "title": "lofi hip hop radio — beats to sleep/chill to", "mood": "lofi" },
+    { "id": "7NOSDKb0HlU", "title": "lofi hip hop radio — beats to study/relax to", "mood": "lofi" },
+    { "id": "5yx6BWlEVcY", "title": "Chillhop Radio — jazzy & lofi hip hop beats", "mood": "lofi" },
+    { "id": "bmVKaAV_7-A", "title": "chill lofi beats to code/relax to", "mood": "lofi" },
+    { "id": "jfKfPfyJRdk", "title": "lofi hip hop radio — beats to relax/study to", "mood": "lofi" },
+
+    { "id": "4xDzrJKXOOY", "title": "synthwave radio — beats to chill/game to", "mood": "focus" },
+    { "id": "GdzrrWA8e7A", "title": "Zelda & Chill — relaxed game music", "mood": "focus" },
+    { "id": "RAK1ka_M98g", "title": "Deep Focus Music 24/7 — rainy forest ambience for work", "mood": "focus" },
+    { "id": "uiMXGIG_DQo", "title": "Coffee Shop Ambience — cafe background noise for focus", "mood": "focus" },
+
+    { "id": "_fqQYTzkbqU", "title": "Medieval Fantasy Ambient — 24/7 radio (no AI)", "mood": "fantasy" },
+    { "id": "A-jPRNp5Qds", "title": "Medieval Tavern Ambience — sleep, study & relax", "mood": "fantasy" },
+
+    { "id": "1ZYbU82GVz4", "title": "Flying — relaxing sleep music for meditation & stress relief", "mood": "nature" },
+    { "id": "q76bMs-NwRk", "title": "Gentle Night Rain — rain sounds for sleeping", "mood": "nature" },
+    { "id": "OdIJ2x3nxzQ", "title": "Forest and Nature Sounds — 10 hours", "mood": "nature" },
+
+    { "id": "77ZozI0rw7w", "title": "Relaxing classical & piano", "mood": "classical" }
+  ]
+}

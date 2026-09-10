@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>מצפן פיננסי · חיים קריספין</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/finance.css" />
+</head>
+<body>
+<div class="fin-wrap">
+
+  <header class="top-header">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="24,4 41,14 41,34 24,44 7,34 7,14" stroke="currentColor" stroke-width="2.5"/>
+        <path d="M17 30c3 3 11 3 14 0M17 30V19m14 11V19M24 15v4M20 22h8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <h1>מצפן פיננסי</h1>
+        <div class="tagline">בדיקת מצב · תוכנית התנהלות · מבט על השוק</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <button class="btn ghost" onclick="location.href='/'">חזרה ללוח הבקרה</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <a href="/">לוח בקרה</a>
+    <a href="/daily.html">מענה יומי</a>
+    <a href="/jarvis.html">עוזר JARVIS</a>
+    <a href="/housing.html">דיור</a>
+    <a href="/jobs.html">דרושים</a>
+    <a href="/finance.html" class="active">פיננסים</a>
+    <a href="/health.html">בריאות</a>
+    <a href="/fitness.html">כושר</a>
+    <a href="/devops.html">DevOps</a>
+    <a href="/aia.html">עיצוב AIA</a>
+    <a href="/library.html">אוצר לחג</a>
+    <a href="/device.html">המכשיר</a>
+    <a href="/graphology.html">גרפולוגיה</a>
+    <a href="/astro-full.html">אסטרולוגיה</a>
+    <a href="/editor.html">עורך מסגרות</a>
+    <a href="/mail.html">מיילים</a>
+    <a href="/setup.html">הגדרות</a>
+  </nav>
+
+  <div class="fin-disclaimer">
+    <b>מידע וחינוך פיננסי — לא ייעוץ.</b>
+    הכלי מחשב מדדים מהמספרים שתזין ומנסח תוכנית לפי עקרונות מקובלים. הוא אינו יועץ השקעות, אינו יועץ פנסיוני,
+    ואינו ממליץ על מוצר או נייר ערך. נתוני השוק מוצגים כמידע (מקור: Yahoo Finance, ייתכן עיכוב). החלטות — עם בעל רישיון.
+  </div>
+
+  <div class="fin-tabbar">
+    <button class="fin-tab active" data-panel="status">מצב ותוכנית</button>
+    <button class="fin-tab" data-panel="market">שוק ההון</button>
+  </div>
+
+  <main id="fin-main">
+
+    <!-- מצב ותוכנית -->
+    <section class="fin-panel" id="panel-status">
+      <div class="fin-cols">
+        <form id="fin-form" class="fin-form">
+          <h2>המספרים שלך</h2>
+          <p class="fin-note">נשמר בדפדפן הזה בלבד. מלא מה שאתה יודע — ככל שיותר, המדדים מדויקים יותר.</p>
+
+          <fieldset><legend>הכנסה והוצאות (חודשי, ₪)</legend>
+            <label>הכנסה נטו — משק בית <input type="number" id="netIncome" inputmode="numeric"></label>
+            <label>הוצאות קבועות (דיור, חשבונות, ביטוחים, מנויים) <input type="number" id="fixedExpenses" inputmode="numeric"></label>
+            <label>הוצאות משתנות (אוכל, דלק, בילויים) <input type="number" id="variableExpenses" inputmode="numeric"></label>
+            <label>נחסך בפועל / חודש <input type="number" id="monthlySavings" inputmode="numeric"></label>
+          </fieldset>
+
+          <fieldset><legend>נכסים</legend>
+            <label>חיסכון נזיל זמין (עו״ש / פק״מ) <input type="number" id="cashSavings" inputmode="numeric"></label>
+            <label>השקעות / חיסכון ארוך-טווח (לא פנסיה) <input type="number" id="investments" inputmode="numeric"></label>
+            <label>צבירת פנסיה / גמל <input type="number" id="pension" inputmode="numeric"></label>
+          </fieldset>
+
+          <fieldset><legend>חובות</legend>
+            <label>חוב יקר — יתרה (אשראי, מסגרת, חוץ-בנקאי) <input type="number" id="expensiveDebt" inputmode="numeric"></label>
+            <label>ריבית שנתית ממוצעת על החוב היקר (%) <input type="number" id="expensiveDebtRate" inputmode="decimal"></label>
+            <label>יתרת משכנתא <input type="number" id="mortgage" inputmode="numeric"></label>
+            <label>החזר משכנתא / חודש <input type="number" id="mortgagePayment" inputmode="numeric"></label>
+            <label>החזרי חוב אחרים / חודש (רכב, הלוואות) <input type="number" id="otherDebtPayment" inputmode="numeric"></label>
+          </fieldset>
+
+          <fieldset><legend>הקשר</legend>
+            <label>מספר תלויים <input type="number" id="dependents" inputmode="numeric"></label>
+            <label>מעמד תעסוקתי
+              <select id="employment"><option value="">—</option><option>שכיר</option><option>עצמאי</option><option>משולב</option></select>
+            </label>
+            <label>מטרות פיננסיות <textarea id="goals" rows="2" placeholder="למשל: לסגור חוב תוך שנה, לחסוך למקדמה, קרן חירום של 4 חודשים"></textarea></label>
+          </fieldset>
+        </form>
+
+        <div class="fin-results">
+          <div class="fin-metrics" id="fin-metrics"></div>
+          <button class="btn primary" id="fin-analyze">בנה לי תוכנית התנהלות</button>
+          <div class="fin-plan" id="fin-plan"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- שוק ההון -->
+    <section class="fin-panel" id="panel-market" hidden>
+      <div class="fin-market-summary" id="mkt-summary"></div>
+
+      <div class="fin-card" id="mkt-outlook-card">
+        <h3>קריאת שוק ואותות</h3>
+        <div id="mkt-outlook"><div class="fin-note">טוען…</div></div>
+      </div>
+
+      <div class="fin-card">
+        <h3>בדיקת נייר ערך</h3>
+        <div class="fin-lookup">
+          <input type="text" id="mkt-sym" placeholder="סימבול — למשל AAPL, MSFT, ^GSPC, TA35.TA" autocomplete="off">
+          <button class="btn" id="mkt-sym-go" type="button">בדוק</button>
+        </div>
+        <div id="mkt-sym-out"></div>
+      </div>
+
+      <div id="mkt-groups"></div>
+      <div class="fin-card">
+        <h3>כותרות כלכלה</h3>
+        <div class="fin-news" id="mkt-news"></div>
+      </div>
+      <p class="fin-note">
+        "מה מומלץ" תלוי במטרות, אופק ורמת הסיכון האישית שלך — ואין לזה תשובה כללית. מה שאפשר לומר באופן חינוכי:
+        אחרי קרן חירום וכיסוי חוב יקר, חיסכון ארוך-טווח מפוזר ובעלות נמוכה עם הפקדה קבועה מנצח, לאורך שנים, את רוב הניסיונות לתזמן.
+        לבחירה קונקרטית — יועץ/ת פיננסי/ת מורשה.
+      </p>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="/js/pnks-core.js"></script>
+<script src="/js/pnks-offline.js"></script>
+<script src="/js/finance.js"></script>
+<script src="/js/dockbar.js" defer></script>
+</body>
+</html>

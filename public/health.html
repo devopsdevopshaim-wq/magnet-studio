@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>מצפן בריאות · חיים קריספין</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/health.css" />
+</head>
+<body>
+<div class="hc-wrap">
+
+  <header class="top-header">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="24,4 41,14 41,34 24,44 7,34 7,14" stroke="currentColor" stroke-width="2.5"/>
+        <path d="M24 13l4 11 -4 11 -4 -11z" fill="currentColor" opacity="0.9"/>
+      </svg>
+      <div>
+        <h1>מצפן בריאות</h1>
+        <div class="tagline">ניהול משקל, נפיחות ועיכול · מבוסס הנחיות</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <button class="btn ghost" onclick="location.href='/'">חזרה ללוח הבקרה</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <a href="/">לוח בקרה</a>
+    <a href="/daily.html">מענה יומי</a>
+    <a href="/jarvis.html">עוזר JARVIS</a>
+    <a href="/housing.html">דיור</a>
+    <a href="/jobs.html">דרושים</a>
+    <a href="/finance.html">פיננסים</a>
+    <a href="/health.html" class="active">בריאות</a>
+    <a href="/fitness.html">כושר</a>
+    <a href="/devops.html">DevOps</a>
+    <a href="/aia.html">עיצוב AIA</a>
+    <a href="/library.html">אוצר לחג</a>
+    <a href="/device.html">המכשיר</a>
+    <a href="/graphology.html">גרפולוגיה</a>
+    <a href="/astro-full.html">אסטרולוגיה</a>
+    <a href="/editor.html">עורך מסגרות</a>
+    <a href="/mail.html">מיילים</a>
+    <a href="/setup.html">הגדרות</a>
+  </nav>
+
+  <div class="hc-hero">
+    <svg class="hc-compass" id="hcCompass" viewBox="0 0 168 168" role="img" aria-label="מצפן — מחוון ההתקדמות בין השלבים">
+      <circle class="ring" cx="84" cy="84" r="76" stroke-width="1"/>
+      <circle class="ring" cx="84" cy="84" r="62" stroke-width="0.75" opacity="0.6"/>
+      <!-- degree ticks -->
+      <g id="hcTicks"></g>
+      <!-- 8-point star -->
+      <path class="star-fill" d="M84 20 L92 76 L148 84 L92 92 L84 148 L76 92 L20 84 L76 76 Z"/>
+      <path class="star-line" d="M84 20 L92 76 L148 84 L92 92 L84 148 L76 92 L20 84 L76 76 Z" stroke-width="0.9"/>
+      <path class="star-line" d="M84 84 L120 48 M84 84 L120 120 M84 84 L48 120 M84 84 L48 48" stroke-width="0.5" opacity="0.5"/>
+      <!-- needle -->
+      <path class="needle-tail" id="hcNeedleTail" d="M84 84 L79 84 L84 122 L89 84 Z"/>
+      <path class="needle" id="hcNeedle" d="M84 84 L79 84 L84 30 L89 84 Z"/>
+      <circle class="hub" cx="84" cy="84" r="6" stroke-width="1"/>
+      <text class="cardinal" x="84" y="15" text-anchor="middle">סינון</text>
+      <text class="cardinal" x="156" y="87" text-anchor="middle">נתונים</text>
+      <text class="cardinal" x="84" y="162" text-anchor="middle">המלצות</text>
+      <text class="cardinal" x="14" y="87" text-anchor="middle">ניתוח</text>
+    </svg>
+    <div>
+      <div class="kicker">כלי אישי · לא ייעוץ רפואי</div>
+      <h1>מה שכל ההנחיות מסכימות עליו — מותאם לנתונים שלך</h1>
+      <p class="lead">
+        ממלאים תמונת מצב, קוראים תמצית מרוכזת של מה שממליצים גופי הנחיות ורופאים מובילים,
+        ומקבלים תוכנית אישית שמצליבה את השניים — תזונה, פעילות שבועית, טיפול בנפיחות ומדדי מעקב.
+      </p>
+    </div>
+  </div>
+
+  <div class="hc-disclaimer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+    <div>
+      <strong>זה אינו ייעוץ רפואי ואינו מחליף רופא.</strong>
+      הכלי מרכז מידע ציבורי מהנחיות מקצועיות ומנתח אותו לפי מה שהזנת. אבחון, מרשמים, בדיקות דם
+      והתאמת טיפול — רק דרך רופא/ה. אם סימנת דגל אדום, פנה לרופא/ה לפני שמתחילים דיאטה או תוכנית עצמאית.
+    </div>
+  </div>
+
+  <!-- ═══════ שלב 0 — סינון דגלים אדומים ═══════ -->
+  <section class="hc-step" id="screener">
+    <div class="hc-step-head"><span class="idx">00</span><h2>סינון דגלים אדומים</h2><span class="sub">לפני כל תוכנית עצמאית</span></div>
+    <p class="hc-note">סמן כל דבר שקיים כרגע. אלה סימנים שמחייבים בירור רפואי לפני שמתחילים.</p>
+    <div class="hc-card">
+      <div class="hc-flags-grid" id="hcFlagGrid"></div>
+      <div class="hc-flag-result" id="hcFlagResult">לא סומנו דגלים אדומים. אפשר להמשיך לאיסוף הנתונים.</div>
+    </div>
+  </section>
+
+  <!-- ═══════ שלב 1 — איסוף נתונים ═══════ -->
+  <section class="hc-step" id="intake">
+    <div class="hc-step-head"><span class="idx">01</span><h2>איסוף נתונים</h2><span class="sub">נשמר בדפדפן שלך בלבד</span></div>
+    <p class="hc-note">ככל שתמלא יותר, הניתוח האישי מדויק יותר. אין חובה למלא הכול.</p>
+    <form id="hcForm" class="hc-form hc-card">
+      <fieldset>
+        <legend>נתוני בסיס</legend>
+        <div class="hc-fields two">
+          <label class="hc-field"><span class="q">גיל</span><input type="number" id="age" min="12" max="110" inputmode="numeric" /></label>
+          <label class="hc-field"><span class="q">מין ביולוגי</span>
+            <select id="sex"><option value="">—</option><option value="female">נקבה</option><option value="male">זכר</option></select>
+          </label>
+          <label class="hc-field"><span class="q">גובה (ס"מ)</span><input type="number" id="height" min="120" max="220" inputmode="numeric" /></label>
+          <label class="hc-field"><span class="q">משקל (ק"ג)</span><input type="number" id="weight" min="35" max="300" inputmode="decimal" /></label>
+          <label class="hc-field"><span class="q">היקף מותן (ס"מ)</span><input type="number" id="waist" min="50" max="200" inputmode="numeric" /></label>
+          <label class="hc-field"><span class="q">משקל יעד (ק"ג, לא חובה)</span><input type="number" id="goalWeight" min="35" max="300" inputmode="decimal" /></label>
+        </div>
+        <div class="hc-readout" id="hcReadout" hidden>
+          <div class="cell"><b id="bmiVal">—</b><span>BMI</span></div>
+          <div class="cell"><b id="bmiClass" style="font-size:0.95rem">—</b><span>סיווג</span></div>
+          <div class="cell"><b id="waistRisk" style="font-size:0.95rem">—</b><span>היקף מותן</span></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>מה מטריד</legend>
+        <div class="hc-checks" id="hcConcerns"></div>
+        <label class="hc-field" style="margin-top:12px"><span class="q">תיאור חופשי — מתי מתחיל, מה מחמיר, מה מקל</span>
+          <textarea id="concernText" placeholder="לדוגמה: נפיחות שמתגברת בערב ואחרי ארוחות עתירות פחמימות; עלייה של 8 ק״ג בשנתיים…"></textarea>
+        </label>
+        <div class="hc-fields two" style="margin-top:12px">
+          <label class="hc-field"><span class="q">משך הבעיה</span>
+            <select id="duration"><option value="">—</option><option>עד חודש</option><option>1–6 חודשים</option><option>6–12 חודשים</option><option>מעל שנה</option></select>
+          </label>
+          <label class="hc-field"><span class="q">דפוס</span>
+            <select id="pattern"><option value="">—</option><option>קבוע לאורך היום</option><option>בעיקר אחרי ארוחות</option><option>מחמיר בערב</option><option>מחזורי / לפני מחזור</option></select>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>רקע רפואי</legend>
+        <div class="hc-checks" id="hcConditions"></div>
+        <label class="hc-field" style="margin-top:12px"><span class="q">תרופות קבועות ותוספים</span><input type="text" id="meds" placeholder="שם התרופה + מינון אם ידוע" /></label>
+        <label class="hc-field" style="margin-top:12px"><span class="q">אבחנות / ניתוחים / רגישויות ידועות</span><input type="text" id="history" placeholder="לדוגמה: תת-פעילות בלוטת התריס, כריתת כיס מרה, אי-סבילות ללקטוז" /></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>תזונה ואורח חיים כיום</legend>
+        <div class="hc-fields two">
+          <label class="hc-field"><span class="q">ארוחות ביום</span><input type="number" id="meals" min="1" max="8" inputmode="numeric" /></label>
+          <label class="hc-field"><span class="q">חלון אכילה (שעות, לא חובה)</span><input type="text" id="window" placeholder="למשל 08:00–21:00" /></label>
+          <label class="hc-field"><span class="q">מזון אולטרה-מעובד ביום</span>
+            <select id="upf"><option value="">—</option><option>כמעט לא</option><option>פעם-פעמיים</option><option>הרבה / רוב הארוחות</option></select>
+          </label>
+          <label class="hc-field"><span class="q">משקאות ממותקים / אלכוהול</span>
+            <select id="drinks"><option value="">—</option><option>אין</option><option>מדי פעם</option><option>יומי</option></select>
+          </label>
+          <label class="hc-field"><span class="q">שינה (שעות בלילה)</span><input type="number" id="sleep" min="3" max="12" step="0.5" inputmode="decimal" /></label>
+          <label class="hc-field"><span class="q">רמת מתח יומיומית</span>
+            <select id="stress"><option value="">—</option><option>נמוכה</option><option>בינונית</option><option>גבוהה</option></select>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>פעילות גופנית כיום</legend>
+        <div class="hc-fields two">
+          <label class="hc-field"><span class="q">דקות פעילות אירובית בשבוע</span><input type="number" id="aerobic" min="0" max="1500" inputmode="numeric" /></label>
+          <label class="hc-field"><span class="q">ימי אימון כוח בשבוע</span><input type="number" id="strength" min="0" max="7" inputmode="numeric" /></label>
+          <label class="hc-field"><span class="q">צעדים ביום (משוער)</span><input type="number" id="steps" min="0" max="40000" inputmode="numeric" /></label>
+          <label class="hc-field"><span class="q">מגבלות תנועה / כאב</span><input type="text" id="limits" placeholder="למשל כאב ברך, הריון, החלמה מניתוח" /></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>מטרות</legend>
+        <label class="hc-field"><span class="q">מה הכי חשוב לך להשיג</span>
+          <textarea id="goals" placeholder="לדוגמה: לרדת 10 ק״ג בחצי שנה בלי דיאטת קיצון, ולהפחית נפיחות אחרי ארוחות"></textarea>
+        </label>
+      </fieldset>
+
+      <div class="hc-actions">
+        <button type="button" class="btn ghost" id="hcSave">שמירת טיוטה</button>
+        <button type="button" class="btn ghost" id="hcClear">איפוס</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- ═══════ שלב 2 — תמצית ההמלצות ═══════ -->
+  <section class="hc-step" id="knowledge">
+    <div class="hc-step-head"><span class="idx">02</span><h2>מה ממליצים — תמצית מרוכזת</h2><span class="sub">עודכן 3.9.2026</span></div>
+    <p class="hc-note">
+      קווי ההמלצה המשותפים לגופים מובילים: ACP, OMA/ACOFP, ADA, NICE, ESNM/UEG, AGA, Monash, ACSM, AHA/CDC, Mayo Clinic, NHS, Harvard.
+    </p>
+
+    <div class="hc-card">
+      <h3>תזונה לירידה במשקל</h3>
+      <p>
+        אין דיאטה אחת "מנצחת". בכל ההשוואות ארוכות-הטווח, מה שקובע את התוצאה הוא <strong>גירעון קלורי שאפשר להתמיד בו</strong> —
+        לרוב כ-500 קק"ל ביום, שמובילים לירידה של כ-0.5 ק"ג בשבוע. ההבדלים בין השיטות קטנים יחסית לחשיבות ההיצמדות.
+      </p>
+      <div class="hc-ref-scroll">
+        <table class="hc-ref">
+          <thead><tr><th>גישה</th><th>עיקרון</th><th>מה העדויות מראות</th></tr></thead>
+          <tbody>
+            <tr><td>ים-תיכונית</td><td>ירקות, קטניות, דגים, שמן זית, דגנים מלאים; מיעוט בשר אדום ומעובד</td><td>ירידה מתונה ויציבה; היתרון הקרדיו-מטבולי החזק ביותר; קלה להתמדה</td></tr>
+            <tr><td>דלת פחמימות / מתונה-נמוכה</td><td>צמצום סוכר, קמח לבן ופחמימות מזוקקות; יותר חלבון ושומן</td><td>לרוב ירידה מעט גדולה יותר בטווח הקצר; שיפור בטריגליצרידים ו-HDL</td></tr>
+            <tr><td>DASH</td><td>דל נתרן, עשיר בירקות/פירות ומוצרי חלב דלי שומן</td><td>הורדת לחץ דם; ירידה במשקל דומה לים-תיכונית</td></tr>
+            <tr><td>אכילה בחלון זמן / צום לסירוגין</td><td>אכילה בחלון של 8–12 שעות ביום</td><td>ירידה דומה לשיטות אחרות; יתרון של פשטות ופחות ספירת קלוריות</td></tr>
+            <tr><td>קיטו / צום יום-כן-יום</td><td>הגבלה חדה של פחמימות או של ימי אכילה</td><td>ירידה מהירה יותר בהתחלה, אך התמדה ותופעות לוואי מגבילות לטווח ארוך</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="hc-consensus">
+        <span class="label">הממוצע המעשי בין הרופאים</span>
+        בסיס <strong>ים-תיכוני</strong> · לחתוך קודם כול <strong>סוכר, משקאות ממותקים, אלכוהול ופחמימות מזוקקות</strong> ·
+        <strong>חלבון</strong> ~1.2–1.6 ג' לכל ק"ג משקל ביום כדי לשמור על מסת שריר ולהשביע ·
+        <strong>סיבים</strong> 25–30+ ג' ביום · גירעון של ~500 קק"ל ·
+        אופציונלי: לקבע <strong>חלון אכילה</strong> של 10–12 שעות. לבחור את הווריאציה שאפשר לחיות איתה שנה.
+      </div>
+    </div>
+
+    <div class="hc-card">
+      <h3>פעילות גופנית</h3>
+      <div class="hc-pills">
+        <span class="hc-pill">בריאות כללית: 150–300 דק'/שבוע</span>
+        <span class="hc-pill">ירידה במשקל: 225–300+ דק'/שבוע</span>
+        <span class="hc-pill">כוח: 2+ ימים/שבוע</span>
+        <span class="hc-pill">שימור: ~200–300 דק'/שבוע</span>
+      </div>
+      <ul class="hc-list">
+        <li><strong>אירובי:</strong> להתחיל מהמצב הנוכחי ולעלות ~10% בשבוע עד 150 דק' לבריאות, ומעל 225 דק' כשהמטרה ירידה משמעותית. הליכה נמרצת נחשבת.</li>
+        <li><strong>אימוני כוח:</strong> לפחות פעמיים בשבוע, כל קבוצות השרירים, ~2–3 סטים של 8–15 חזרות. שומר על שריר ועצם בזמן ירידה ומעלה חילוף חומרים במנוחה.</li>
+        <li><strong>אורח חיים:</strong> להפחית ישיבה ממושכת, לכוון ל-7,000–10,000 צעדים ביום, והליכה של 10–15 דק' אחרי ארוחות משפרת סוכר ומפחיתה גזים.</li>
+        <li><strong>שילוב:</strong> אירובי + כוח יחד עדיפים על כל אחד לבד, גם לירידה וגם לבריאות מטבולית.</li>
+      </ul>
+    </div>
+
+    <div class="hc-card">
+      <h3>נפיחות בטנית וגזים</h3>
+      <p>
+        רוב הנפיחות הכרונית היא <strong>תפקודית</strong> (נפיחות תפקודית או תסמונת המעי הרגיז) — רגישות-יתר של המעי, חוסר תיאום בין הסרעפת לדופן הבטן, תנועתיות איטית ותסיסת חיידקים. עדיין חשוב לשלול סיבות אחרות.
+      </p>
+      <ul class="hc-list">
+        <li><strong>קו ראשון — תזונה:</strong> דיאטת <strong>FODMAP נמוך</strong> ב-3 שלבים (הגבלה 2–6 שבועות → החזרה מבוקרת → התאמה אישית), רצוי בליווי דיאטן/ית. 3 מתוך 4 עם מעי רגיז משתפרים.</li>
+        <li><strong>הרגלים:</strong> ארוחות בזמנים קבועים ולא גדולות מדי, פחות מזון מטוגן ושומני, להפחית מוגז, מסטיק ושתייה בקש; אם תוספת סיבים מחמירה — להוריד זמנית.</li>
+        <li><strong>אי-סבילות:</strong> לשקול ניסיון של הפחתת לקטוז ו/או פרוקטוז לשבועיים.</li>
+        <li><strong>תוספים:</strong> פרוביוטיקה — ניסיון של 4 שבועות (תלוי זן); שמן מנטה בכמוסות — לכאב ונפיחות במעי רגיז.</li>
+        <li><strong>עצירות נלווית:</strong> לטפל בעצירות עצמה — משפר נפיחות משמעותית.</li>
+        <li><strong>לשלול אצל רופא:</strong> צליאק, מחלת מעי דלקתית, SIBO, אי-ספיקת לבלב, חסימה; בנשים — גם הערכה גינקולוגית כשיש נפיחות מהירה ומתמשכת.</li>
+      </ul>
+      <p style="font-size:0.9rem;color:var(--cream-dim)">
+        <strong style="color:var(--cream-dim)">"אצירת נוזלים" אמיתית (בצקת)</strong> שונה מנפיחות של גזים — בצקת מתמשכת, אסימטרית או בכפות הרגליים מצריכה בירור לב/כליה/כבד/ורידים ובדיקת תרופות. הפחתת עודף מלח עוזרת לנטייה לאגור נוזלים.
+      </p>
+    </div>
+
+    <div class="hc-card">
+      <h3>גורמים וטיפולים נוספים</h3>
+      <ul class="hc-list">
+        <li><strong>שינה:</strong> 7–9 שעות. מיעוט שינה מגביר תיאבון ועלייה במשקל.</li>
+        <li><strong>מתח:</strong> מתח כרוני וקורטיזול מזינים אכילה רגשית — הרפיה, פעילות, ובמידת הצורך ליווי נפשי.</li>
+        <li><strong>בדיקת תרופות:</strong> חלק מנוגדי הדיכאון והפסיכוזה, אינסולין/סולפונילאוריאה, סטרואידים וחלק מחוסמי הסידן גורמים לעלייה במשקל או לבצקת. לא להפסיק לבד — להתייעץ.</li>
+        <li><strong>סיבה משנית:</strong> תת-פעילות בלוטת התריס, PCOS, דום נשימה בשינה, לעיתים קושינג — בדיקות דם והפניה דרך רופא/ה משפחה.</li>
+        <li><strong>תרופות להרזיה:</strong> אגוניסטים ל-GLP-1 (סמגלוטייד, טירזפטייד) — קו ראשון תרופתי לפי ACP 2025 ל-BMI ≥30, או ≥27 עם מחלה נלווית — <strong>במרשם ובמעקב רופא</strong>, כתוספת לשינוי אורח חיים.</li>
+        <li><strong>ניתוח בריאטרי / אנדוסקופי:</strong> נשקל ב-BMI ≥40, או ≥35 עם מחלה נלווית.</li>
+      </ul>
+    </div>
+
+    <details class="hc-card">
+      <summary>מקורות</summary>
+      <ul class="hc-sources">
+        <li>ACP — Living Clinical Guideline on Pharmacologic Treatment of Overweight and Obesity (2025): <a href="https://www.acponline.org/acp-newsroom/acp-issues-new-living-clinical-guideline-on-using-medications-to-manage-overweight-and-obesity" target="_blank" rel="noopener">acponline.org</a></li>
+        <li>Obesity Medicine Association &amp; ACOFP — Obesity management in primary care (2025): <a href="https://www.sciencedirect.com/science/article/pii/S2667368125000166" target="_blank" rel="noopener">sciencedirect.com</a></li>
+        <li>American Diabetes Association — Standards of Care in Diabetes 2025, ch. 8: <a href="https://diabetesjournals.org/care/article/48/Supplement_1/S167/157555" target="_blank" rel="noopener">diabetesjournals.org</a></li>
+        <li>ESNM/UEG — European Consensus on Functional Bloating and Abdominal Distension (2025): <a href="https://onlinelibrary.wiley.com/doi/full/10.1002/ueg2.70098" target="_blank" rel="noopener">onlinelibrary.wiley.com</a></li>
+        <li>AGA — Clinical Practice Update on Belching, Abdominal Bloating, and Distention: <a href="https://www.gastrojournal.org/article/S0016-5085(23)00823-5/fulltext" target="_blank" rel="noopener">gastrojournal.org</a></li>
+        <li>Monash University — Low FODMAP Diet &amp; IBS: <a href="https://www.monashfodmap.com/about-fodmap-and-ibs/" target="_blank" rel="noopener">monashfodmap.com</a></li>
+        <li>NEJM — Weight Loss with a Low-Carbohydrate, Mediterranean, or Low-Fat Diet: <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa0708681" target="_blank" rel="noopener">nejm.org</a></li>
+        <li>ACSM Physical Activity Guidelines · CDC Adult Activity · AHA — <a href="https://www.cdc.gov/physical-activity-basics/guidelines/adults.html" target="_blank" rel="noopener">cdc.gov</a></li>
+        <li>Mayo Clinic — Exercise for weight loss: <a href="https://www.mayoclinic.org/healthy-lifestyle/weight-loss/in-depth/exercise/art-20050999" target="_blank" rel="noopener">mayoclinic.org</a></li>
+      </ul>
+    </details>
+  </section>
+
+  <!-- ═══════ שלב 3 — ניתוח אישי ═══════ -->
+  <section class="hc-step" id="analysis">
+    <div class="hc-step-head"><span class="idx">03</span><h2>ניתוח אישי</h2><span class="sub">דרך מנוע ה-AI המקומי</span></div>
+    <p class="hc-note">
+      לוחצים, ומנוע ה-AI של המערכת (JARVIS / Ollama מקומי / ספק ענן) בונה תוכנית שמצליבה את תמצית ההנחיות עם הנתונים שהזנת —
+      תזונה, פעילות שבועית, טיפול בנפיחות, גורמים נוספים ומדדי מעקב. ניתוח מבוסס-הנחיות, <strong>לא ייעוץ רפואי</strong>.
+    </p>
+    <div class="hc-actions" style="margin-top:0">
+      <button type="button" class="btn primary" id="hcAnalyze">נתח את המקרה שלי</button>
+      <button type="button" class="btn ghost" id="hcExport" hidden>ייצוא הסיכום (Markdown)</button>
+    </div>
+    <div class="hc-analysis empty" id="hcOut">כאן תופיע התוכנית האישית אחרי שתמלא נתונים ותלחץ "נתח את המקרה שלי".</div>
+  </section>
+
+  <footer class="hc-foot">
+    מצפן בריאות · תמצית ההמלצות עודכנה 3.9.2026 · המידע כללי ואינו תחליף לאבחון וטיפול רפואי אישי.
+    בחירום רפואי — פנו למד"א 101 או למיון הקרוב.
+  </footer>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="/js/health.js"></script>
+<script src="/js/dockbar.js" defer></script>
+</body>
+</html>

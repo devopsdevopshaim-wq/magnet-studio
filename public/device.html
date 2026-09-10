@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>המכשיר הזה · חיים קריספין</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/device.css" />
+</head>
+<body>
+<div class="dv-wrap">
+
+  <header class="top-header">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="24,4 41,14 41,34 24,44 7,34 7,14" stroke="currentColor" stroke-width="2.5"/>
+        <rect x="18" y="15" width="12" height="20" rx="2" fill="currentColor" opacity="0.9"/>
+      </svg>
+      <div>
+        <h1>המכשיר הזה</h1>
+        <div class="tagline">מה שהדפדפן חושף על המכשיר שאתה מחזיק</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <button class="btn ghost" onclick="location.href='/'">חזרה ללוח הבקרה</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <a href="/">לוח בקרה</a>
+    <a href="/daily.html">מענה יומי</a>
+    <a href="/jarvis.html">עוזר JARVIS</a>
+    <a href="/housing.html">דיור</a>
+    <a href="/jobs.html">דרושים</a>
+    <a href="/finance.html">פיננסים</a>
+    <a href="/health.html">בריאות</a>
+    <a href="/fitness.html">כושר</a>
+    <a href="/devops.html">DevOps</a>
+    <a href="/aia.html">עיצוב AIA</a>
+    <a href="/library.html">אוצר לחג</a>
+    <a href="/device.html" class="active">המכשיר</a>
+    <a href="/graphology.html">גרפולוגיה</a>
+    <a href="/astro-full.html">אסטרולוגיה</a>
+    <a href="/editor.html">עורך מסגרות</a>
+    <a href="/mail.html">מיילים</a>
+    <a href="/setup.html">הגדרות</a>
+  </nav>
+
+  <div class="dv-hero">
+    <div class="kicker">מדידה מקומית · בדפדפן</div>
+    <h1>סוללה, רשת, חומרה ומסך — של המכשיר הזה</h1>
+    <p class="lead">
+      כל הנתונים כאן נמדדים בדפדפן של המכשיר שאתה מסתכל ממנו — טלפון, טאבלט או מחשב — ומתעדכנים חי.
+      זה שונה מ"מצב המערכת" במענה היומי, שמראה את המחשב שמריץ את השרת.
+    </p>
+    <div class="dv-liveflag"><span class="pip"></span><span id="dvClock">חי · מתעדכן</span></div>
+  </div>
+
+  <div class="dv-note">
+    <b>מה דפדפן יכול למדוד — ומה לא.</b>
+    דפדפן חושף סוללה, סוג רשת ומהירות משוערת, כמות ליבות, סיווג זיכרון, מסך, ומערכת ההפעלה.
+    הוא <b>לא</b> חושף: פירוט אחסון מלא של הטלפון, אפליקציות מותקנות, טמפרטורה, בריאות סוללה מפורטת,
+    או מה רץ ברקע — לזה צריך אפליקציה מותקנת עם הרשאות מערכת.
+  </div>
+
+  <div class="dv-grid" id="dvGrid">
+    <!-- battery -->
+    <div class="dv-card span2">
+      <div class="dv-label">סוללה</div>
+      <div class="dv-battery">
+        <svg class="dv-ring" id="dvRing" viewBox="0 0 84 84">
+          <circle class="track" cx="42" cy="42" r="34"/>
+          <circle class="fill" id="dvRingFill" cx="42" cy="42" r="34" stroke-dasharray="213.6" stroke-dashoffset="213.6"/>
+        </svg>
+        <div>
+          <div class="dv-big"><span id="dvBattPct">—</span><span class="unit">%</span></div>
+          <div class="dv-sub" id="dvBattState">בודק…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- network -->
+    <div class="dv-card">
+      <div class="dv-label">רשת</div>
+      <div class="dv-big" id="dvNetType" style="font-size:1.3rem">—</div>
+      <div class="dv-rows" style="margin-top:10px">
+        <div class="dv-row"><span class="k">חיבור</span><span class="v" id="dvNetOnline">—</span></div>
+        <div class="dv-row"><span class="k">מהירות משוערת</span><span class="v" id="dvNetDown">—</span></div>
+        <div class="dv-row"><span class="k">השהיה (RTT)</span><span class="v" id="dvNetRtt">—</span></div>
+        <div class="dv-row"><span class="k">מצב חיסכון</span><span class="v" id="dvNetSave">—</span></div>
+      </div>
+    </div>
+
+    <!-- hardware -->
+    <div class="dv-card">
+      <div class="dv-label">חומרה</div>
+      <div class="dv-rows">
+        <div class="dv-row"><span class="k">זיכרון (סיווג)</span><span class="v" id="dvRam">—</span></div>
+        <div class="dv-row"><span class="k">ליבות מעבד</span><span class="v" id="dvCores">—</span></div>
+        <div class="dv-row"><span class="k">מעבד גרפי</span><span class="v" id="dvGpu" style="font-size:0.75rem">—</span></div>
+        <div class="dv-row"><span class="k">מגע</span><span class="v" id="dvTouch">—</span></div>
+      </div>
+    </div>
+
+    <!-- storage -->
+    <div class="dv-card">
+      <div class="dv-label">אחסון זמין לאתר</div>
+      <div class="dv-big" id="dvStoreUsed" style="font-size:1.3rem">—</div>
+      <div class="dv-sub" id="dvStoreSub">—</div>
+      <div class="dv-bar"><i id="dvStoreBar" style="width:0%"></i></div>
+    </div>
+
+    <!-- screen -->
+    <div class="dv-card">
+      <div class="dv-label">מסך</div>
+      <div class="dv-rows">
+        <div class="dv-row"><span class="k">רזולוציה</span><span class="v" id="dvScreenRes">—</span></div>
+        <div class="dv-row"><span class="k">יחס פיקסלים</span><span class="v" id="dvScreenDpr">—</span></div>
+        <div class="dv-row"><span class="k">כיוון</span><span class="v" id="dvScreenOrient">—</span></div>
+        <div class="dv-row"><span class="k">קצב רענון</span><span class="v" id="dvScreenHz">מודד…</span></div>
+      </div>
+    </div>
+
+    <!-- system -->
+    <div class="dv-card span2">
+      <div class="dv-label">מערכת ודפדפן</div>
+      <div class="dv-rows">
+        <div class="dv-row"><span class="k">מערכת הפעלה</span><span class="v" id="dvOs">—</span></div>
+        <div class="dv-row"><span class="k">דפדפן</span><span class="v" id="dvBrowser">—</span></div>
+        <div class="dv-row"><span class="k">שפה</span><span class="v" id="dvLang">—</span></div>
+        <div class="dv-row"><span class="k">אזור זמן</span><span class="v" id="dvTz">—</span></div>
+        <div class="dv-row"><span class="k">מצב אפליקציה (PWA)</span><span class="v" id="dvPwa">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="dv-foot">
+    הנתונים נמדדים ב-<span class="mono">navigator</span> ו-<span class="mono">screen</span> של הדפדפן ואינם נשלחים לשום מקום.
+    חלק מהערכים מוערכים בגסות (סיווג זיכרון, מהירות רשת) לפי בחירת הדפדפן, לשמירה על פרטיות.
+  </footer>
+
+</div>
+
+<script src="/js/device.js"></script>
+<script src="/js/dockbar.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>דרושים · חיים קריספין</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/jobs.css" />
+</head>
+<body>
+<div class="jb-wrap">
+
+  <header class="top-header">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="24,4 41,14 41,34 24,44 7,34 7,14" stroke="currentColor" stroke-width="2.5"/>
+        <path d="M18 20h12v3H18zM18 26h12v3H18z" fill="currentColor"/>
+      </svg>
+      <div>
+        <h1>דרושים</h1>
+        <div class="tagline">מיילי חיפוש עבודה + חיפוש מהיר בלוחות</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <button class="btn ghost" onclick="location.href='/'">חזרה ללוח הבקרה</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <a href="/">לוח בקרה</a>
+    <a href="/daily.html">מענה יומי</a>
+    <a href="/jarvis.html">עוזר JARVIS</a>
+    <a href="/housing.html">דיור</a>
+    <a href="/jobs.html" class="active">דרושים</a>
+    <a href="/finance.html">פיננסים</a>
+    <a href="/health.html">בריאות</a>
+    <a href="/fitness.html">כושר</a>
+    <a href="/devops.html">DevOps</a>
+    <a href="/aia.html">עיצוב AIA</a>
+    <a href="/library.html">אוצר לחג</a>
+    <a href="/device.html">המכשיר</a>
+    <a href="/graphology.html">גרפולוגיה</a>
+    <a href="/astro-full.html">אסטרולוגיה</a>
+    <a href="/editor.html">עורך מסגרות</a>
+    <a href="/mail.html">מיילים</a>
+    <a href="/setup.html">הגדרות</a>
+  </nav>
+
+  <div class="jb-hero">
+    <div class="kicker">חיפוש עבודה</div>
+    <h1>כל מה שקשור לחיפוש עבודה — במקום אחד</h1>
+    <p class="lead">
+      המיילים שזוהו כחיפוש עבודה מסודרים לפי תחום, ולצידם קישורי חיפוש מהירים ללוחות הדרושים המובילים.
+      בוחרים את התחומים שרלוונטיים לך, והם נשמרים למכשיר הזה.
+    </p>
+  </div>
+
+  <!-- ═══════ 01 — המיילים שלך ═══════ -->
+  <section class="jb-section" id="mails">
+    <div class="jb-head"><span class="idx">01</span><h2>מיילי חיפוש עבודה</h2><span class="sub" id="jb-mail-updated"></span></div>
+    <p class="jb-note">מסונן אוטומטית מהמיילים שנמשכים דרך Maton, לפי שולח ותוכן. מקובץ לפי התחום שזוהה.</p>
+    <div class="jb-card" id="jb-mails-card">
+      <div class="jb-empty">טוען…</div>
+    </div>
+  </section>
+
+  <!-- ═══════ 02 — חיפוש בלוחות ═══════ -->
+  <section class="jb-section" id="boards">
+    <div class="jb-head"><span class="idx">02</span><h2>חיפוש מהיר בלוחות</h2><span class="sub">AllJobs · דרושים · JobMaster · LinkedIn · Indeed · Google</span></div>
+    <p class="jb-note">בחר את התחומים שלך — הם נשמרים ומוצגים ראשונים. לכל תחום, לחיצה על לוח פותחת חיפוש מוכן בלשונית חדשה.</p>
+
+    <div class="jb-fields-pick" id="jb-fields-pick"></div>
+
+    <div class="jb-card">
+      <div class="jb-field-block">
+        <h3>חיפוש חופשי</h3>
+        <div class="jb-search">
+          <input type="text" id="jb-free" placeholder="כל מילת חיפוש — למשל: DevOps Team Lead, Kubernetes, מנהל פרויקטים" />
+        </div>
+        <div class="jb-boards" id="jb-free-boards"></div>
+      </div>
+    </div>
+
+    <div class="jb-card" id="jb-fields-out"></div>
+  </section>
+
+  <footer class="jb-foot">
+    הקישורים נפתחים בלוחות חיצוניים ואינם נשמרים. סינון המיילים נעשה מקומית לפי מילים בשולח ובנושא — ייתכנו החמצות או טעויות סיווג.
+  </footer>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="/js/jobs.js"></script>
+<script src="/js/dockbar.js" defer></script>
+</body>
+</html>

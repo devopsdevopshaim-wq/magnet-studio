@@ -1,0 +1,25 @@
+{
+  "name": "הפנקס היומי",
+  "short_name": "הפנקס",
+  "description": "מערכת ההפעלה האישית — מענה יומי, לימוד, כספים, עיצוב וקול.",
+  "lang": "he",
+  "dir": "rtl",
+  "start_url": "/daily.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#1b1611",
+  "theme_color": "#1b1611",
+  "categories": ["productivity", "lifestyle", "utilities"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "מענה יומי", "url": "/daily.html", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "כספים", "url": "/finance.html" },
+    { "name": "אוצר לחג", "url": "/library.html" },
+    { "name": "עיצוב AIA", "url": "/aia.html" }
+  ]
+}

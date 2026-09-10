@@ -1,0 +1,504 @@
+/* מענה יומי — "חדר עבודה בערב". פנקס אישי, לא דשבורד. משתמש ב-tokens של style.css. */
+
+.daily-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 26px 100px;
+}
+
+/* ---------- מסתור (masthead) ---------- */
+
+.daily-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.daily-greeting {
+  font-family: var(--font-display);
+  font-size: 2.7rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  margin: 0;
+  line-height: 1.15;
+  color: var(--cream);
+}
+
+.daily-subline {
+  color: var(--cream-dim);
+  font-size: 0.9rem;
+  margin-top: 8px;
+  letter-spacing: 0.01em;
+}
+
+.daily-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* קשת האופק — החתימה: אור היום מהזריחה לשקיעה, עם סימן ל"עכשיו" */
+.horizon {
+  margin: 22px 0 30px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 26px;
+}
+.horizon svg { display: block; width: 100%; height: 62px; overflow: visible; }
+.horizon .arc { fill: none; stroke: var(--line); stroke-width: 1.25; }
+.horizon .arc-day { fill: none; stroke: url(#dayGrad); stroke-width: 2; stroke-linecap: round; }
+.horizon .tick { stroke: var(--line); stroke-width: 1; }
+.horizon .tick-label { fill: var(--cream-dim); font-family: var(--font-mono); font-size: 9px; }
+.horizon .now-dot { fill: var(--ember); }
+.horizon .now-ring { fill: none; stroke: var(--ember); stroke-width: 1; opacity: 0.5; }
+@media (prefers-reduced-motion: no-preference) {
+  .horizon .now-ring { animation: nowpulse 3.4s ease-in-out infinite; }
+}
+@keyframes nowpulse { 0%,100% { opacity: 0.15; r: 7; } 50% { opacity: 0.55; r: 11; } }
+.horizon .caption { fill: var(--cream-dim); font-family: var(--font-mono); font-size: 9.5px; }
+
+/* ---------- ניווט-עוגנים: שקט ---------- */
+
+.daily-anchors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin: 0 0 8px;
+  position: sticky;
+  top: 0;
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  backdrop-filter: blur(8px);
+  padding: 8px 0;
+  z-index: 20;
+  border-bottom: 1px solid var(--line-soft);
+}
+.daily-anchors a {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--cream-dim);
+  padding: 5px 12px;
+  border-bottom: 2px solid transparent;
+}
+.daily-anchors a:hover { color: var(--cream); border-bottom-color: var(--line); }
+.daily-anchors a.here { color: var(--ember); border-bottom-color: var(--ember); }
+
+/* ---------- הנרטיב: דף פתיחה ---------- */
+
+.daily-narrative {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-inline-start: 3px solid var(--ember);
+  border-radius: var(--radius-card);
+  padding: 24px 28px 26px;
+  margin: 26px 0 40px;
+  box-shadow: var(--shadow-soft);
+}
+.daily-narrative .label {
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--brass);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  margin-bottom: 12px;
+}
+.daily-narrative .text {
+  font-family: var(--font-display);
+  font-size: 1.16rem;
+  font-weight: 400;
+  line-height: 1.85;
+  color: var(--cream);
+  white-space: pre-wrap;
+}
+.daily-narrative .text::first-letter { font-size: 1.5em; color: var(--ember); font-weight: 500; }
+.daily-narrative.muted { border-inline-start-color: var(--line); }
+.daily-narrative.muted .text { font-family: var(--font-body); font-size: 0.95rem; line-height: 1.7; color: var(--cream-dim); }
+.daily-narrative.muted .text::first-letter { font-size: 1em; color: inherit; }
+
+/* ---------- מקטע: eyebrow + סריף + קו קצר ---------- */
+
+.daily-section { margin-top: 46px; scroll-margin-top: 64px; }
+.daily-section:first-of-type { margin-top: 0; }
+
+.daily-section-head { margin-bottom: 18px; }
+.daily-eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brass);
+  display: block;
+  margin-bottom: 4px;
+}
+.daily-section-head h2 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin: 0;
+  color: var(--cream);
+  line-height: 1.2;
+}
+.daily-section-head h2::after {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 1px;
+  background: var(--brass);
+  margin-top: 12px;
+  opacity: 0.6;
+}
+.daily-section-sub { font-size: 0.8rem; color: var(--cream-dim); margin-top: 8px; display: block; }
+
+/* ---------- כרטיסים ---------- */
+
+.daily-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.daily-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: 20px 22px;
+  box-shadow: var(--shadow-soft);
+}
+.daily-section > .daily-card + .daily-card { margin-top: 14px; }
+
+.daily-card h3 {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--brass);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  margin: 0 0 14px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.daily-card h3 .badge {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  background: none;
+  border: 1px solid var(--line);
+  color: var(--cream-dim);
+  padding: 1px 8px;
+  border-radius: 2px;
+  letter-spacing: 0;
+}
+.daily-card h3 .badge.warn { border-color: var(--danger); color: var(--danger); }
+.daily-card h3 .badge.ok { border-color: var(--sage); color: var(--sage); }
+.daily-card h3 .daily-sub { letter-spacing: 0; text-transform: none; font-weight: 400; }
+
+/* ---------- שורות ---------- */
+
+.daily-list { display: flex; flex-direction: column; gap: 0; }
+
+.daily-row {
+  font-size: 0.86rem;
+  border-top: 1px solid var(--line-soft);
+  padding: 9px 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.daily-row:first-child { border-top: none; padding-top: 0; }
+.daily-row .main {
+  color: var(--cream);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+}
+.daily-row .aside {
+  color: var(--cream-dim);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  white-space: nowrap;
+  flex: none;
+  max-width: 55%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.daily-row a { color: var(--brass-soft); text-decoration: none; }
+.daily-row a:hover { text-decoration: underline; text-decoration-color: var(--brass); }
+
+.daily-note { border-top: 1px solid var(--line-soft); padding-top: 9px; margin-top: 9px; font-size: 0.86rem; }
+.daily-note:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+.daily-note .t { color: var(--cream); }
+.daily-note .d { color: var(--cream-dim); font-size: 0.78rem; line-height: 1.55; margin-top: 3px; }
+
+.daily-empty { color: var(--cream-dim); font-size: 0.84rem; font-style: italic; }
+
+/* ---------- מדדים ---------- */
+
+.daily-metric-row { display: flex; gap: 26px; flex-wrap: wrap; }
+.daily-metric { display: flex; flex-direction: column; gap: 3px; }
+.daily-metric .num {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--brass-soft);
+}
+.daily-metric .num.warn { color: var(--danger); }
+.daily-metric .lbl {
+  font-size: 0.66rem;
+  color: var(--cream-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.daily-loading {
+  text-align: center;
+  padding: 90px 20px;
+  color: var(--cream-dim);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+.daily-errors { margin-top: 26px; font-size: 0.72rem; color: var(--cream-dim); opacity: 0.65; }
+
+/* ---------- טקסט ומקורות ---------- */
+
+.daily-para { font-size: 0.94rem; line-height: 1.75; color: var(--cream); margin: 14px 0 0; }
+.daily-sub { font-size: 0.76rem; color: var(--cream-dim); line-height: 1.5; }
+
+/* טקסט מקור (משנה / תניא / הלכה) — הסריף הספרותי, מנוקד, מרווח */
+.daily-source {
+  font-family: var(--font-display);
+  font-size: 1.08rem;
+  line-height: 2;
+  color: var(--cream);
+  margin: 0 0 12px;
+  padding: 14px 18px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-inline-start: 2px solid var(--brass);
+  border-radius: 2px;
+}
+.daily-explain { font-size: 0.88rem; line-height: 1.7; color: var(--cream-dim); margin: 0; }
+.daily-explain b { color: var(--brass-soft); font-weight: 600; }
+
+.daily-linkline { margin-top: 10px; font-size: 0.8rem; }
+.daily-linkline a { color: var(--brass-soft); text-decoration: none; }
+.daily-linkline a:hover { text-decoration: underline; }
+
+.daily-collapse { border-top: 1px solid var(--line-soft); padding: 10px 0; }
+.daily-collapse:first-child { border-top: none; }
+.daily-collapse summary {
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  color: var(--cream);
+  font-weight: 400;
+  list-style: none;
+}
+.daily-collapse summary::-webkit-details-marker { display: none; }
+.daily-collapse summary::before { content: "◦  "; color: var(--brass); }
+.daily-collapse[open] summary::before { content: "●  "; color: var(--ember); }
+.daily-collapse-body { padding: 14px 0 6px; }
+
+/* ---------- מילת היום (פתגם) ---------- */
+
+.daily-quote { text-align: center; padding: 34px 30px; position: relative; }
+.daily-quote::before {
+  content: "\201F";
+  font-family: var(--font-display);
+  font-size: 3.4rem;
+  color: var(--brass);
+  opacity: 0.35;
+  position: absolute;
+  top: 6px;
+  inset-inline-start: 22px;
+  line-height: 1;
+}
+.daily-quote blockquote {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1.7;
+  color: var(--cream);
+  margin: 0 0 14px;
+  font-weight: 400;
+}
+.daily-quote cite { font-style: normal; font-size: 0.84rem; color: var(--brass); letter-spacing: 0.04em; }
+
+/* ---------- מן השמים ---------- */
+
+.zmanim-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0 22px;
+  margin-top: 4px;
+}
+.zman {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.86rem;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+.zman-l { color: var(--cream-dim); }
+.zman-v { font-family: var(--font-mono); color: var(--brass-soft); }
+
+.daily-moon { display: flex; align-items: center; gap: 18px; }
+.moon-glyph { font-size: 2.8rem; line-height: 1; filter: saturate(0.85); }
+.moon-name { font-family: var(--font-display); font-size: 1.15rem; color: var(--cream); margin-bottom: 4px; }
+
+/* ---------- אוצר לחג ---------- */
+
+.daily-lib-item {
+  display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap;
+  padding: 12px 0; border-bottom: 1px solid var(--line-soft);
+}
+.daily-lib-item:last-of-type { border-bottom: none; }
+.daily-lib-main { flex: 1; min-width: 180px; }
+.daily-lib-title { font-weight: 600; color: var(--cream); }
+.daily-lib-tag {
+  display: inline-block; margin-inline-start: 8px; font-size: 0.7rem;
+  color: var(--ember); border: 1px solid var(--ember); border-radius: 10px; padding: 0 8px;
+}
+.daily-lib-actions { display: flex; gap: 8px; flex: none; }
+.daily-lib-actions a {
+  font-size: 0.8rem; color: var(--brass-soft); text-decoration: none;
+  border: 1px solid var(--line); border-radius: 7px; padding: 4px 12px;
+}
+.daily-lib-actions a:hover { border-color: var(--brass); color: var(--cream); }
+
+/* ---------- שבת ---------- */
+
+.daily-shabbat { border-inline-start: 2px solid var(--ember); }
+.shabbat-times { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 6px; }
+.shabbat-t {
+  flex: 1 1 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 11px 14px;
+}
+.shabbat-t .lbl { font-size: 0.74rem; color: var(--cream-dim); letter-spacing: 0.04em; }
+.shabbat-t .val { font-family: var(--font-mono); font-size: 1.5rem; font-variant-numeric: tabular-nums; color: var(--ember); line-height: 1.1; }
+.shabbat-t .sub { font-size: 0.74rem; color: var(--cream-dim); }
+
+/* ---------- מן המזל: טופס ---------- */
+
+.astro-form { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; margin-top: 16px; }
+.astro-form label { display: flex; flex-direction: column; gap: 5px; font-size: 0.76rem; color: var(--cream-dim); }
+.astro-form input,
+.astro-form select {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--cream);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  padding: 8px 11px;
+  border-radius: 2px;
+}
+.astro-form input:focus,
+.astro-form select:focus { outline: none; border-color: var(--brass); }
+
+/* בוחר תאריך לטרנזיטים + פרשנות מלאה */
+.astro-datepick {
+  display: flex; align-items: flex-end; gap: 14px; flex-wrap: wrap;
+  margin: 4px 0 18px; padding-bottom: 14px; border-bottom: 1px solid var(--line);
+}
+.astro-datepick label { display: flex; flex-direction: column; gap: 5px; font-size: 0.76rem; color: var(--cream-dim); }
+.astro-datepick input[type="date"] {
+  background: var(--bg); border: 1px solid var(--line); color: var(--cream);
+  font-family: var(--font-mono); font-size: 0.9rem; padding: 8px 11px; border-radius: 2px;
+}
+.astro-datepick input[type="date"]:focus { outline: none; border-color: var(--brass); }
+.astro-datepick #astro-date-note { color: var(--ember); font-size: 0.78rem; }
+
+.astro-interp-list { display: flex; flex-direction: column; gap: 12px; }
+.astro-interp {
+  border-inline-start: 2px solid var(--line);
+  padding: 4px 12px 6px;
+}
+.astro-interp.tight { border-inline-start-color: var(--ember); }
+.astro-interp-head {
+  font-family: var(--font-display); font-size: 1.02rem; color: var(--brass-soft); margin-bottom: 4px;
+}
+.astro-interp.tight .astro-interp-head { color: var(--ember); }
+.astro-interp-text { font-size: 0.9rem; line-height: 1.7; color: var(--cream); margin: 0; }
+
+/* ברכה + פרצוף קטן */
+.daily-greet-wrap { display: flex; align-items: center; gap: 16px; }
+.daily-avatar { flex: none; }
+
+/* ---------- השבוע הקרוב ---------- */
+
+.daily-legend { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px; font-size: 0.78rem; color: var(--cream-dim); }
+.acc-tag { font-family: var(--font-mono); font-size: 0.7rem; padding: 2px 10px; border: 1px solid; border-radius: 999px; }
+
+.week-grid { grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); }
+.week-day h3 .badge { background: none; border: 1px solid var(--line); color: var(--cream-dim); }
+.week-day.today { border-color: var(--ember); }
+.week-day.today h3 { color: var(--ember); }
+
+/* ---------- מזל והזדמנות (הגרלה) ---------- */
+
+.lotto-next { text-align: center; }
+.lotto-next h3 { font-family: var(--font-display); font-size: 1.35rem; font-weight: 500; color: var(--cream); letter-spacing: 0; text-transform: none; }
+.lotto-when { color: var(--cream-dim); font-size: 0.9rem; margin: 4px 0; }
+.lotto-count { font-family: var(--font-display); font-size: 1.7rem; color: var(--ember); margin-top: 8px; }
+
+.lotto-line { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.ball {
+  width: 36px; height: 36px; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  font-family: var(--font-mono); font-weight: 500; font-size: 0.92rem;
+  background: var(--bg);
+  border: 1px solid var(--brass);
+  color: var(--brass-soft);
+}
+.ball.strong { background: var(--ember); border-color: var(--ember); color: #211a12; font-weight: 600; }
+
+.daily-warn {
+  margin-top: 14px;
+  font-size: 0.73rem;
+  line-height: 1.6;
+  color: var(--accent-warm);
+  border-inline-start: 2px solid var(--accent-warm);
+  padding-inline-start: 11px;
+}
+
+/* ---------- ניהול היום ---------- */
+
+.tip-row {
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  padding: 12px 0;
+  border-top: 1px solid var(--line-soft);
+}
+.tip-row:first-child { border-top: none; padding-top: 0; }
+.tip-cat {
+  flex: none;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--brass);
+  text-transform: uppercase;
+  min-width: 62px;
+}
+.tip-text { color: var(--cream); font-size: 0.92rem; line-height: 1.65; }
+
+@media (max-width: 560px) {
+  .daily-greeting { font-size: 2rem; }
+  .daily-wrap { padding: 28px 18px 80px; }
+  .daily-quote blockquote { font-size: 1.2rem; }
+  .daily-section-head h2 { font-size: 1.35rem; }
+  .daily-narrative .text { font-size: 1.05rem; }
+}

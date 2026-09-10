@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>דיור · חיים קריספין</title>
+<link rel="stylesheet" href="/css/style.css" />
+<style>
+  body { overflow: hidden; padding-bottom: 0 !important; }
+  .housing-shell { display: flex; flex-direction: column; height: calc(100vh - 46px); }
+  body.dock-collapsed .housing-shell { height: calc(100vh - 26px); }
+  .housing-bar {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    padding: 11px 20px; border-bottom: 1px solid var(--line); background: var(--surface);
+  }
+  .housing-bar .brand-mini { font-family: var(--font-display); font-weight: 500; font-size: 1.1rem; color: var(--cream); }
+  .housing-bar nav { display: flex; gap: 2px; flex-wrap: wrap; }
+  .housing-bar nav a {
+    text-decoration: none; font-size: 0.82rem; font-weight: 500; padding: 5px 12px; color: var(--cream-dim);
+    border-bottom: 2px solid transparent;
+  }
+  .housing-bar nav a:hover { color: var(--cream); }
+  .housing-bar nav a.active { color: var(--ember); border-bottom-color: var(--ember); }
+  .housing-bar .status-pill {
+    margin-inline-start: auto; font-family: var(--font-mono); font-size: 0.74rem;
+    padding: 4px 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--cream-dim);
+  }
+  .housing-bar .status-pill.up { border-color: var(--sage); color: var(--sage); }
+  .housing-bar .status-pill.down { border-color: var(--danger); color: var(--danger); }
+  .housing-bar button {
+    font-family: var(--font-body); font-size: 0.76rem; padding: 6px 13px; cursor: pointer;
+    background: none; color: var(--cream-dim); border: 1px solid var(--line); border-radius: 2px;
+  }
+  .housing-bar button:hover { border-color: var(--brass); color: var(--brass-soft); }
+  iframe#dira { flex: 1; width: 100%; border: 0; background: #f2f3f6; }
+</style>
+</head>
+<body>
+<div class="housing-shell">
+  <div class="housing-bar">
+    <span class="brand-mini">דיור · DiraFinder</span>
+    <nav>
+      <a href="/">לוח בקרה</a>
+      <a href="/daily.html">מענה יומי</a>
+      <a href="/jarvis.html">JARVIS</a>
+      <a href="/housing.html" class="active">דיור</a>
+      <a href="/jobs.html">דרושים</a>
+      <a href="/finance.html">פיננסים</a>
+      <a href="/health.html">בריאות</a>
+      <a href="/fitness.html">כושר</a>
+      <a href="/devops.html">DevOps</a>
+      <a href="/aia.html">עיצוב AIA</a>
+      <a href="/library.html">אוצר לחג</a>
+      <a href="/device.html">המכשיר</a>
+      <a href="/graphology.html">גרפולוגיה</a>
+      <a href="/astro-full.html">אסטרולוגיה</a>
+    </nav>
+    <span class="status-pill" id="status-pill">בודק מצב…</span>
+    <button id="btn-stack">הפעל סטאק</button>
+    <button id="btn-open" onclick="window.open('/housing/landing','_blank')">פתיחה בחלון</button>
+  </div>
+  <iframe id="dira" src="/housing/landing" title="DiraFinder"></iframe>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const toastEl = document.getElementById("toast");
+  function toast(m, e) { toastEl.textContent = m; toastEl.className = "toast show" + (e ? " error" : ""); setTimeout(() => toastEl.className = "toast", 3000); }
+
+  const pill = document.getElementById("status-pill");
+  async function refreshStatus() {
+    try {
+      const st = await fetch("/api/housing/status").then(r => r.json());
+      if (st.up) {
+        const n = st.count != null ? st.count : (await fetch("/api/housing/listings?limit=1").then(r => r.json()).then(d => (d.listings || []).length ? "?" : 0).catch(() => "?"));
+        pill.textContent = `פעיל · ${st.count ?? n} נכסים · ${st.source === "postgres" ? "Postgres מקומי" : "API"}`;
+        pill.className = "status-pill up";
+      } else {
+        pill.textContent = "הסטאק כבוי";
+        pill.className = "status-pill down";
+      }
+    } catch {
+      pill.textContent = "שגיאת בדיקה";
+      pill.className = "status-pill down";
+    }
+  }
+  refreshStatus();
+
+  document.getElementById("btn-stack").addEventListener("click", async (e) => {
+    e.target.disabled = true;
+    e.target.textContent = "מפעיל…";
+    const r = await fetch("/api/housing/stack-up", { method: "POST" }).then(r => r.json()).catch(() => ({ ok: false }));
+    e.target.disabled = false;
+    e.target.textContent = "הפעל סטאק";
+    if (r.ok) { toast("הסטאק הופעל"); setTimeout(refreshStatus, 4000); }
+    else toast(r.error || "לא הצלחתי להפעיל את הסטאק (Docker Desktop פתוח?)", true);
+  });
+</script>
+<script src="/js/dockbar.js" defer></script>
+</body>
+</html>

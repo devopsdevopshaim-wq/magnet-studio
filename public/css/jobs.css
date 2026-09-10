@@ -1,0 +1,69 @@
+/* דרושים — במערכת "חדר עבודה בערב". tokens מ-style.css. */
+
+.jb-wrap { max-width: 880px; margin: 0 auto; padding: 30px 22px 90px; }
+
+.jb-hero { padding: 18px 0 4px; }
+.jb-hero .kicker { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember); }
+.jb-hero h1 { font-family: var(--font-display); font-weight: 500; font-size: clamp(1.7rem, 1.1rem + 2.6vw, 2.4rem); margin: 6px 0 8px; color: var(--cream); }
+.jb-hero .lead { color: var(--cream-dim); font-size: 0.98rem; line-height: 1.7; max-width: 56ch; margin: 0; }
+
+.jb-section { margin-top: 40px; }
+.jb-section > .jb-head { display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid var(--line); padding-bottom: 7px; margin-bottom: 14px; }
+.jb-head .idx { font-family: var(--font-mono); font-size: 0.78rem; color: var(--brass); border: 1px solid var(--line); border-radius: 2px; padding: 1px 7px; }
+.jb-head h2 { font-family: var(--font-display); font-weight: 500; font-size: 1.4rem; margin: 0; color: var(--cream); }
+.jb-head .sub { margin-inline-start: auto; font-size: 0.78rem; color: var(--cream-dim); }
+.jb-note { color: var(--cream-dim); font-size: 0.9rem; margin: 0 0 14px; }
+
+.jb-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-card); padding: 18px; }
+.jb-card + .jb-card { margin-top: 12px; }
+
+/* בחירת תחומים */
+.jb-fields-pick { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 18px; }
+.jb-fields-pick label {
+  display: inline-flex; gap: 7px; align-items: center; font-size: 0.85rem;
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px;
+  padding: 5px 13px; cursor: pointer; color: var(--cream-dim);
+}
+.jb-fields-pick label:hover { border-color: var(--brass); }
+.jb-fields-pick input { accent-color: var(--ember); }
+.jb-fields-pick label:has(input:checked) { border-color: var(--ember); color: var(--cream); background: color-mix(in srgb, var(--ember) 10%, var(--surface-2)); }
+
+/* טור לכל תחום */
+.jb-field-block { margin-bottom: 6px; }
+.jb-field-block h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.08rem; color: var(--brass-soft); margin: 0 0 4px; }
+.jb-field-block .q { font-family: var(--font-mono); font-size: 0.74rem; color: var(--cream-dim); margin-bottom: 8px; }
+.jb-boards { display: flex; flex-wrap: wrap; gap: 8px; }
+.jb-board {
+  font-size: 0.82rem; text-decoration: none;
+  background: var(--bg); border: 1px solid var(--line); border-radius: 2px;
+  padding: 6px 13px; color: var(--brass-soft);
+}
+.jb-board:hover { border-color: var(--brass); color: var(--cream); }
+
+/* חיפוש חופשי */
+.jb-search { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 16px; }
+.jb-search input {
+  flex: 1; min-width: 200px; font: inherit; color: var(--cream); background: var(--bg);
+  border: 1px solid var(--line); border-radius: 2px; padding: 9px 12px;
+}
+.jb-search input:focus { outline: none; border-color: var(--brass); }
+
+/* מיילים */
+.jb-mail-field { margin-bottom: 16px; }
+.jb-mail-field h3 {
+  font-family: var(--font-display); font-weight: 500; font-size: 1rem; color: var(--ember);
+  margin: 0 0 6px; display: flex; align-items: baseline; gap: 8px;
+}
+.jb-mail-field h3 .count { font-family: var(--font-mono); font-size: 0.78rem; color: var(--cream-dim); }
+.jb-mail-list { display: flex; flex-direction: column; gap: 6px; }
+.jb-mail {
+  display: flex; justify-content: space-between; gap: 12px; align-items: baseline;
+  border-inline-start: 2px solid var(--line); padding: 4px 11px; font-size: 0.9rem;
+}
+.jb-mail a { color: var(--cream); text-decoration: none; }
+.jb-mail a:hover { color: var(--brass-soft); text-decoration: underline; }
+.jb-mail .who { font-size: 0.76rem; color: var(--cream-dim); font-family: var(--font-mono); flex: none; }
+
+.jb-empty { color: var(--cream-dim); font-size: 0.86rem; font-style: italic; }
+
+.jb-foot { margin-top: 44px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 0.8rem; color: var(--cream-dim); line-height: 1.7; }

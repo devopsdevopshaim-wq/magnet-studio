@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>אסטרולוגיה מלאה · חיים קריספין</title>
+<link rel="stylesheet" href="/css/style.css" />
+<style>
+  body { overflow: hidden; padding-bottom: 0 !important; }
+  .ext-shell { display: flex; flex-direction: column; height: calc(100vh - 46px); }
+  body.dock-collapsed .ext-shell { height: calc(100vh - 26px); }
+  .ext-bar {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    padding: 11px 20px; border-bottom: 1px solid var(--line); background: var(--surface);
+  }
+  .ext-bar .brand-mini { font-family: var(--font-display); font-weight: 500; font-size: 1.1rem; color: var(--cream); }
+  .ext-bar nav { display: flex; gap: 2px; flex-wrap: wrap; }
+  .ext-bar nav a {
+    text-decoration: none; font-size: 0.82rem; font-weight: 500; padding: 5px 12px;
+    color: var(--cream-dim); border-bottom: 2px solid transparent;
+  }
+  .ext-bar nav a:hover { color: var(--cream); }
+  .ext-bar nav a.active { color: var(--ember); border-bottom-color: var(--ember); }
+  .ext-bar .spring { margin-inline-start: auto; }
+  .ext-bar button {
+    font-family: var(--font-body); font-size: 0.76rem; padding: 6px 13px; cursor: pointer;
+    background: none; color: var(--cream-dim); border: 1px solid var(--line); border-radius: 2px;
+  }
+  .ext-bar button:hover { border-color: var(--brass); color: var(--brass-soft); }
+  iframe.ext { flex: 1; width: 100%; border: 0; background: #0f0d16; }
+  .ext-fallback { flex: 1; display: none; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; text-align: center; padding: 30px; color: var(--cream-dim); }
+  .ext-fallback h2 { color: var(--brass-soft); font-family: var(--font-display); margin: 0; }
+  .ext-fallback a { color: var(--ember); }
+</style>
+</head>
+<body>
+<div class="ext-shell">
+  <div class="ext-bar">
+    <span class="brand-mini">פענוח אסטרולוגי מלא</span>
+    <nav>
+      <a href="/">לוח בקרה</a>
+      <a href="/daily.html">מענה יומי</a>
+      <a href="/jarvis.html">JARVIS</a>
+      <a href="/jobs.html">דרושים</a>
+      <a href="/finance.html">פיננסים</a>
+      <a href="/health.html">בריאות</a>
+      <a href="/fitness.html">כושר</a>
+      <a href="/devops.html">DevOps</a>
+      <a href="/aia.html">עיצוב AIA</a>
+      <a href="/library.html">אוצר לחג</a>
+      <a href="/device.html">המכשיר</a>
+      <a href="/graphology.html">גרפולוגיה</a>
+      <a href="/astro-full.html" class="active">אסטרולוגיה</a>
+    </nav>
+    <span class="spring"></span>
+    <button onclick="window.open('/astro/full','_blank')">פתיחה בחלון</button>
+  </div>
+  <iframe class="ext" id="ext-frame" src="/astro/full" title="פענוח אסטרולוגי מלא"></iframe>
+  <div class="ext-fallback" id="ext-fallback">
+    <h2>האסטרולוגיה המלאה דורשת את המחשב</h2>
+    <p>המנוע האסטרולוגי המלא (אפמריס, מפת לידה מפורטת, טרנזיטים) רץ על המחשב שלך.</p>
+    <p>בטלפון, מכל מקום: <a href="/daily.html#astro">"המזל היום" במענה היומי</a> — מזל השמש והירח,
+       הטרנזיטים והיבטים, מחושבים במכשיר.</p>
+    <p style="font-size:0.82rem">לגרסה המלאה בטלפון: הרץ במחשב <code>install\גישה-מרחוק-מכל-מקום.bat</code> (Tailscale).</p>
+  </div>
+</div>
+<script>
+(function () {
+  var frame = document.getElementById("ext-frame");
+  var fb = document.getElementById("ext-fallback");
+  var ok = false;
+  frame.addEventListener("load", function () {
+    // ניווט מוצלח בתוך ה-iframe — בודקים שלא קיבלנו 404 של Vercel
+    try { if (frame.contentDocument && /404|not found/i.test(frame.contentDocument.title || "")) return; } catch (e) {}
+    ok = true;
+  });
+  setTimeout(function () {
+    if (ok) return;
+    // ניסיון ישיר: יש /astro/full?
+    fetch("/astro/full", { method: "HEAD" }).then(function (r) {
+      if (!r.ok) throw new Error();
+    }).catch(function () {
+      frame.style.display = "none";
+      fb.style.display = "flex";
+    });
+  }, 6000);
+})();
+</script>
+<script src="/js/dockbar.js" defer></script>
+</body>
+</html>

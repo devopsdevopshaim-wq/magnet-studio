@@ -1,0 +1,9 @@
+# נירמול סופי שורות — הרפו נפרס על לינוקס
+* text=auto eol=lf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+*.vbs text eol=crlf
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff2 binary

@@ -1,0 +1,47 @@
+{
+  "_note": "אוצר קבצים לחגים. occasion = שם חג באנגלית (Pesach, Rosh Hashana, Yom Kippur, Sukkot, Chanukah, Purim, Shavuot, Tu BiShvat, Lag BaOmer, Tish'a B'Av) · \"always\" · \"shabbat\". windowBefore/After = ימים לפני/אחרי שהקובץ בולט במענה היומי. type: pdf | page.",
+  "resources": [
+    {
+      "id": "haggadah-page",
+      "title": "הגדה של פסח — מהדורה מעוצבת",
+      "file": "/library/haggadah.html",
+      "type": "page",
+      "category": "חג",
+      "occasion": "Pesach",
+      "windowBefore": 25,
+      "windowAfter": 8,
+      "desc": "הגדה אינטראקטיבית מלאה — 15 שלבי הסדר, ניקוד מלא, ניווט, שליטה בגודל טקסט והדפסה."
+    },
+    {
+      "id": "haggadah-pdf",
+      "title": "הגדה של פסח — PDF להורדה והדפסה",
+      "file": "/library/haggadah-shel-pesach.pdf",
+      "type": "pdf",
+      "category": "חג",
+      "occasion": "Pesach",
+      "windowBefore": 25,
+      "windowAfter": 8,
+      "desc": "אותה הגדה כקובץ PDF מעוצב, מוכן להדפסה."
+    },
+    {
+      "id": "megillat-esther",
+      "title": "מגילת אסתר — הנוסח המלא",
+      "file": "/library/megillah.html",
+      "type": "page",
+      "category": "חג",
+      "occasion": "Purim",
+      "windowBefore": 21,
+      "windowAfter": 3,
+      "desc": "עשרה פרקים, טקסט מלא עם ניקוד וטעמים, ניווט לפי פרקים והדפסה."
+    },
+    {
+      "id": "brachot-magnets",
+      "title": "ברכות ותפילות — לוח מגנטים",
+      "file": "/library/brachot-magnets.pdf",
+      "type": "pdf",
+      "category": "ברכות",
+      "occasion": "always",
+      "desc": "אוסף ברכות ותפילות מעוצב, מוכן להדפסה כמגנטים למקרר / למתנה."
+    }
+  ]
+}

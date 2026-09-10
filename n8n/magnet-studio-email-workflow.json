@@ -1,0 +1,66 @@
+{
+  "name": "סטודיו מגנטים - מצב מיילים",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "minutes", "minutesInterval": 15 }]
+        }
+      },
+      "id": "trigger-schedule",
+      "name": "כל 15 דקות",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [-40, 200]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "getAll",
+        "returnAll": false,
+        "limit": 100,
+        "filters": { "q": "is:unread in:inbox" }
+      },
+      "id": "gmail-get-unread",
+      "name": "שליפת מיילים שלא נקראו",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [200, 200],
+      "credentials": {
+        "gmailOAuth2": { "id": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL", "name": "Gmail account" }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst recent = items.slice(0, 5).map(i => ({\n  subject: i.json.subject || (i.json.payload?.headers || []).find(h => h.name === 'Subject')?.value || '',\n  sender: i.json.from || (i.json.payload?.headers || []).find(h => h.name === 'From')?.value || '',\n  date: i.json.date || new Date().toISOString()\n}));\nreturn [{\n  json: {\n    account: 'REPLACE_WITH_YOUR_EMAIL',\n    unreadCount: items.length,\n    recentUnread: recent,\n    source: 'n8n'\n  }\n}];"
+      },
+      "id": "build-summary",
+      "name": "בניית סיכום",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:4420/api/email/status",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "id": "http-push",
+      "name": "עדכון לוח הבקרה",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 200]
+    }
+  ],
+  "connections": {
+    "כל 15 דקות": { "main": [[{ "node": "שליפת מיילים שלא נקראו", "type": "main", "index": 0 }]] },
+    "שליפת מיילים שלא נקראו": { "main": [[{ "node": "בניית סיכום", "type": "main", "index": 0 }]] },
+    "בניית סיכום": { "main": [[{ "node": "עדכון לוח הבקרה", "type": "main", "index": 0 }]] }
+  },
+  "pinData": {},
+  "meta": { "instanceId": "magnet-studio-local" }
+}
