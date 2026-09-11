@@ -84,6 +84,16 @@ if (!fs.existsSync(INBOX_FILE)) fs.writeFileSync(INBOX_FILE, "[]", "utf8");
 if (!fs.existsSync(EMAIL_STATUS_FILE)) fs.writeFileSync(EMAIL_STATUS_FILE, "null", "utf8");
 if (!fs.existsSync(CALENDAR_STATUS_FILE)) fs.writeFileSync(CALENDAR_STATUS_FILE, "null", "utf8");
 
+// ---------- אינטגרציות: כל השירותים/ה-API-ים שהמערכת משתמשת בהם, במקום אחד ----------
+app.get("/api/integrations", async (req, res) => {
+  try { res.json({ integrations: await require("./lib/integrations").list() }); }
+  catch (err) { res.status(500).json({ integrations: [], error: err.message }); }
+});
+app.post("/api/integrations/:id", async (req, res) => {
+  try { res.json({ ok: true, status: await require("./lib/integrations").save(req.params.id, req.body || {}) }); }
+  catch (err) { res.status(400).json({ ok: false, error: err.message }); }
+});
+
 // ---------- הגדרת מערכת (מסך התקנה - הופך את המערכת לניידת בין מחשבים) ----------
 
 app.get("/api/setup/status", (req, res) => {
@@ -773,6 +783,118 @@ app.get("/api/library", async (req, res) => {
   }
 });
 
+// ---------- ספריית קודש: תנ"ך · סידור · רש"י/רמב"ם/אור החיים · תלמוד בבלי (חי מ-Sefaria) ----------
+app.get("/api/torah/catalog", (req, res) => {
+  const L = require("./lib/sefariaLibrary");
+  res.json({
+    books: L.TANAKH_BOOKS, commentaries: L.COMMENTARIES,
+    rambam: L.RAMBAM_SECTIONS, talmud: L.TALMUD_TRACTATES
+  });
+});
+app.get("/api/torah/siddur-tree", async (req, res) => {
+  try { res.json({ tree: await require("./lib/sefariaLibrary").getSiddurTree() }); }
+  catch (err) { res.status(502).json({ tree: [], error: err.message }); }
+});
+app.get("/api/torah/text", async (req, res) => {
+  try { res.json(await require("./lib/sefariaLibrary").getText(req.query.ref)); }
+  catch (err) { res.status(502).json({ error: err.message }); }
+});
+
+// ---------- ניהול עסק: לקוחות · חשבוניות · הנהלת חשבונות · יומן עסקי ----------
+const biz = require("./lib/business");
+
+app.get("/api/business/clients", (req, res) => res.json({ clients: biz.listClients() }));
+app.post("/api/business/clients", (req, res) => {
+  try { res.json({ client: biz.saveClient(req.body || {}) }); } catch (err) { res.status(400).json({ error: err.message }); }
+});
+app.delete("/api/business/clients/:id", (req, res) => res.json(biz.deleteClient(req.params.id)));
+
+app.get("/api/business/invoices", (req, res) => res.json({ invoices: biz.listInvoices() }));
+app.get("/api/business/invoices/:id", (req, res) => {
+  const inv = biz.getInvoice(req.params.id);
+  if (!inv) return res.status(404).json({ error: "לא נמצאה" });
+  res.json(inv);
+});
+app.post("/api/business/invoices", (req, res) => {
+  try { res.json({ invoice: biz.saveInvoice(req.body || {}) }); } catch (err) { res.status(400).json({ error: err.message }); }
+});
+app.put("/api/business/invoices/:id", (req, res) => {
+  try { res.json({ invoice: biz.saveInvoice({ ...req.body, id: req.params.id }) }); } catch (err) { res.status(400).json({ error: err.message }); }
+});
+app.post("/api/business/invoices/:id/status", (req, res) => {
+  try { res.json({ invoice: biz.setInvoiceStatus(req.params.id, (req.body || {}).status) }); } catch (err) { res.status(400).json({ error: err.message }); }
+});
+app.delete("/api/business/invoices/:id", (req, res) => res.json(biz.deleteInvoice(req.params.id)));
+
+app.get("/api/business/ledger", (req, res) => res.json(biz.listLedger(req.query.month)));
+app.post("/api/business/ledger", (req, res) => {
+  try { res.json({ entry: biz.saveLedgerEntry(req.body || {}) }); } catch (err) { res.status(400).json({ error: err.message }); }
+});
+app.delete("/api/business/ledger/:id", (req, res) => res.json(biz.deleteLedgerEntry(req.params.id)));
+
+app.get("/api/business/calendar", (req, res) => res.json({
+  entries: biz.listCalendar(req.query.month), upcoming: req.query.upcoming ? biz.upcomingCalendar(Number(req.query.upcoming) || 14) : undefined
+}));
+app.post("/api/business/calendar", (req, res) => {
+  try { res.json({ entry: biz.saveCalendarEntry(req.body || {}) }); } catch (err) { res.status(400).json({ error: err.message }); }
+});
+app.delete("/api/business/calendar/:id", (req, res) => res.json(biz.deleteCalendarEntry(req.params.id)));
+
+// חשבונית להדפסה — עמוד עצמאי ומעוצב, מוכן ל-Ctrl+P / שמירה כ-PDF
+app.get("/business/invoice/:id/print", (req, res) => {
+  const inv = biz.getInvoice(req.params.id);
+  if (!inv) return res.status(404).send("חשבונית לא נמצאה");
+  const prof = require("./lib/profile").read();
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const nis = (n) => Number(n || 0).toLocaleString("he-IL", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const rows = inv.items.map((it) => `<tr><td>${esc(it.desc)}</td><td>${it.qty}</td><td>${nis(it.price)} ₪</td><td>${nis(it.qty * it.price)} ₪</td></tr>`).join("");
+  const sub = inv.items.reduce((s, it) => s + it.qty * it.price, 0);
+  res.type("html").send(`<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8">
+<title>חשבונית ${esc(inv.number)}</title>
+<style>
+  body{font-family:'Assistant',Arial,sans-serif;max-width:720px;margin:40px auto;color:#241d16;padding:0 20px}
+  h1{font-size:1.5rem;margin:0} .muted{color:#8a7c68} .head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #c69a63;padding-bottom:16px;margin-bottom:20px}
+  table{width:100%;border-collapse:collapse;margin:20px 0} th,td{text-align:start;padding:8px 10px;border-bottom:1px solid #e5ddc9} th{color:#8a7c68;font-size:.85rem;text-transform:uppercase;letter-spacing:.04em}
+  .totals{margin-top:10px;display:flex;flex-direction:column;align-items:flex-end;gap:4px} .totals .grand{font-size:1.3rem;font-weight:700;color:#241d16;border-top:2px solid #241d16;padding-top:8px;margin-top:6px}
+  .status{display:inline-block;padding:4px 12px;border-radius:999px;font-size:.8rem;font-weight:700}
+  .status.paid{background:#e3ecdd;color:#4a6741} .status.sent{background:#fdeeda;color:#a15b16} .status.draft{background:#eee;color:#777}
+  @media print{ button{display:none} }
+</style></head><body>
+  <div class="head">
+    <div><h1>${esc(prof.displayName || "חיים קריספין")}</h1><div class="muted">חשבונית מס' ${esc(inv.number)}</div></div>
+    <div style="text-align:end"><span class="status ${esc(inv.status)}">${inv.status === "paid" ? "שולם" : inv.status === "sent" ? "נשלח" : "טיוטה"}</span>
+      <div class="muted" style="margin-top:6px">תאריך: ${esc(inv.date)}${inv.dueDate ? " · לתשלום עד " + esc(inv.dueDate) : ""}</div></div>
+  </div>
+  <div><b>לכבוד:</b> ${esc(inv.client?.name || inv.clientName || "—")}${inv.client?.phone ? " · " + esc(inv.client.phone) : ""}${inv.client?.email ? " · " + esc(inv.client.email) : ""}</div>
+  <table><tr><th>תיאור</th><th>כמות</th><th>מחיר יח'</th><th>סה"כ</th></tr>${rows}</table>
+  <div class="totals">
+    ${inv.discount ? `<div>סכום ביניים: ${nis(sub)} ₪</div><div>הנחה ${inv.discount}%: −${nis(sub - inv.total)} ₪</div>` : ""}
+    <div class="grand">לתשלום: ${nis(inv.total)} ₪</div>
+  </div>
+  ${inv.notes ? `<p class="muted">${esc(inv.notes)}</p>` : ""}
+  <button onclick="window.print()" style="margin-top:24px;padding:10px 20px;border-radius:9px;border:1px solid #c69a63;background:#c69a63;color:#201810;font-weight:700;cursor:pointer">הדפס / שמור כ-PDF</button>
+</body></html>`);
+});
+
+// ---------- סטודיו פרסום ושיווק: קמפיין מלא (כותרות/טקסטים/CTA/האשטגים/בריף חזותי) ----------
+app.post("/api/marketing/generate", async (req, res) => {
+  try { res.json(await require("./lib/adStudio").generate(req.body || {})); }
+  catch (err) {
+    if (err.code === "NO_AI") return res.status(428).json({ error: err.message, needAI: true });
+    res.status(400).json({ error: err.message });
+  }
+});
+app.get("/api/marketing/options", (req, res) => {
+  const a = require("./lib/adStudio");
+  res.json({ platforms: a.PLATFORM_LABELS, goals: a.GOAL_LABELS });
+});
+
+// ---------- סטודיו לוגו: 6 קונספטים וקטוריים מיידיים + פרומפטים למחוללי תמונה ----------
+app.post("/api/logo/generate", async (req, res) => {
+  try { res.json(await require("./lib/logoStudio").generate(req.body || {})); }
+  catch (err) { res.status(400).json({ error: err.message }); }
+});
+
 // ---------- הקראה בעברית בקול נשי (לצ'אט הקולי של JARVIS) ----------
 
 app.get("/api/tts/status", (req, res) => {
@@ -812,6 +934,34 @@ app.get("/api/ambient/moods", (req, res) => {
   const tracks = dock.tracks();
   const moods = dock.moods().map((m) => ({ ...m, count: tracks.filter((t) => t.mood === m.key).length }));
   res.json({ moods, total: tracks.length });
+});
+
+// חיפוש חופשי ב-YouTube (בלי מפתח API) — כל שיר/ערוץ/ז'אנר, לא רק הרשימה המתוקתקת
+app.get("/api/youtube/search", async (req, res) => {
+  try { res.json({ items: await require("./lib/youtubeSearch").searchYouTube(req.query.q || "", 12) }); }
+  catch (err) { res.status(502).json({ items: [], error: err.message }); }
+});
+
+// הוספת תחנה שנמצאה בחיפוש לרשימת המוזיקה הקבועה — נכנסת מיד לרוטציה, נשארת לתמיד
+app.post("/api/ambient/add", (req, res) => {
+  try {
+    const { id, title } = req.body || {};
+    if (!id || !title) return res.status(400).json({ error: "חסר מזהה או כותרת" });
+    const file = path.join(__dirname, "data", "ambient-tracks.json");
+    const j = JSON.parse(fs.readFileSync(file, "utf8"));
+    j.tracks = j.tracks || []; j.moods = j.moods || [];
+    if (!j.tracks.some((t) => t.id === id)) {
+      j.tracks.push({ id, title: String(title).slice(0, 140), mood: "custom" });
+      if (!j.moods.some((m) => m.key === "custom")) {
+        j.moods.push({ key: "custom", he: "שלי", emoji: "⭐", desc: "תחנות שהוספתי מיוטיוב" });
+      }
+      fs.writeFileSync(file, JSON.stringify(j, null, 2));
+    }
+    require("./lib/dockbarData").reload();
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // ---------- n8n מקומי (Docker) - JARVIS עצמו נשאר מול n8n Cloud ----------

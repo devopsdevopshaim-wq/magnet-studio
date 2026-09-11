@@ -225,6 +225,38 @@
     } catch { MOODS = []; }
   }
 
+  // --- חיפוש חופשי ביוטיוב (לא רק הרשימה המתוקתקת) ---
+  async function ytSearch(q) {
+    const box = $("dock-ytresults");
+    if (!box) return;
+    box.innerHTML = `<div class="dock-yt-msg">מחפש…</div>`;
+    try {
+      const { items } = await fetch("/api/youtube/search?q=" + encodeURIComponent(q)).then((r) => r.json());
+      if (!items || !items.length) { box.innerHTML = `<div class="dock-yt-msg">לא נמצא כלום. נסה חיפוש אחר.</div>`; return; }
+      box.innerHTML = items.map((it) =>
+        `<div class="dock-yt-item" data-id="${esc(it.id)}" data-title="${esc(it.title)}">` +
+        `<span class="t">${esc(it.title)}</span><span class="c">${esc(it.channel)}${it.duration ? " · " + esc(it.duration) : ""}</span>` +
+        `<button type="button" class="play" title="נגן עכשיו">▶</button>` +
+        `<button type="button" class="save" title="הוסף לתחנה שלי לתמיד">⭐</button></div>`
+      ).join("");
+      box.querySelectorAll(".dock-yt-item").forEach((row) => {
+        const id = row.dataset.id, title = row.dataset.title;
+        row.querySelector(".play").addEventListener("click", () => {
+          playTrack({ id, title, mood: "custom" }, { autoplay: true });
+          $("dock-moodmenu").hidden = true;
+        });
+        row.querySelector(".save").addEventListener("click", async (e) => {
+          e.target.textContent = "…";
+          try {
+            await fetch("/api/ambient/add", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id, title }) });
+            e.target.textContent = "✓"; e.target.disabled = true;
+            await loadMoods();
+          } catch { e.target.textContent = "⚠"; }
+        });
+      });
+    } catch { box.innerHTML = `<div class="dock-yt-msg">החיפוש נכשל — בדוק חיבור לרשת.</div>`; }
+  }
+
   function buildMoodMenu() {
     const menu = $("dock-moodmenu");
     if (!menu) return;
@@ -233,8 +265,25 @@
       `<span class="e">${esc(emoji)}</span><span class="l">${esc(he)}</span>` +
       (count != null ? `<span class="c">${count}</span>` : "") + `</button>`;
     menu.innerHTML =
+      `<div class="dock-ytsearch"><input type="text" id="dock-ytq" placeholder="🔍 כל שיר, אמן או ז'אנר ביוטיוט…" autocomplete="off"></div>` +
+      `<div class="dock-ytresults" id="dock-ytresults"></div>` +
+      `<div class="dock-moodchips">` +
       item("all", "🎲", "הכל / יומי", null) +
-      MOODS.map((m) => item(m.key, m.emoji, m.he, m.count)).join("");
+      MOODS.map((m) => item(m.key, m.emoji, m.he, m.count)).join("") +
+      `</div>`;
+    const q = $("dock-ytq");
+    let qTimer = null;
+    q.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter") return;
+      clearTimeout(qTimer);
+      if (q.value.trim()) ytSearch(q.value.trim());
+    });
+    q.addEventListener("input", () => {
+      clearTimeout(qTimer);
+      const v = q.value.trim();
+      if (v.length < 2) { $("dock-ytresults").innerHTML = ""; return; }
+      qTimer = setTimeout(() => ytSearch(v), 500);
+    });
     menu.querySelectorAll(".dock-moodchip").forEach((btn) => {
       btn.addEventListener("click", async () => {
         LS.mood = btn.dataset.mood;

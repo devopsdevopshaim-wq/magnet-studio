@@ -8,6 +8,7 @@ data/aia-video-config.json
 data/tts-config.json
 data/jarvis-config.json
 data/auth-config.json
+data/integrations-config.json
 
 # ═══ נתונים אישיים / ספציפיים-למחשב (מוגדרים מחדש בכל התקנה) ═══
 data/astro-config.json
@@ -28,6 +29,7 @@ data/*.pre-import-*.bak
 data/tehillim-cache/
 data/devops-logs/
 data/aia/
+data/business/
 
 # ═══ תלויות ובנייה ═══
 node_modules/

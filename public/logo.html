@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>סטודיו לוגו · חיים קריספין</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/logo.css" />
+</head>
+<body>
+<div class="shell">
+
+  <header class="top-header">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="24" cy="24" r="18" stroke="currentColor" stroke-width="2.5"/>
+        <text x="24" y="31" font-family="serif" font-size="18" font-weight="700" fill="currentColor" text-anchor="middle">L</text>
+      </svg>
+      <div>
+        <h1>סטודיו לוגו</h1>
+        <div class="tagline">6 קונספטים וקטוריים מיידיים + פרומפטים מוכנים למחוללי תמונה</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <button class="btn ghost" onclick="location.href='/'">חזרה ללוח הבקרה</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <a href="/">לוח בקרה</a>
+    <a href="/daily.html">מענה יומי</a>
+    <a href="/aia.html">עיצוב AIA</a>
+    <a href="/logo.html" class="active">לוגו</a>
+    <a href="/marketing.html">פרסום ושיווק</a>
+    <a href="/business.html">ניהול עסק</a>
+    <a href="/torah.html">ספריית קודש</a>
+    <a href="/finance.html">פיננסים</a>
+    <a href="/setup.html">הגדרות</a>
+  </nav>
+
+  <div class="lg-wrap">
+    <form class="lg-form" id="lg-form">
+      <label>שם העסק / המותג <input type="text" id="lg-name" required placeholder="לדוגמה: מגנטים קריספין"></label>
+      <div class="lg-row2">
+        <label>תחום <input type="text" id="lg-industry" placeholder="לדוגמה: עיצוב מגנטים אישיים"></label>
+        <label>סגנון <input type="text" id="lg-style" placeholder="מודרני, מינימלי, יוקרתי…"></label>
+      </div>
+      <label>הערות נוספות (אופציונלי) <textarea id="lg-notes" rows="2" placeholder="ערכים של המותג, קהל יעד, השראה"></textarea></label>
+      <button class="btn primary" type="submit">✨ צור קונספטים</button>
+    </form>
+
+    <div id="lg-result" hidden>
+      <div id="lg-concept"></div>
+      <h2 class="lg-h">קונספטים</h2>
+      <div class="lg-grid" id="lg-marks"></div>
+      <h2 class="lg-h">פלטות צבע חלופיות</h2>
+      <div class="lg-palettes" id="lg-palettes"></div>
+      <h2 class="lg-h">רוצים גרסה מאוירת? פרומפטים מוכנים</h2>
+      <div id="lg-prompts"></div>
+    </div>
+  </div>
+
+</div>
+<div class="toast" id="toast"></div>
+<script src="/js/logo.js"></script>
+<script src="/js/dockbar.js" defer></script>
+</body>
+</html>

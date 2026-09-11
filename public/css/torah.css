@@ -1,0 +1,48 @@
+/* ספריית קודש */
+.tr-tabbar { display: flex; gap: 6px; flex-wrap: wrap; margin: 18px 0 20px; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
+.tr-tab {
+  background: none; border: 1px solid var(--line); border-radius: 999px; cursor: pointer;
+  color: var(--cream-dim); font-family: var(--font-body); font-size: 0.86rem; font-weight: 600;
+  padding: 7px 16px;
+}
+.tr-tab:hover { border-color: var(--brass); color: var(--brass-soft); }
+.tr-tab.active { background: var(--brass); color: var(--bg); border-color: transparent; }
+
+.tr-main { padding-bottom: 60px; }
+.tr-panel { display: flex; flex-direction: column; gap: 16px; }
+
+.tr-picker { display: flex; flex-direction: column; gap: 10px; }
+.tr-grp { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.tr-grp-l { font-family: var(--font-display); font-size: 0.85rem; color: var(--brass); min-width: 4.2em; flex: 0 0 auto; }
+.tr-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.tr-chip {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px; cursor: pointer;
+  color: var(--cream-dim); font-family: var(--font-body); font-size: 0.82rem; padding: 5px 11px;
+}
+.tr-chip:hover { border-color: var(--brass); color: var(--cream); }
+.tr-chip.on { background: var(--surface-2); border-color: var(--ember); color: var(--ember); }
+
+.tr-controls { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 12px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.tr-controls label { font-size: 0.84rem; color: var(--cream-dim); display: flex; align-items: center; gap: 6px; }
+.tr-controls input, .tr-controls select {
+  background: var(--surface-2); color: var(--cream); border: 1px solid var(--line); border-radius: 7px;
+  padding: 5px 8px; font-family: var(--font-body); font-size: 0.86rem;
+}
+.tr-comm { display: flex; gap: 12px; flex-wrap: wrap; }
+.tr-check { display: flex; align-items: center; gap: 5px; font-size: 0.82rem; color: var(--cream-dim); cursor: pointer; }
+.tr-comm-block { margin-top: 18px; padding-top: 14px; border-top: 1px dashed var(--line); font-family: var(--font-body); font-size: 0.95rem; line-height: 1.9; color: var(--cream-dim); }
+.tr-comm-block p { margin: 0.5em 0; }
+
+.tr-siddur { display: grid; grid-template-columns: 280px 1fr; gap: 18px; align-items: start; }
+@media (max-width: 760px) { .tr-siddur { grid-template-columns: 1fr; } }
+.tr-tree { max-height: 74vh; overflow-y: auto; border: 1px solid var(--line); border-radius: 10px; padding: 8px; }
+.tr-node summary { cursor: pointer; padding: 6px 8px; font-family: var(--font-display); font-size: 0.9rem; color: var(--brass-soft); border-radius: 6px; }
+.tr-node summary:hover { background: var(--surface); }
+.tr-node { margin-inline-start: 6px; }
+.tr-leaf {
+  display: block; width: 100%; text-align: start; background: none; border: 0; cursor: pointer;
+  color: var(--cream-dim); font-family: var(--font-body); font-size: 0.84rem; padding: 5px 10px;
+  border-radius: 6px; margin-inline-start: 12px;
+}
+.tr-leaf:hover { background: var(--surface); color: var(--cream); }
+.tr-leaf.on { background: var(--surface-2); color: var(--ember); }

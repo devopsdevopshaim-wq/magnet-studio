@@ -18,7 +18,7 @@ rm -f public/_yttest.html
 rm -f data/daily-brief-*.json data/learning-*.json data/lotto-*.json \
       data/astro-natal-cache.json data/*.bak data/*.pre-import-*.bak data/sync-status.json \
       data/devops-config.json data/devops-runtime.json data/profile.json \
-      data/tts-config.json data/aia-video-config.json data/auth-config.json \
+      data/tts-config.json data/aia-video-config.json data/auth-config.json data/integrations-config.json \
       "הפעלת הסטודיו.bat"
 rm -rf data/tehillim-cache
 

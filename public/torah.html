@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ספריית קודש · חיים קריספין</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/library/reader.css" />
+<link rel="stylesheet" href="/css/torah.css" />
+</head>
+<body>
+<div class="shell">
+
+  <header class="top-header">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="24,4 41,14 41,34 24,44 7,34 7,14" stroke="currentColor" stroke-width="2.5"/>
+        <path d="M24 10v22M15 17c3-2 6-2 9 0s6 2 9 0M15 25c3-2 6-2 9 0s6 2 9 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <h1>ספריית קודש</h1>
+        <div class="tagline">תנ״ך · סידור תפילה וחגים · רש״י ורמב״ם ואור החיים · תלמוד בבלי</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <button class="btn ghost" onclick="location.href='/'">חזרה ללוח הבקרה</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <a href="/">לוח בקרה</a>
+    <a href="/daily.html">מענה יומי</a>
+    <a href="/library.html">אוצר לחג</a>
+    <a href="/torah.html" class="active">ספריית קודש</a>
+    <a href="/marketing.html">פרסום ושיווק</a>
+    <a href="/logo.html">לוגו</a>
+    <a href="/business.html">ניהול עסק</a>
+    <a href="/finance.html">פיננסים</a>
+    <a href="/aia.html">עיצוב AIA</a>
+    <a href="/setup.html">הגדרות</a>
+  </nav>
+
+  <div class="tr-tabbar" id="tr-tabbar">
+    <button class="tr-tab active" data-mode="tanakh">תנ״ך</button>
+    <button class="tr-tab" data-mode="siddur">סידור וחגים</button>
+    <button class="tr-tab" data-mode="rambam">רמב״ם</button>
+    <button class="tr-tab" data-mode="talmud">תלמוד בבלי</button>
+  </div>
+
+  <main id="tr-main" class="tr-main"></main>
+
+</div>
+<div class="toast" id="toast"></div>
+<script src="/js/pnks-core.js"></script>
+<script src="/js/pnks-offline.js"></script>
+<script src="/js/torah.js"></script>
+<script src="/js/dockbar.js" defer></script>
+</body>
+</html>

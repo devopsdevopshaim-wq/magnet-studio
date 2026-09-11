@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ניהול עסק · חיים קריספין</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/business.css" />
+</head>
+<body>
+<div class="shell" style="max-width:1080px;">
+
+  <header class="top-header">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8" y="16" width="32" height="24" rx="2" stroke="currentColor" stroke-width="2.5"/>
+        <path d="M16 16v-4a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v4" stroke="currentColor" stroke-width="2.5"/>
+        <path d="M8 26h32" stroke="currentColor" stroke-width="2"/>
+      </svg>
+      <div>
+        <h1>ניהול עסק</h1>
+        <div class="tagline">יומן עסקי · חשבוניות · הנהלת חשבונות · לקוחות — במקום אחד</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <button class="btn ghost" onclick="location.href='/'">חזרה ללוח הבקרה</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <a href="/">לוח בקרה</a>
+    <a href="/daily.html">מענה יומי</a>
+    <a href="/marketing.html">פרסום ושיווק</a>
+    <a href="/logo.html">לוגו</a>
+    <a href="/business.html" class="active">ניהול עסק</a>
+    <a href="/torah.html">ספריית קודש</a>
+    <a href="/finance.html">פיננסים</a>
+    <a href="/setup.html">הגדרות</a>
+  </nav>
+
+  <div class="biz-tabbar" id="biz-tabbar">
+    <button class="biz-tab active" data-panel="calendar">יומן עסקי</button>
+    <button class="biz-tab" data-panel="invoices">חשבוניות</button>
+    <button class="biz-tab" data-panel="ledger">הנהלת חשבונות</button>
+    <button class="biz-tab" data-panel="clients">לקוחות</button>
+  </div>
+
+  <main id="biz-main"></main>
+
+</div>
+<div class="toast" id="toast"></div>
+<script src="/js/business.js"></script>
+<script src="/js/dockbar.js" defer></script>
+</body>
+</html>

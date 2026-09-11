@@ -481,10 +481,77 @@ async function loadPhoneInstall() {
   }
 }
 
+// ---------- אינטגרציות ו-API ----------
+async function loadIntegrations() {
+  const host = document.getElementById("int-list");
+  if (!host) return;
+  let items = [];
+  try { items = (await fetch("/api/integrations").then((r) => r.json())).integrations || []; }
+  catch { host.innerHTML = '<div class="validate-result bad">לא הצלחתי לטעון את רשימת האינטגרציות.</div>'; return; }
+
+  const order = ["ai", "media", "business", "data", "system"];
+  const groups = {};
+  items.forEach((it) => { (groups[it.category] = groups[it.category] || []).push(it); });
+
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  const fieldHtml = (f) => {
+    if (f.type === "select") {
+      return `<label>${esc(f.label)}<select name="${esc(f.key)}">${(f.options || []).map((o) => `<option value="${esc(o[0])}">${esc(o[1])}</option>`).join("")}</select></label>`;
+    }
+    return `<label>${esc(f.label)}<input type="${f.type === "text" ? "text" : "password"}" name="${esc(f.key)}" placeholder="${esc(f.placeholder || "")}" autocomplete="off"></label>`;
+  };
+
+  const card = (it) => `
+    <div class="int-card" data-id="${esc(it.id)}">
+      <div class="int-head">
+        <div>
+          <b>${esc(it.label)}</b>
+          <span class="int-vendor">${esc(it.vendor || "")}</span>
+        </div>
+        <span class="int-badge ${it.configured ? "ok" : "off"}">${it.configured ? "מוגדר ✓" : "לא מוגדר"}</span>
+      </div>
+      ${it.detail ? `<div class="int-detail">${esc(it.detail)}</div>` : ""}
+      <div class="int-actions">
+        ${it.docsUrl ? `<a href="${esc(it.docsUrl)}" target="_blank" rel="noopener" class="int-link">קבלת מפתח ↗</a>` : ""}
+        ${it.editable ? `<button type="button" class="btn ghost int-edit">${it.configured ? "עדכון" : "הגדרה"}</button>` : ""}
+      </div>
+      ${it.editable ? `<form class="int-form" hidden>${it.fields.map(fieldHtml).join("")}<button type="submit" class="btn primary">שמור</button><span class="int-msg"></span></form>` : ""}
+    </div>`;
+
+  host.innerHTML = order.filter((c) => groups[c]).map((c) => `
+    <div class="int-group">
+      <h3>${esc(groups[c][0].categoryLabel)}</h3>
+      <div class="int-grid">${groups[c].map(card).join("")}</div>
+    </div>`).join("");
+
+  host.querySelectorAll(".int-card").forEach((el) => {
+    const id = el.dataset.id;
+    const editBtn = el.querySelector(".int-edit");
+    const form = el.querySelector(".int-form");
+    if (editBtn) editBtn.addEventListener("click", () => { form.hidden = !form.hidden; });
+    if (form) form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const msg = form.querySelector(".int-msg");
+      const values = {};
+      [...form.elements].forEach((el2) => { if (el2.name) values[el2.name] = el2.value; });
+      msg.textContent = "שומר…"; msg.className = "int-msg";
+      try {
+        const r = await fetch(`/api/integrations/${id}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(values) });
+        const j = await r.json();
+        if (!r.ok || !j.ok) throw new Error(j.error || "שגיאה");
+        msg.textContent = "נשמר ✓"; msg.className = "int-msg ok";
+        setTimeout(loadIntegrations, 900);
+      } catch (err) { msg.textContent = "✗ " + err.message; msg.className = "int-msg bad"; }
+    });
+  });
+}
+
 (async () => {
   await loadStatus();
   await loadInstalledApps();
   showInstallZipMeta();
   loadProfile();
   loadPhoneInstall();
+  loadIntegrations();
 })();

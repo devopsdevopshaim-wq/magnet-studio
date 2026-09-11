@@ -117,3 +117,26 @@
 }
 
 .save-result.ok { color: var(--success); }
+
+/* ---------- אינטגרציות ו-API ---------- */
+.int-group { margin-bottom: 22px; }
+.int-group h3 { font-family: var(--font-display); font-size: 1rem; color: var(--brass-soft); margin: 0 0 10px; }
+.int-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.int-card { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; background: var(--surface); }
+.int-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.int-head b { display: block; font-size: 0.95rem; color: var(--cream); }
+.int-vendor { font-size: 0.74rem; color: var(--cream-dim); }
+.int-badge { font-size: 0.7rem; padding: 3px 8px; border-radius: 999px; white-space: nowrap; }
+.int-badge.ok { background: rgba(139,160,124,0.18); color: var(--sage); }
+.int-badge.off { background: rgba(163,146,122,0.16); color: var(--cream-dim); }
+.int-detail { font-size: 0.78rem; color: var(--cream-dim); margin-top: 4px; }
+.int-actions { display: flex; gap: 10px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
+.int-link { font-size: 0.78rem; color: var(--brass-soft); }
+.int-actions .btn { padding: 5px 12px; font-size: 0.8rem; }
+.int-form { display: flex; flex-direction: column; gap: 7px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
+.int-form label { font-size: 0.78rem; color: var(--cream-dim); display: block; }
+.int-form input, .int-form select { width: 100%; margin-top: 3px; background: var(--surface-2); color: var(--cream); border: 1px solid var(--line); border-radius: 7px; padding: 6px 8px; font-size: 0.85rem; }
+.int-form .btn { align-self: flex-start; margin-top: 4px; padding: 6px 14px; font-size: 0.82rem; }
+.int-msg { font-size: 0.78rem; color: var(--cream-dim); }
+.int-msg.ok { color: var(--sage); }
+.int-msg.bad { color: var(--danger); }
