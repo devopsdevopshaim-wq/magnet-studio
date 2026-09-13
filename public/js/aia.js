@@ -10,12 +10,33 @@
   let MAX = 120;
   let CAN_RENDER = false;
   let BEDS = [];
+  let TRANSITIONS = [];
   const stageId = "st-" + Date.now().toString(36) + Math.random().toString(16).slice(2, 8);
 
   $("aia-type").querySelectorAll(".aia-type").forEach((b) => b.addEventListener("click", () => {
     $("aia-type").querySelectorAll(".aia-type").forEach((x) => x.classList.toggle("active", x === b));
     type = b.dataset.v;
   }));
+
+  // ---------- צ'יפים מוכנים לסגנון/מצב-רוח — לחיצה מוסיפה/מסירה מהשדה, אפשר גם להקליד חופשי ----------
+  const STYLE_PRESETS = ["קולנועי", "מינימליסטי", "ניאון", "אקוורל", "רטרו", "3D ריאליסטי", "יד-מצוירת", "קורפורטיבי נקי"];
+  const MOOD_PRESETS = ["חמים", "אנרגטי", "חלומי", "דרמטי", "עליז", "רגוע", "מסתורי", "חגיגי"];
+  function wireChips(containerId, inputId, presets) {
+    const box = $(containerId), input = $(inputId);
+    box.innerHTML = presets.map((p) => `<button type="button" class="aia-chip" data-v="${esc(p)}">${esc(p)}</button>`).join("");
+    const parts = () => input.value.split(/\s*[·,]\s*/).map((s) => s.trim()).filter(Boolean);
+    const sync = () => { const sel = new Set(parts()); box.querySelectorAll(".aia-chip").forEach((c) => c.classList.toggle("on", sel.has(c.dataset.v))); };
+    box.querySelectorAll(".aia-chip").forEach((c) => c.addEventListener("click", () => {
+      const sel = parts();
+      const i = sel.indexOf(c.dataset.v);
+      if (i === -1) sel.push(c.dataset.v); else sel.splice(i, 1);
+      input.value = sel.join(" · ");
+      sync();
+    }));
+    input.addEventListener("input", sync);
+  }
+  wireChips("aia-style-chips", "aia-style", STYLE_PRESETS);
+  wireChips("aia-mood-chips", "aia-mood", MOOD_PRESETS);
 
   // ---------- תמונות ייחוס — כיווץ + העלאה מדורגת (בלי גבול מספר) ----------
   const drop = $("aia-drop");
@@ -240,6 +261,9 @@
           <span id="st-per-val">3</span> שנ'
         </label>
         <label class="aia-check st-montage-only"><input type="checkbox" id="st-kb" checked> תנועת Ken Burns (זום/פאן)</label>
+        <label class="st-montage-only">מעבר בין תמונות
+          <select id="st-transition">${TRANSITIONS.map((t) => `<option value="${esc(t.id)}">${esc(t.he)}</option>`).join("")}</select>
+        </label>
         <label class="st-anim-only">אורך (שניות)
           <input type="number" id="st-dur" min="4" max="20" value="${project.package?.durationSec || 8}">
         </label>
@@ -304,6 +328,7 @@
             secondsPerImage: per ? parseFloat(per.value) : 3,
             durationSec: parseFloat($("st-dur")?.value) || undefined,
             kenBurns: $("st-kb") ? $("st-kb").checked : true,
+            transition: $("st-transition") ? $("st-transition").value : "fade",
             titleText: $("st-title").value.trim(),
             endText: $("st-end").value.trim(),
             bed: bedVal === "upload" ? "none" : bedVal,
@@ -545,6 +570,7 @@
       if (d.maxImages) { MAX = d.maxImages; $("aia-maxnote").textContent = `עד ${MAX} תמונות`; }
       CAN_RENDER = !!d.canRender;
       BEDS = d.beds || [];
+      TRANSITIONS = d.transitions || [];
       $("aia-gallery").innerHTML = (d.projects || []).map((p) => `
         <div class="aia-gcard" data-id="${esc(p.id)}">
           <button class="del" data-del="${esc(p.id)}" title="מחק">🗑</button>

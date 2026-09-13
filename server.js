@@ -1114,7 +1114,8 @@ app.get("/api/aia/projects", (req, res) => {
     projects: aiaStudio.listProjects(),
     maxImages: aiaStudio.MAX_IMAGES,
     canRender: aiaRender.hasFFmpeg,
-    beds: aiaRender.bedList()
+    beds: aiaRender.bedList(),
+    transitions: aiaRender.transitionList()
   });
 });
 
