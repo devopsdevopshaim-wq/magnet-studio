@@ -499,7 +499,14 @@ async function loadIntegrations() {
     if (f.type === "select") {
       return `<label>${esc(f.label)}<select name="${esc(f.key)}">${(f.options || []).map((o) => `<option value="${esc(o[0])}">${esc(o[1])}</option>`).join("")}</select></label>`;
     }
-    return `<label>${esc(f.label)}<input type="${f.type === "text" ? "text" : "password"}" name="${esc(f.key)}" placeholder="${esc(f.placeholder || "")}" autocomplete="off"></label>`;
+    if (f.type === "text") {
+      return `<label>${esc(f.label)}<input type="text" name="${esc(f.key)}" placeholder="${esc(f.placeholder || "")}" autocomplete="off"></label>`;
+    }
+    return `<label>${esc(f.label)}
+      <span class="int-pwrow">
+        <input type="password" name="${esc(f.key)}" placeholder="${esc(f.placeholder || "")}" autocomplete="off">
+        <button type="button" class="int-eye" title="הצג/הסתר">👁</button>
+      </span></label>`;
   };
 
   const card = (it) => `
@@ -529,8 +536,28 @@ async function loadIntegrations() {
     const id = el.dataset.id;
     const editBtn = el.querySelector(".int-edit");
     const form = el.querySelector(".int-form");
-    if (editBtn) editBtn.addEventListener("click", () => { form.hidden = !form.hidden; });
-    if (form) form.addEventListener("submit", async (e) => {
+    let loadedValues = false;
+    if (editBtn) editBtn.addEventListener("click", async () => {
+      const opening = form.hidden;
+      form.hidden = !form.hidden;
+      if (opening && !loadedValues) {
+        loadedValues = true;
+        try {
+          const { values } = await fetch(`/api/integrations/${id}/reveal`).then((r) => r.json());
+          Object.entries(values || {}).forEach(([k, v]) => {
+            const input = form.elements[k];
+            if (input && v) input.value = v;
+          });
+        } catch { /* אין ערכים קיימים להציג */ }
+      }
+    });
+    if (form) {
+      form.querySelectorAll(".int-eye").forEach((eye) => eye.addEventListener("click", () => {
+        const input = eye.previousElementSibling;
+        input.type = input.type === "password" ? "text" : "password";
+        eye.textContent = input.type === "password" ? "👁" : "🙈";
+      }));
+      form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const msg = form.querySelector(".int-msg");
       const values = {};
@@ -543,7 +570,8 @@ async function loadIntegrations() {
         msg.textContent = "נשמר ✓"; msg.className = "int-msg ok";
         setTimeout(loadIntegrations, 900);
       } catch (err) { msg.textContent = "✗ " + err.message; msg.className = "int-msg bad"; }
-    });
+      });
+    }
   });
 }
 

@@ -502,3 +502,19 @@
   .daily-section-head h2 { font-size: 1.35rem; }
   .daily-narrative .text { font-size: 1.05rem; }
 }
+
+/* ---------- מנה יומית ---------- */
+.daily-meal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 640px) { .daily-meal-grid { grid-template-columns: 1fr; } }
+.daily-meal-dish { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--surface-2, #241d16); }
+.daily-meal-img { position: relative; aspect-ratio: 16/10; overflow: hidden; background: var(--surface, #1b1611); }
+.daily-meal-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.daily-meal-noimg { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 2.4rem; opacity: 0.4; }
+.daily-meal-kind { position: absolute; top: 8px; inset-inline-start: 8px; background: rgba(27,22,17,0.82); color: var(--brass-soft); font-size: 0.72rem; padding: 3px 10px; border-radius: 999px; font-family: var(--font-mono, monospace); }
+.daily-meal-body { padding: 12px 14px; }
+.daily-meal-body h4 { font-family: var(--font-display); font-size: 1.05rem; margin: 0 0 4px; color: var(--cream); }
+.daily-meal-meta { font-size: 0.78rem; color: var(--cream-dim); margin: 6px 0; }
+.daily-meal-recipe { margin-top: 8px; }
+.daily-meal-recipe summary { cursor: pointer; color: var(--brass-soft); font-size: 0.85rem; font-weight: 600; padding: 4px 0; }
+.daily-meal-recipe b { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--brass); margin: 10px 0 4px; }
+.daily-meal-recipe ul, .daily-meal-recipe ol { margin: 0; padding-inline-start: 20px; font-size: 0.86rem; color: var(--cream-dim); line-height: 1.7; }

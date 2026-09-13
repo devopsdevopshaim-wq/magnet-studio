@@ -93,6 +93,11 @@ app.post("/api/integrations/:id", async (req, res) => {
   try { res.json({ ok: true, status: await require("./lib/integrations").save(req.params.id, req.body || {}) }); }
   catch (err) { res.status(400).json({ ok: false, error: err.message }); }
 });
+// חשיפת הערך המלא (לא מוסתר) — רק בבקשה מפורשת מהמשתמש, מאחורי מסך ההגדרות המוגן
+app.get("/api/integrations/:id/reveal", async (req, res) => {
+  try { res.json({ values: await require("./lib/integrations").reveal(req.params.id) }); }
+  catch (err) { res.status(400).json({ error: err.message }); }
+});
 
 // ---------- הגדרת מערכת (מסך התקנה - הופך את המערכת לניידת בין מחשבים) ----------
 
@@ -696,6 +701,15 @@ app.get("/api/lotto", async (req, res) => {
   }
 });
 
+// ---------- מנה עיקרית וקינוח ליום (מתכון + תמונה אמיתית) ----------
+app.get("/api/daily-meal", async (req, res) => {
+  try { res.json(await require("./lib/dailyMeal").getDailyMeal(new Date(), req.query.refresh === "1")); }
+  catch (err) {
+    if (err.code === "NO_AI") return res.status(428).json({ error: err.message, needAI: true });
+    res.status(502).json({ error: err.message });
+  }
+});
+
 // ---------- תהילים יומי (לפי ימי החודש) ----------
 app.get("/api/tehillim", async (req, res) => {
   try {
@@ -940,6 +954,40 @@ app.get("/api/ambient/moods", (req, res) => {
 app.get("/api/youtube/search", async (req, res) => {
   try { res.json({ items: await require("./lib/youtubeSearch").searchYouTube(req.query.q || "", 12) }); }
   catch (err) { res.status(502).json({ items: [], error: err.message }); }
+});
+
+// ---------- טלוויזיה — ערוצים חינמיים ופתוחים (השידור הרשמי של הערוץ עצמו ביוטיוב) ----------
+const TV_FILE = path.join(__dirname, "data", "tv-channels.json");
+app.get("/api/tv/channels", (req, res) => {
+  try { res.json(JSON.parse(fs.readFileSync(TV_FILE, "utf8"))); }
+  catch { res.json({ channels: [] }); }
+});
+// חיפוש ערוץ להוספה — מוצא את ה-channelId הרשמי לפי שם, כדי שהשידור החי תמיד יעודכן ממקור אמיתי
+app.get("/api/tv/search", async (req, res) => {
+  try {
+    const items = await require("./lib/youtubeSearch").searchYouTube(req.query.q || "", 8);
+    const seen = new Set();
+    const channels = [];
+    for (const it of items) {
+      if (!it.channelId || seen.has(it.channelId)) continue;
+      seen.add(it.channelId);
+      channels.push({ channelId: it.channelId, name: it.channel });
+    }
+    res.json({ channels });
+  } catch (err) { res.status(502).json({ channels: [], error: err.message }); }
+});
+app.post("/api/tv/add", (req, res) => {
+  try {
+    const { he, channelId } = req.body || {};
+    if (!he || !channelId) return res.status(400).json({ error: "חסר שם או מזהה ערוץ" });
+    const j = JSON.parse(fs.readFileSync(TV_FILE, "utf8"));
+    j.channels = j.channels || [];
+    if (!j.channels.some((c) => c.channelId === channelId)) {
+      j.channels.push({ id: "custom-" + Date.now().toString(36), he: String(he).slice(0, 80), group: "שלי", channelId });
+      fs.writeFileSync(TV_FILE, JSON.stringify(j, null, 2));
+    }
+    res.json({ ok: true });
+  } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
 // הוספת תחנה שנמצאה בחיפוש לרשימת המוזיקה הקבועה — נכנסת מיד לרוטציה, נשארת לתמיד

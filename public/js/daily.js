@@ -198,6 +198,42 @@ function renderProverb(b) {
   );
 }
 
+function dishHtml(d, kind) {
+  if (!d || !d.name) return "";
+  const img = d.image && d.image.url
+    ? `<img src="${esc(d.image.url)}" alt="${esc(d.name)}" loading="lazy">`
+    : `<div class="daily-meal-noimg">🍽️</div>`;
+  const ingredients = (d.ingredients || []).map((i) => `<li>${esc(i)}</li>`).join("");
+  const steps = (d.steps || []).map((s) => `<li>${esc(s)}</li>`).join("");
+  return `
+    <div class="daily-meal-dish">
+      <div class="daily-meal-img">${img}<span class="daily-meal-kind">${esc(kind)}</span></div>
+      <div class="daily-meal-body">
+        <h4 class="js-speak" data-speak="${esc(d.name + ". " + (d.description || ""))}">${esc(d.name)}</h4>
+        ${d.description ? `<p class="daily-sub">${esc(d.description)}</p>` : ""}
+        <div class="daily-meal-meta">${d.time ? `⏱ ${esc(d.time)}` : ""}${d.servings ? ` · 🍽 ${esc(d.servings)} מנות` : ""}</div>
+        <details class="daily-meal-recipe">
+          <summary>המתכון המלא</summary>
+          ${ingredients ? `<b>רכיבים</b><ul>${ingredients}</ul>` : ""}
+          ${steps ? `<b>הכנה</b><ol>${steps}</ol>` : ""}
+        </details>
+      </div>
+    </div>`;
+}
+
+async function loadDailyMeal() {
+  const host = document.getElementById("daily-meal-card");
+  if (!host) return;
+  try {
+    const m = await fetch("/api/daily-meal").then((r) => r.json());
+    if (m.error) throw new Error(m.error);
+    host.innerHTML = `<div class="daily-meal-grid">${dishHtml(m.main, "מנה עיקרית")}${dishHtml(m.dessert, "קינוח")}</div>` +
+      (m.source ? `<div class="daily-sub" style="margin-top:8px">נכתב ע"י ${esc(m.source)} · תמונות: Wikimedia Commons</div>` : "");
+  } catch (e) {
+    host.innerHTML = `<div class="daily-sub">מנה יומית לא זמינה כרגע${e.message ? " (" + esc(e.message) + ")" : ""}.</div>`;
+  }
+}
+
 function renderTehillim(b) {
   const t = b.tehillim;
   if (!t || !(t.chapters || []).length) return "";
@@ -558,6 +594,7 @@ const ANCHORS = [
   ["learning", "לימוד"],
   ["parasha", "פרשה"],
   ["tehillim", "תהילים"],
+  ["meal", "מנה יומית"],
   ["proverb", "פתגם"],
   ["sky", "שמיים"],
   ["astro", "מזל"],
@@ -727,6 +764,8 @@ function render(b) {
   parts.push(renderLearning(b));
   parts.push(renderParasha(b));
   parts.push(renderTehillim(b));
+  parts.push(section("meal", "מנה יומית",
+    `<div class="daily-card" id="daily-meal-card"><div class="daily-sub">טוען הצעת תפריט…</div></div>`));
   parts.push(renderProverb(b));
   parts.push(renderSky(b));
   parts.push(renderAstro(b));
@@ -739,6 +778,7 @@ function render(b) {
   document.getElementById("content").innerHTML = parts.join("");
   wireAstroForm();
   wireScrollSpy();
+  loadDailyMeal();
 
   try {
     localStorage.setItem("dailyBriefSeen", b.date || new Date().toISOString().slice(0, 10));

@@ -31,6 +31,11 @@
 
   --radius-card: 3px;
 
+  /* אקצנט טכנולוגי משני — למצבי "מערכת חיה" (סטטוס, פוקוס, קו-סריקה). נשאר נדיר ומכוון, לא מחליף את הפליז. */
+  --tech: #2fe3ff;
+  --tech-dim: rgba(47, 227, 255, 0.35);
+  --tech-glow: 0 0 14px rgba(47, 227, 255, 0.45);
+
   /* Frank Ruhl Libre = הסריף הספרותי של העברית · Assistant = גוף הומניסטי · IBM Plex Mono = נתונים */
   --font-display: "Frank Ruhl Libre", "David Libre", Georgia, serif;
   --font-body: "Assistant", "Segoe UI", system-ui, Arial, sans-serif;
@@ -64,9 +69,10 @@ a { color: inherit; }
 ::selection { background: var(--ember); color: #211a12; }
 
 :focus-visible {
-  outline: 2px solid var(--brass);
+  outline: 2px solid var(--tech);
   outline-offset: 3px;
   border-radius: 2px;
+  box-shadow: var(--tech-glow);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -208,7 +214,27 @@ code.mono {
   padding-bottom: 22px;
   margin-bottom: 34px;
   border-bottom: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
 }
+/* קו-סריקה טכנולוגי עדין שחולף פעם על פני כותרת העמוד — "המערכת חיה" */
+.top-header::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--tech) 45%, transparent 90%);
+  opacity: 0.55;
+  animation: header-scan 9s ease-in-out infinite;
+}
+@keyframes header-scan {
+  0%, 100% { transform: translateX(-30%); opacity: 0; }
+  8% { opacity: 0.55; }
+  50% { transform: translateX(30%); opacity: 0.55; }
+  92% { opacity: 0; }
+}
+.brand .mark { color: var(--brass); filter: drop-shadow(0 0 5px rgba(198, 154, 99, 0.35)); }
 
 .brand {
   display: flex;
@@ -1138,17 +1164,14 @@ footer.credit {
    מבטל צ'מפרים / זוהר / גרדיאנטים של הגרסה הקודמת; סריף ספרותי, קווי שיער.
    ============================================================ */
 
-/* --- מבטלים את הפינות המקוצצות והאנימציות ה"טכניות" מהבסיס --- */
+/* --- קליפ-פאת' שקט לרוב המשטחים, אבל הלשוניות והפאנלים המסומנים "hud" שומרים על הפינות הטכנולוגיות --- */
 .side-card, .panel, .magnet-tile, .event-card, .system-app-card, .modal,
-nav.tabs a, .btn, .chip, .maton-connect-chip, .ai-chip, .file-tile,
-.hud-panel, .toast, .setup-banner, .ai-synth {
+.btn, .chip, .maton-connect-chip, .ai-chip, .file-tile,
+.toast, .setup-banner, .ai-synth {
   clip-path: none !important;
   border-radius: var(--radius-card);
 }
-.hud-panel::before { display: none; }
-.hud-corner { display: none; }
 .magnet-tile::after { display: none; }
-@keyframes scan-sweep { to { opacity: 0; } }
 
 /* --- מסגרת ראשית --- */
 .shell { max-width: 1100px; }
@@ -1171,11 +1194,17 @@ nav.tabs a, .btn, .chip, .maton-connect-chip, .ai-chip, .file-tile,
 }
 .brand .mark { color: var(--ember); }
 
-.top-header { border-bottom: 1px solid var(--line); }
+.top-header {
+  border-bottom: 1px solid var(--line);
+  padding-inline: 14px;
+  margin-inline: -14px;
+  clip-path: polygon(16px 0, 100% 0, 100% 100%, calc(100% - 16px) 100%, 0 100%, 0 16px);
+  background: linear-gradient(180deg, rgba(47,227,255,0.03), transparent 60%);
+}
 .header-meta { color: var(--cream-dim); font-family: var(--font-mono); font-size: 0.75rem; }
-.header-meta .dot { background: var(--sage); animation: none; box-shadow: none; }
+.header-meta .dot { background: var(--sage); box-shadow: 0 0 8px var(--sage); }
 
-/* --- לשוניות: שקטות, קו תחתון עדין לפעילה --- */
+/* --- לשוניות: קו תחתון עדין + פינה מקוצצת קלה, זוהר טכנולוגי עדין על הפעילה/הובר --- */
 nav.tabs { gap: 2px; border-bottom: 1px solid var(--line-soft); padding-bottom: 2px; }
 nav.tabs a {
   border: none;
@@ -1187,14 +1216,16 @@ nav.tabs a {
   padding: 9px 13px;
   border-bottom: 2px solid transparent;
   border-radius: 0;
-  transition: color 0.15s, border-color 0.15s;
+  clip-path: polygon(7px 0, 100% 0, 100% 100%, 0 100%, 0 7px);
+  transition: color 0.15s, border-color 0.15s, background 0.15s, text-shadow 0.15s;
 }
-nav.tabs a:hover { color: var(--cream); background: none; border-bottom-color: var(--line); }
+nav.tabs a:hover { color: var(--cream); background: var(--line-soft); border-bottom-color: var(--line); }
 nav.tabs a.active {
   color: var(--ember);
-  background: none;
-  border-bottom-color: var(--ember);
-  box-shadow: none;
+  background: rgba(219, 139, 66, 0.08);
+  border-bottom-color: var(--tech);
+  box-shadow: inset 0 -1px 0 var(--tech), 0 1px 8px -2px var(--tech-dim);
+  text-shadow: 0 0 12px rgba(219, 139, 66, 0.35);
   font-weight: 600;
 }
 
@@ -1225,7 +1256,7 @@ nav.tabs a.active {
 }
 .side-card:hover, .event-card:hover, .system-app-card:hover {
   border-color: var(--brass);
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--shadow-soft), 0 0 0 1px var(--tech-dim);
   transform: none;
 }
 .side-card h4 {
@@ -1250,7 +1281,7 @@ nav.tabs a.active {
 }
 .magnet-tile h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.05rem; letter-spacing: 0; }
 .magnet-tile .icon { color: var(--ember); }
-.magnet-tile .rivet { background: var(--ember); animation: none; }
+.magnet-tile .rivet { background: var(--ember); animation: pulse-glow 2.4s ease-in-out infinite; box-shadow: 0 0 6px rgba(219,139,66,0.7); }
 .magnet-tile .status.ok { color: var(--sage); }
 .magnet-tile .status.missing { color: var(--danger); }
 
@@ -1262,9 +1293,9 @@ nav.tabs a.active {
   border: 1px solid transparent;
 }
 .btn.primary { background: var(--ember); color: #211a12; }
-.btn.primary:hover { background: var(--ember-deep); filter: none; box-shadow: none; }
+.btn.primary:hover { background: var(--ember-deep); filter: none; box-shadow: 0 0 16px -2px rgba(219,139,66,0.55); }
 .btn.ghost { background: none; color: var(--cream-dim); border-color: var(--line); }
-.btn.ghost:hover { border-color: var(--brass); color: var(--brass-soft); background: rgba(198,154,99,0.06); box-shadow: none; }
+.btn.ghost:hover { border-color: var(--tech); color: var(--brass-soft); background: rgba(198,154,99,0.06); box-shadow: 0 0 10px -3px var(--tech-dim); }
 
 /* --- צ'יפים --- */
 .chip, .maton-connect-chip {
@@ -1275,7 +1306,7 @@ nav.tabs a.active {
   color: var(--cream-dim);
 }
 .chip:hover { border-color: var(--brass); color: var(--cream); }
-.chip.active { background: var(--surface-2); border-color: var(--ember); color: var(--ember); box-shadow: none; }
+.chip.active { background: var(--surface-2); border-color: var(--ember); color: var(--ember); box-shadow: 0 0 10px -3px rgba(219,139,66,0.5); }
 .maton-connect-chip.connected { border-color: var(--sage); color: var(--sage); }
 
 /* --- מספרים / נתונים --- */
@@ -1288,8 +1319,8 @@ nav.tabs a.active {
 .hebrew-date { font-family: var(--font-display); font-weight: 500; }
 .gauge-label span:last-child { color: var(--brass-soft); }
 .gauge-bar { background: rgba(0,0,0,0.28); }
-.gauge-fill { background: var(--brass); box-shadow: none; }
-.gauge-fill.warn { background: var(--danger); box-shadow: none; }
+.gauge-fill { background: var(--brass); box-shadow: 0 0 8px -1px rgba(198,154,99,0.6); }
+.gauge-fill.warn { background: var(--danger); box-shadow: 0 0 8px -1px rgba(201,86,76,0.6); }
 
 /* --- התראות --- */
 .alert-item { border-inline-start-width: 2px; }

@@ -19,6 +19,7 @@ data/profile.json
 # ═══ מצב ריצה ומטמונים — נבנים מחדש ═══
 data/daily-brief-*.json
 data/learning-*.json
+data/daily-meal-*.json
 data/lotto-*.json
 data/sync-status.json
 data/email-status.json

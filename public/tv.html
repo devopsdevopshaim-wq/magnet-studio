@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>טלוויזיה · חיים קריספין</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/tv.css" />
+</head>
+<body>
+<div class="shell" style="max-width:1100px;">
+
+  <header class="top-header">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="6" y="10" width="36" height="24" rx="3" stroke="currentColor" stroke-width="2.5"/>
+        <path d="M17 40h14M24 34v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M17 20l7 5-7 5V20z" fill="currentColor"/>
+      </svg>
+      <div>
+        <h1>טלוויזיה</h1>
+        <div class="tagline">ערוצי חדשות חינמיים ופתוחים — שידור רשמי ישיר מהערוץ עצמו</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <button class="btn ghost" onclick="location.href='/'">חזרה ללוח הבקרה</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <a href="/">לוח בקרה</a>
+    <a href="/daily.html">מענה יומי</a>
+    <a href="/torah.html">ספריית קודש</a>
+    <a href="/marketing.html">פרסום ושיווק</a>
+    <a href="/logo.html">לוגו</a>
+    <a href="/business.html">ניהול עסק</a>
+    <a href="/tv.html" class="active">טלוויזיה</a>
+    <a href="/finance.html">פיננסים</a>
+    <a href="/setup.html">הגדרות</a>
+  </nav>
+
+  <div class="tv-wrap">
+    <div class="tv-player">
+      <div class="tv-frame" id="tv-frame">
+        <div class="tv-placeholder">בחרו ערוץ מהרשימה</div>
+      </div>
+      <div class="tv-nowtxt" id="tv-now"></div>
+    </div>
+
+    <aside class="tv-side">
+      <div class="tv-search">
+        <input type="text" id="tv-q" placeholder="🔍 חפש ערוץ נוסף להוספה…" autocomplete="off">
+        <div id="tv-search-results"></div>
+      </div>
+      <div id="tv-list"><div class="rd-loading">טוען ערוצים…</div></div>
+      <p class="tv-note">כל הערוצים משדרים בעצמם, באופן רשמי וחופשי, דרך היוטיוב שלהם. אם ערוץ לא משדר כרגע — יוצג "אין כרגע שידור חי".</p>
+    </aside>
+  </div>
+
+</div>
+<div class="toast" id="toast"></div>
+<script src="/js/tv.js"></script>
+<script src="/js/dockbar.js" defer></script>
+</body>
+</html>

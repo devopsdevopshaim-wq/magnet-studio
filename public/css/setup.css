@@ -140,3 +140,8 @@
 .int-msg { font-size: 0.78rem; color: var(--cream-dim); }
 .int-msg.ok { color: var(--sage); }
 .int-msg.bad { color: var(--danger); }
+
+.int-pwrow { display: flex; gap: 4px; align-items: center; }
+.int-pwrow input { flex: 1; }
+.int-eye { background: var(--surface-2); border: 1px solid var(--line); border-radius: 7px; cursor: pointer; font-size: 0.85rem; padding: 5px 8px; margin-top: 3px; flex: 0 0 auto; }
+.int-eye:hover { border-color: var(--brass); }
