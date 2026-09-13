@@ -4,17 +4,15 @@
 !.env.example
 data/devops-config.json
 data/devops-runtime.json
-data/aia-video-config.json
-data/tts-config.json
-data/jarvis-config.json
-data/auth-config.json
-data/integrations-config.json
+
+# ═══ PERSIST_DIR — כל מה שהמשתמש יוצר/שומר דרך האתר (מפתחות API, עסק, AIA, פרופיל).
+# ראו lib/paths.js — עם דיסק קבוע מחובר (render.yaml disk) שורד פריסה מחדש בענן. ═══
+data/persist/
 
 # ═══ נתונים אישיים / ספציפיים-למחשב (מוגדרים מחדש בכל התקנה) ═══
 data/astro-config.json
 data/astro-natal-cache.json
 data/user-config.json
-data/profile.json
 
 # ═══ מצב ריצה ומטמונים — נבנים מחדש ═══
 data/daily-brief-*.json
@@ -29,8 +27,6 @@ data/*.bak
 data/*.pre-import-*.bak
 data/tehillim-cache/
 data/devops-logs/
-data/aia/
-data/business/
 
 # ═══ תלויות ובנייה ═══
 node_modules/

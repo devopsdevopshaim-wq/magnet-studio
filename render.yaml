@@ -1,19 +1,26 @@
 # Render Blueprint — פריסת "הפנקס היומי" לכתובת ציבורית.
 # איך: render.com → New → Blueprint → מחברים את ה-repo מ-GitHub → Apply.
+#      אם השירות כבר קיים: Render Dashboard → השירות → Settings → "Sync render.yaml" (או Manual Deploy → Deploy latest commit),
+#      ולאשר את שדרוג התוכנית ל-Starter (יש עלות — כרטיס אשראי כבר על התיק אם הוגדר בעבר).
 # חובה למלא PNKS_AUTH_PASSWORD (סיסמת גישה) לפני שהאתר עולה.
 #
-# מה עובד בענן:  מענה יומי, לוח עברי, תהילים, קריאה, כספים, שוק ההון, לוטו, דיבוב קולי (Google TTS).
-# מה לא (דורש את המחשב):  סיכום ה-AI מ-Ollama המקומי, DevOps/Docker/n8n, קריאת תיקיות עיצוב, Outlook.
+# מה עובד בענן:  מענה יומי, לוח עברי, תהילים, קריאה, כספים, שוק ההון, לוטו, דיבוב קולי (Google TTS),
+#                עכשיו גם נשמר לצמיתות: אינטגרציות/מפתחות API, נתוני עסק (חשבוניות/לקוחות/הנה"ח), פרויקטי AIA, פרופיל, ערוצי טלוויזיה מותאמים.
+# מה עדיין לא (דורש את המחשב עצמו, לא קשור לדיסק):  סיכום ה-AI מ-Ollama המקומי, DevOps/Docker/n8n, קריאת תיקיות עיצוב, Outlook.
 
 services:
   - type: web
     name: hapinkas-hayomi
     runtime: docker
     dockerfilePath: ./Dockerfile
-    plan: free            # שנו ל-starter אם רוצים בלי "הירדמות" אחרי חוסר פעילות
+    plan: starter          # דיסק קבוע דורש תוכנית בתשלום (לא נתמך ב-free) — ~7$/חודש
     region: frankfurt
     healthCheckPath: /healthz
     autoDeploy: true       # כל push ל-branch הראשי מפרסם מחדש
+    disk:
+      name: pnks-data
+      mountPath: /app/data # אותה תיקייה ש-DATA_DIR בשרת קורא/כותב אליה — עכשיו שורדת redeploy
+      sizeGB: 1             # ~0.25$/חודש נוסף — מספיק בנדיבות לכל ה-JSON/נכסים/רינדורים
     envVars:
       - key: NODE_ENV
         value: production
@@ -30,5 +37,5 @@ services:
         sync: false
       - key: AZURE_SPEECH_REGION
         value: westeurope
-    # אין דיסק קבוע (התוכנית החינמית לא תומכת). מצב ריצה (מטמונים, פרופיל) מתאפס
-    # בכל פרסום ונבנה מחדש. נתוני המשתמש בכספים נשמרים ב-localStorage של הדפדפן.
+    # דיסק קבוע מחובר ב-/app/data (ראו disk למעלה) — data/*.json, data/aia/*, data/business/* וכו' שורדים redeploy.
+    # נתוני המשתמש בכספים (מחשבון) עדיין ב-localStorage של הדפדפן בנוסף.

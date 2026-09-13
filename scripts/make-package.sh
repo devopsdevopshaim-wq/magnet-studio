@@ -13,12 +13,11 @@ DEST="${1:-$HOME/Desktop/הפנקס-היומי-להעברה.zip}"
 cp -r "$ROOT" "$STAGE/magnet-studio"
 cd "$STAGE/magnet-studio"
 
-rm -rf node_modules .git scratchpad public/downloads .vercel data/aia data/devops-logs
+rm -rf node_modules .git scratchpad public/downloads .vercel data/persist data/devops-logs
 rm -f public/_yttest.html
 rm -f data/daily-brief-*.json data/learning-*.json data/lotto-*.json \
       data/astro-natal-cache.json data/*.bak data/*.pre-import-*.bak data/sync-status.json \
-      data/devops-config.json data/devops-runtime.json data/profile.json \
-      data/tts-config.json data/aia-video-config.json data/auth-config.json data/integrations-config.json \
+      data/devops-config.json data/devops-runtime.json \
       "הפעלת הסטודיו.bat"
 rm -rf data/tehillim-cache
 
