@@ -80,9 +80,22 @@
   }
 
   function exImg(e) {
+    if (e.video && e.video.thumb) {
+      return '<div class="ft-ex-video" data-video-id="' + esc(e.video.videoId) + '" data-title="' + esc(e.name) + '">' +
+        '<img class="ft-ex-img" src="' + esc(e.video.thumb) + '" alt="' + esc(e.name) + '" loading="lazy">' +
+        '<button type="button" class="ft-ex-play" aria-label="צפה בהדגמה">▶</button></div>';
+    }
     var figs = window.EXERCISE_FIGURES || {};
     if (figs[e.id]) return '<div class="ft-ex-fallback">' + figs[e.id] + "</div>";
     return '<div class="ft-ex-fallback">' + FIG + "</div>";
+  }
+
+  function playExerciseVideo(box) {
+    var vid = box.dataset.videoId;
+    if (!vid) return;
+    box.innerHTML = '<iframe src="https://www.youtube.com/embed/' + encodeURIComponent(vid) +
+      '?autoplay=1&playsinline=1" title="' + esc(box.dataset.title || "") +
+      '" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen class="ft-ex-iframe"></iframe>';
   }
 
   function renderLibrary() {
@@ -104,6 +117,12 @@
         "</details>" +
         "</div></article>";
     }).join("");
+    $("ft-lib").querySelectorAll(".ft-ex-play").forEach(function (btn) {
+      btn.addEventListener("click", function () { playExerciseVideo(btn.closest(".ft-ex-video")); });
+    });
+    $("ft-lib").querySelectorAll(".ft-ex-video .ft-ex-img").forEach(function (img) {
+      img.addEventListener("click", function () { playExerciseVideo(img.closest(".ft-ex-video")); });
+    });
   }
 
   function boot(d, offline) {

@@ -1345,12 +1345,17 @@ app.get("/api/astro/reading", (req, res) => {
 // ---------- כושר יומי — ספריית תרגילים + תוכנית שבועית ----------
 
 let _fitnessCache = null;
-app.get("/api/fitness", (req, res) => {
+app.get("/api/fitness", async (req, res) => {
   try {
     if (!_fitnessCache) _fitnessCache = JSON.parse(fs.readFileSync(path.join(DATA_DIR, "exercises.json"), "utf8"));
     const today = new Date().getDay(); // 0=ראשון
     const routine = (_fitnessCache.week || []).find((w) => w.day === today) || (_fitnessCache.week || [])[0];
-    res.json({ ..._fitnessCache, today, routine });
+    const { resolveExerciseVideo } = require("./lib/exerciseVideos");
+    const exercises = await Promise.all((_fitnessCache.exercises || []).map(async (e) => {
+      const v = await resolveExerciseVideo(e);
+      return { ...e, video: v.videoId ? { videoId: v.videoId, title: v.title, channel: v.channel, thumb: v.thumb } : null };
+    }));
+    res.json({ ..._fitnessCache, exercises, today, routine });
   } catch (err) {
     res.status(500).json({ error: err.message, exercises: [], week: [] });
   }
