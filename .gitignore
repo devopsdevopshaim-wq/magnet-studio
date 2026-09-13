@@ -49,3 +49,6 @@ public/_pocket-preview.html
 Thumbs.db
 npm-debug.log*
 *.log
+
+.vercel
+.env*

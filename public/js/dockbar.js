@@ -14,7 +14,7 @@
   }
 
   // --- מודולים גלובליים: התקנה כאפליקציה + דיבוב קולי בכל עמוד ---
-  ["/js/pwa.js", "/js/voice.js"].forEach((src) => {
+  ["/js/pwa.js", "/js/voice.js", "/js/fx-neural.js"].forEach((src) => {
     if (document.querySelector(`script[src="${src}"]`)) return;
     const s = document.createElement("script");
     s.src = src;
