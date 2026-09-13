@@ -1536,4 +1536,12 @@ function startServer(retriesLeft = 5) {
   });
 }
 
-startServer();
+// Vercel (Serverless Functions) — אין להאזין על פורט; מייצאים את ה-app כפונקציה.
+// אזהרה: ל-Serverless Functions אין דיסק בר-כתיבה מתמשך — מטמונים/נתונים שנשמרים
+// ל-data/*.json (תהילים, מנה יומית, ניהול עסק, אינטגרציות...) לא ישרדו בין קריאות.
+// לשימוש מלא ואמין - Render (docker, מאזין ברצף) הוא הכתובת המומלצת.
+if (process.env.VERCEL) {
+  module.exports = app;
+} else {
+  startServer();
+}
