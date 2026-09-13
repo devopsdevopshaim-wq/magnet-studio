@@ -46,4 +46,21 @@
 .lib-card-actions { display: flex; gap: 8px; margin-top: 4px; }
 .lib-card-actions .btn { font-size: 0.8rem; padding: 5px 14px; }
 
+.lib-stories { margin-bottom: 30px; }
+.lib-stories h2 { font-family: var(--font-display); font-size: 1.1rem; color: var(--cream); margin: 0 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+.lib-story-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.lib-story-chip {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 999px; cursor: pointer;
+  color: var(--cream-dim); font-family: var(--font-body); font-size: 0.82rem; padding: 6px 14px;
+}
+.lib-story-chip:hover { border-color: var(--brass); color: var(--cream); }
+.lib-story-chip.on { background: var(--surface-2); border-color: var(--ember); color: var(--ember); }
+.lib-story-body {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+  padding: 20px 22px; font-family: var(--font-body);
+}
+.lib-story-title { font-family: var(--font-display); font-size: 1.3rem; color: var(--cream); }
+.lib-story-sub { font-size: 0.86rem; color: var(--brass-soft); margin: 4px 0 14px; }
+.lib-story-body p { font-size: 0.95rem; line-height: 1.9; color: var(--cream-dim); margin: 0 0 1em; }
+
 @media (max-width: 560px) { .lib-wrap { padding: 0 12px 60px; } .lib-grid { grid-template-columns: 1fr; } }

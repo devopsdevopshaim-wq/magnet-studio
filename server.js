@@ -790,10 +790,11 @@ app.get("/api/dockbar", (req, res) => {
 app.get("/api/library", async (req, res) => {
   try {
     const hr = require("./lib/holidayResources");
+    const stories = require("./lib/holidayStories");
     const [active, holidays] = await Promise.all([hr.active(), hr.upcomingHolidays().catch(() => [])]);
-    res.json({ resources: hr.list(), active, holidays });
+    res.json({ resources: hr.list(), active, holidays, stories: stories.list() });
   } catch (err) {
-    res.status(500).json({ resources: [], active: [], holidays: [], error: err.message });
+    res.status(500).json({ resources: [], active: [], holidays: [], stories: [], error: err.message });
   }
 });
 

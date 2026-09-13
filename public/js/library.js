@@ -22,6 +22,7 @@
     const activeIds = new Set((data.active || []).map((a) => a.id));
     const activeById = Object.fromEntries((data.active || []).map((a) => [a.id, a]));
     const resources = data.resources || [];
+    const stories = data.stories || [];
 
     // לוח חגים קרובים
     let boardHtml = "";
@@ -37,8 +38,24 @@
       </section>`;
     }
 
+    // סיפורי החגים — ברירת מחדל: החג הקרוב ביותר שיש לו סיפור
+    let storiesHtml = "";
+    if (stories.length) {
+      const nearestTitle = (data.holidays || []).map((h) => h.desc || h.title).find((t) =>
+        stories.some((s) => t && t.startsWith(s.occasion)));
+      const nearest = stories.find((s) => nearestTitle && nearestTitle.startsWith(s.occasion));
+      const defaultOcc = (nearest || stories[0]).occasion;
+      storiesHtml = `<section class="lib-stories">
+        <h2>סיפורי החג</h2>
+        <div class="lib-story-chips">${stories.map((s) => `
+          <button type="button" class="lib-story-chip${s.occasion === defaultOcc ? " on" : ""}" data-occ="${esc(s.occasion)}">${s.icon || ""} ${esc(s.title)}</button>`).join("")}</div>
+        <div class="lib-story-body" id="lib-story-body"></div>
+      </section>`;
+    }
+
     if (!resources.length) {
-      $("lib-main").innerHTML = boardHtml + `<div class="lib-note">עדיין אין קבצים באוצר.</div>`;
+      $("lib-main").innerHTML = boardHtml + storiesHtml + `<div class="lib-note">עדיין אין קבצים באוצר.</div>`;
+      wireStories(stories);
       return;
     }
 
@@ -69,11 +86,29 @@
     const order = ["חג", "שבת", "ברכות", "כללי"];
     const cats = Object.keys(byCat).sort((a, b) => (order.indexOf(a) + 99) % 100 - (order.indexOf(b) + 99) % 100 || a.localeCompare(b));
 
-    $("lib-main").innerHTML = boardHtml + cats.map((cat) => `
+    $("lib-main").innerHTML = boardHtml + storiesHtml + cats.map((cat) => `
       <section class="lib-cat">
         <h2>${esc(cat)}</h2>
         <div class="lib-grid">${byCat[cat].map(card).join("")}</div>
       </section>`).join("");
+    wireStories(stories);
+  }
+
+  function wireStories(stories) {
+    const chips = document.querySelectorAll(".lib-story-chip");
+    if (!chips.length) return;
+    const show = (occ) => {
+      const s = stories.find((x) => x.occasion === occ);
+      const body = $("lib-story-body");
+      if (!s || !body) return;
+      body.innerHTML = `<div class="lib-story-title">${s.icon || ""} ${esc(s.title)}</div>
+        <div class="lib-story-sub">${esc(s.subtitle || "")}</div>
+        ${(s.paragraphs || []).map((p) => `<p class="js-speak" data-speak="${esc(p)}">${esc(p)}</p>`).join("")}`;
+      chips.forEach((c) => c.classList.toggle("on", c.dataset.occ === occ));
+    };
+    chips.forEach((c) => c.addEventListener("click", () => show(c.dataset.occ)));
+    const initial = document.querySelector(".lib-story-chip.on");
+    if (initial) show(initial.dataset.occ);
   }
 
   load();
