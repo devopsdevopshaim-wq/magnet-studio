@@ -9,12 +9,33 @@
   let CHANNELS = [];
 
   function playChannel(ch) {
-    $("tv-frame").innerHTML = `<iframe src="https://www.youtube.com/embed/live_stream?channel=${encodeURIComponent(ch.channelId)}&autoplay=1"
-      title="${esc(ch.he)}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
-    $("tv-now").textContent = "צופה עכשיו: " + ch.he;
+    // embed/live_stream?channel= לא אמין (יוטיוב לפעמים לא טוען דרכו) — לכן השרת כבר פתר
+    // מראש את מזהה הסרטון החי בפועל (ch.videoId), ומטמיעים אותו ישירות: embed/<videoId>.
+    // autoplay מושתק (mute=1) — כך הדפדפן תמיד מתחיל לנגן מיד; לביטול ההשתקה יש כפתור בנגן עצמו.
     document.querySelectorAll(".tv-ch").forEach((el) => el.classList.toggle("on", el.dataset.id === ch.id));
     try { localStorage.setItem(LS_KEY, ch.id); } catch {}
+
+    if (!ch.videoId) {
+      $("tv-frame").innerHTML = `<div class="tv-placeholder">אין כרגע שידור חי בערוץ "${esc(ch.he)}" · נסו ערוץ אחר מהרשימה</div>`;
+      $("tv-now").textContent = "לא נמצא שידור חי כרגע: " + ch.he;
+      return;
+    }
+    $("tv-frame").innerHTML = `<iframe id="tv-iframe" src="https://www.youtube.com/embed/${encodeURIComponent(ch.videoId)}?autoplay=1&mute=1&playsinline=1"
+      title="${esc(ch.he)}" frameborder="0"
+      allow="autoplay; encrypted-media; picture-in-picture; fullscreen; web-share"
+      allowfullscreen></iframe>`;
+    $("tv-now").textContent = "צופה עכשיו: " + ch.he + " · אם המסך שחור — נסו ערוץ אחר";
   }
+
+  function goFullscreen() {
+    var box = document.getElementById("tv-frame");
+    if (!box) return;
+    if (box.requestFullscreen) box.requestFullscreen().catch(() => toast("המסך המלא לא נתמך כאן", true));
+    else if (box.webkitRequestFullscreen) box.webkitRequestFullscreen();
+    else toast("המסך המלא לא נתמך בדפדפן הזה", true);
+  }
+  var fsBtn = $("tv-fullscreen");
+  if (fsBtn) fsBtn.addEventListener("click", goFullscreen);
 
   function channelRow(ch) {
     return `<button type="button" class="tv-ch" data-id="${esc(ch.id)}">

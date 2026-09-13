@@ -1,18 +1,15 @@
 {
-  "_note": "ערוצי חדשות/שידור חינמיים ופתוחים — כולם משדרים בעצמם, באופן רשמי וחופשי, דרך היוטיוב שלהם. הכתובת נבנית מ-channel ID קבוע (embed/live_stream?channel=...) — מציגה תמיד את מה שהערוץ משדר עכשיו, בלי תלות במזהה סרטון שמתחלף.",
+  "_note": "ערוצים חינמיים ופתוחים — כולם משדרים בעצמם, באופן רשמי, דרך היוטיוב שלהם. השרת מאתר עבור כל ערוץ את הסרטון החי הנוכחי (lib/tvLive.js) ומטמיע אותו ישירות — לא כל ערוץ יוטיוב מאפשר הטמעה (חלק מהרשתות הגדולות חוסמות הטמעה באתרים אחרים כמדיניות שלהן, בכל אתר שהוא — לא רק כאן). הרשימה כאן כוללת רק ערוצים שנבדקו ועובדים בפועל.",
   "channels": [
     { "id": "kan11", "he": "כאן 11 — חדשות", "group": "ישראל", "channelId": "UC_HwfTAcjBESKZRJq6BTCpg" },
-    { "id": "i24he", "he": "i24NEWS עברית", "group": "ישראל", "channelId": "UCisowXt5wZkp2sR3rFh9lnQ" },
-    { "id": "i24en", "he": "i24NEWS English", "group": "ישראל", "channelId": "UCvHDpsWKADrDia0c99X37vg" },
-    { "id": "aljazeera", "he": "Al Jazeera English", "group": "חדשות עולם", "channelId": "UCNye-wNBqNL5ZzHSJj3l8Bg" },
-    { "id": "dw", "he": "DW News", "group": "חדשות עולם", "channelId": "UCknLrEdhRCp1aegoMqRaCZg" },
-    { "id": "france24", "he": "France 24 English", "group": "חדשות עולם", "channelId": "UCCCPCZNChQdGa9EkATeye4g" },
-    { "id": "euronews", "he": "Euronews", "group": "חדשות עולם", "channelId": "UCSrZ3UV4jOidv8ppoVuvW9Q" },
     { "id": "skynews", "he": "Sky News", "group": "חדשות עולם", "channelId": "UCoMdktPbSTixAyNGwb-UYkQ" },
-    { "id": "cna", "he": "CNA (סינגפור)", "group": "חדשות עולם", "channelId": "UC83jt4dlz1Gjl58fzQrrKZg" },
-    { "id": "abcnews", "he": "ABC News In-depth", "group": "חדשות עולם", "channelId": "UCxcrzzhQDj5zKJbXfIscCtg" },
+    { "id": "foxnews", "he": "Fox News", "group": "חדשות עולם", "channelId": "UCXIJgqnII2ZOINSWNOGFThA" },
+    { "id": "wion", "he": "WION", "group": "חדשות עולם", "channelId": "UC_gUM8rL-Lrg6O3adPW9K1g" },
     { "id": "globalnews", "he": "Global News (קנדה)", "group": "חדשות עולם", "channelId": "UChLtXXpo4Ge1ReTEboVvTDg" },
     { "id": "bloomberg", "he": "Bloomberg Television", "group": "כלכלה", "channelId": "UCIALMKvObZNtJ6AmdCLP7Lg" },
+    { "id": "prasarsports", "he": "Prasar Bharati Sports (הודו — שידור ציבורי)", "group": "ספורט", "channelId": "UCX2eNtU1ZG3x4OpdP2UIlJA" },
+    { "id": "moviesclassic", "he": "קולנוע קלאסי (רשיון ציבורי)", "group": "סרטים", "channelId": "UCgFh2rveKiwL9QdXZaawJQg" },
+    { "id": "moviespublicdomain", "he": "סרטי רשיון ציבורי 24/7", "group": "סרטים", "channelId": "UCUnaJD2wzrN2U3X40ESkFiA" },
     { "id": "nasa", "he": "NASA", "group": "נוספים", "channelId": "UCLA_DiR1FfKNvjuUpBHmylQ" }
   ]
 }

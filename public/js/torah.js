@@ -27,8 +27,15 @@
     const groups = {};
     CATALOG.books.forEach((b) => { (groups[b.group] = groups[b.group] || []).push(b); });
     const order = ["תורה", "נביאים", "תרי עשר", "כתובים"];
+    const MEGILLOT = [
+      ["Song of Songs", "שיר השירים", "פסח"], ["Ruth", "רות", "שבועות"],
+      ["Ecclesiastes", "קהלת", "סוכות"], ["Lamentations", "איכה", "תשעה באב"], ["Esther", "אסתר", "פורים"]
+    ];
     main.innerHTML = `
       <div class="tr-panel">
+        <div class="tr-grp tr-megillot"><span class="tr-grp-l">חמש מגילות</span>
+          <div class="tr-chips">${MEGILLOT.map((m) => `<button class="tr-chip tr-meg-chip" data-book="${esc(m[0])}">${esc(m[1])} <small>· ${esc(m[2])}</small></button>`).join("")}</div>
+        </div>
         <div class="tr-picker">
           ${order.map((g) => `<div class="tr-grp"><span class="tr-grp-l">${esc(g)}</span>
             <div class="tr-chips">${groups[g].map((b) => `<button class="tr-chip" data-book="${esc(b.en)}">${esc(b.he)}</button>`).join("")}</div></div>`).join("")}

@@ -46,3 +46,6 @@
 }
 .tr-leaf:hover { background: var(--surface); color: var(--cream); }
 .tr-leaf.on { background: var(--surface-2); color: var(--ember); }
+
+.tr-megillot { padding-bottom: 10px; margin-bottom: 6px; border-bottom: 1px dashed var(--line); }
+.tr-meg-chip small { color: var(--cream-dim); font-weight: 400; }

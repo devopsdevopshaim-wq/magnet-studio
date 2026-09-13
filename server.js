@@ -958,9 +958,16 @@ app.get("/api/youtube/search", async (req, res) => {
 
 // ---------- טלוויזיה — ערוצים חינמיים ופתוחים (השידור הרשמי של הערוץ עצמו ביוטיוב) ----------
 const TV_FILE = path.join(__dirname, "data", "tv-channels.json");
-app.get("/api/tv/channels", (req, res) => {
-  try { res.json(JSON.parse(fs.readFileSync(TV_FILE, "utf8"))); }
-  catch { res.json({ channels: [] }); }
+app.get("/api/tv/channels", async (req, res) => {
+  try {
+    const j = JSON.parse(fs.readFileSync(TV_FILE, "utf8"));
+    const { resolveLiveVideoId } = require("./lib/tvLive");
+    const channels = await Promise.all((j.channels || []).map(async (c) => {
+      const r = await resolveLiveVideoId(c.channelId);
+      return { ...c, videoId: r.videoId, live: r.live };
+    }));
+    res.json({ ...j, channels });
+  } catch { res.json({ channels: [] }); }
 });
 // חיפוש ערוץ להוספה — מוצא את ה-channelId הרשמי לפי שם, כדי שהשידור החי תמיד יעודכן ממקור אמיתי
 app.get("/api/tv/search", async (req, res) => {
