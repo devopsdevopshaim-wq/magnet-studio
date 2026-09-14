@@ -1290,8 +1290,8 @@ app.get("/api/jarvis/config", (req, res) => {
 });
 
 app.post("/api/jarvis/config", (req, res) => {
-  const { base, id, mode } = req.body || {};
-  res.json(jarvis.writeConfig({ base, id, mode }));
+  const { target, localBase, localPath, base, id, mode } = req.body || {};
+  res.json(jarvis.writeConfig({ target, localBase, localPath, base, id, mode }));
 });
 
 app.post("/api/jarvis/ask", async (req, res) => {
