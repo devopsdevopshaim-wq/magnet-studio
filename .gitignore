@@ -3,6 +3,7 @@
 .env.*
 !.env.example
 data/devops-config.json
+android-signing/
 data/devops-runtime.json
 
 # ═══ PERSIST_DIR — כל מה שהמשתמש יוצר/שומר דרך האתר (מפתחות API, עסק, AIA, פרופיל).

@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.onrender.hapinkas_hayomi.twa",
+      "sha256_cert_fingerprints": [
+        "12:F1:03:5B:7A:A5:0E:AC:56:61:24:FA:6B:3E:34:04:9D:AB:E3:53:DE:DB:DA:B9:26:86:4B:0D:E7:68:F1:6F"
+      ]
+    }
+  }
+]
