@@ -1,0 +1,23 @@
+/* נתוני שימוש */
+.an-section { margin: 28px 0; }
+.an-section h2 {
+  font-family: var(--font-display); font-size: 1.1rem; color: var(--cream);
+  margin: 0 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--line);
+}
+.an-hint { font-size: 0.76rem; color: var(--cream-dim); font-weight: 400; }
+
+.an-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+.an-stat { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; text-align: center; }
+.an-v { font-family: var(--font-display); font-size: 1.8rem; color: var(--brass); }
+.an-l { font-size: 0.8rem; color: var(--cream-dim); margin-top: 2px; }
+.an-sub { font-size: 0.7rem; color: var(--cream-dim); opacity: 0.8; margin-top: 4px; }
+
+.an-note { font-size: 0.78rem; color: var(--cream-dim); margin-top: 10px; }
+
+.an-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+.an-table th { text-align: start; color: var(--brass-soft); font-family: var(--font-display); font-weight: 500; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+.an-table td { padding: 7px 10px; border-bottom: 1px solid var(--line-soft, var(--line)); color: var(--cream-dim); }
+.an-table tr:hover td { color: var(--cream); }
+.an-empty { text-align: center; color: var(--cream-dim); padding: 16px !important; }
+
+@media (max-width: 560px) { .an-grid { grid-template-columns: repeat(2, 1fr); } }

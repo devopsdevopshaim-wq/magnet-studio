@@ -3,32 +3,33 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>מענה יומי · חיים קריספין</title>
+<title>נתוני שימוש · חיים קריספין</title>
 <link rel="stylesheet" href="/css/style.css" />
-<link rel="stylesheet" href="/css/daily.css" />
+<link rel="stylesheet" href="/css/analytics.css" />
 </head>
 <body>
-<div class="daily-wrap">
+<div class="shell" style="max-width:1000px;">
 
   <header class="top-header">
     <div class="brand">
       <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="24,4 41,14 41,34 24,44 7,34 7,14" stroke="currentColor" stroke-width="2"/>
-        <circle cx="24" cy="25" r="6.5" fill="currentColor" opacity="0.9"/>
+        <rect x="6" y="26" width="7" height="16" stroke="currentColor" stroke-width="2.5"/>
+        <rect x="20" y="16" width="7" height="26" stroke="currentColor" stroke-width="2.5"/>
+        <rect x="34" y="6" width="7" height="36" stroke="currentColor" stroke-width="2.5"/>
       </svg>
       <div>
-        <h1>הפנקס היומי</h1>
-        <div class="tagline">חיים קריספין</div>
+        <h1>נתוני שימוש</h1>
+        <div class="tagline">כניסות לאתר, מבקרים ייחודיים והורדות האפליקציה — נראה רק לך</div>
       </div>
     </div>
     <div class="header-meta">
-      <div id="clock"></div>
+      <button class="btn ghost" onclick="location.href='/'">חזרה ללוח הבקרה</button>
     </div>
   </header>
 
   <nav class="tabs">
     <a href="/">לוח בקרה</a>
-    <a href="/daily.html" class="active">מענה יומי</a>
+    <a href="/daily.html">מענה יומי</a>
     <a href="/jarvis.html">עוזר JARVIS</a>
     <a href="/housing.html">דיור</a>
     <a href="/jobs.html">דרושים</a>
@@ -49,35 +50,16 @@
     <a href="/editor.html">עורך מסגרות</a>
     <a href="/mail.html">מיילים</a>
     <a href="/setup.html">הגדרות</a>
-    <a href="/analytics.html">נתוני שימוש</a>
+    <a href="/analytics.html" class="active">נתוני שימוש</a>
   </nav>
 
-  <div class="daily-top">
-    <div class="daily-greet-wrap">
-      <div id="daily-avatar" class="daily-avatar"></div>
-      <div>
-        <h2 class="daily-greeting" id="greeting">בוקר טוב</h2>
-        <div class="daily-subline" id="subline">טוען את היום…</div>
-      </div>
-    </div>
-    <div class="daily-actions">
-      <button class="btn ghost" id="btn-refresh">רענן</button>
-      <button class="btn primary" onclick="location.href='/'">המשך ללוח הבקרה →</button>
-    </div>
-  </div>
-
-  <div id="content">
-    <div class="daily-loading" id="loading">אוסף את היום — יומן, לימוד, שמיים ומזל…</div>
+  <div id="an-main">
+    <div class="rd-loading">טוען…</div>
   </div>
 
 </div>
-
 <div class="toast" id="toast"></div>
-
-<script src="/js/pnks-core.js"></script>
-<script src="/js/pnks-offline.js"></script>
-<script src="/js/avatar.js"></script>
-<script src="/js/daily.js"></script>
+<script src="/js/analytics.js"></script>
 <script src="/js/dockbar.js" defer></script>
 </body>
 </html>

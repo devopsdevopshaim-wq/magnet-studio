@@ -59,6 +59,26 @@ app.get("/login", (req, res) => res.sendFile(path.join(__dirname, "public", "log
 app.get("/healthz", (req, res) => res.json({ ok: true, ts: Date.now() }));
 app.use(auth.gate);
 
+// אנליטיקס פרטי — כניסות/מבקרים ייחודיים לפי עמוד. רק עמודי HTML אמיתיים, לא API/assets.
+app.use((req, res, next) => {
+  if (req.method === "GET" && req.path.endsWith(".html")) {
+    try { require("./lib/analytics").track(req.path, auth.visitorToken(req)); } catch { /* לא קריטי */ }
+  }
+  next();
+});
+app.get("/", (req, res, next) => {
+  try { require("./lib/analytics").track("/", auth.visitorToken(req)); } catch { /* לא קריטי */ }
+  next();
+});
+
+// הורדת אפליקציית האנדרואיד — פתוח לכולם (קובץ ההתקנה עצמו, בניגוד ללוח הבקרה, לא רגיש) + מונה הורדות
+const APK_PATH = path.join(__dirname, "public", "app", "hapinkas-hayomi.apk");
+app.get("/app/download", (req, res) => {
+  if (!fs.existsSync(APK_PATH)) return res.status(404).send("האפליקציה עדיין לא הועלתה לשרת הזה.");
+  try { require("./lib/analytics").trackDownload(); } catch { /* לא קריטי */ }
+  res.download(APK_PATH, "הפנקס-היומי.apk");
+});
+
 // אפליקציה מקומית שמתעדכנת תדיר - מכריחים את הדפדפן לאמת מול השרת בכל טעינה
 // (מונע את "צריך hard-refresh אחרי עדכון").
 app.use(
@@ -97,6 +117,12 @@ app.post("/api/integrations/:id", async (req, res) => {
 app.get("/api/integrations/:id/reveal", async (req, res) => {
   try { res.json({ values: await require("./lib/integrations").reveal(req.params.id) }); }
   catch (err) { res.status(400).json({ error: err.message }); }
+});
+
+// ---------- אנליטיקס פרטי — נגיש רק מאחורי שער ההתחברות (auth.gate כבר חוסם למעלה) ----------
+app.get("/api/analytics/stats", (req, res) => {
+  try { res.json(require("./lib/analytics").getStats()); }
+  catch (err) { res.status(500).json({ error: err.message }); }
 });
 
 // ---------- הגדרת מערכת (מסך התקנה - הופך את המערכת לניידת בין מחשבים) ----------
