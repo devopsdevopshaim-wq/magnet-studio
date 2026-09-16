@@ -4,6 +4,7 @@ try { require("dotenv").config(); } catch { /* dotenv אופציונלי */ }
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
+const { PERSIST_DIR } = require("./lib/paths");
 const {
   MAGNET_ROOT,
   EVENTS_DIR,
@@ -42,22 +43,44 @@ const app = express();
 app.set("trust proxy", 1); // מאחורי proxy של שירות אחסון (Render/Railway) — לזיהוי https נכון
 app.use(express.json({ limit: "45mb" }));
 
-// ---------- הזדהות אופציונלית (מופעלת רק כשמוגדרת סיסמה — ראו lib/auth.js) ----------
+// ---------- הזדהות רב-משתמשית אופציונלית (מופעלת רק כשמוגדרת סיסמת בעלים — ראו lib/auth.js) ----------
 const auth = require("./lib/auth");
-app.get("/api/auth/status", (req, res) => res.json({ enabled: auth.config().enabled, authed: auth.isAuthed(req) }));
+const pnksUsers = require("./lib/users");
+app.get("/api/auth/status", (req, res) => {
+  const u = auth.currentUser(req);
+  res.json({ enabled: auth.config().enabled, authed: !!u, user: u });
+});
 app.post("/api/auth/login", (req, res) => {
   if (!auth.config().enabled) return res.json({ ok: true, disabled: true });
-  if (!auth.checkPassword((req.body || {}).password)) {
-    return res.status(401).json({ ok: false, error: "סיסמה שגויה" });
-  }
-  auth.setSession(res);
-  res.json({ ok: true });
+  const { name, password } = req.body || {};
+  const user = auth.login(name, password);
+  if (!user) return res.status(401).json({ ok: false, error: "שם או סיסמה שגויים" });
+  auth.setSession(res, user.id);
+  res.json({ ok: true, user });
+});
+app.post("/api/auth/register", (req, res) => {
+  if (!auth.config().enabled) return res.status(400).json({ ok: false, error: "הרשמה לא נדרשת — המערכת פתוחה" });
+  try {
+    const { name, password } = req.body || {};
+    const user = pnksUsers.register(name, password);
+    require("./lib/profile").write({ displayName: user.name }, pnksUsers.userDir(user.id));
+    auth.setSession(res, user.id);
+    res.json({ ok: true, user });
+  } catch (err) { res.status(400).json({ ok: false, error: err.message }); }
 });
 app.post("/api/auth/logout", (req, res) => { auth.clearSession(res); res.json({ ok: true }); });
 app.get("/login", (req, res) => res.sendFile(path.join(__dirname, "public", "login.html")));
 // בדיקת חיות לשירות האחסון — לפני שער ההזדהות
 app.get("/healthz", (req, res) => res.json({ ok: true, ts: Date.now() }));
 app.use(auth.gate);
+// מזהה המשתמש המחובר זמין לכל הנתיבים מכאן והלאה — req.pnksUser = {id,name} או null (מערכת פתוחה)
+app.use((req, res, next) => { req.pnksUser = auth.currentUser(req); next(); });
+// תיקיית הנתונים הפרטית של המשתמש המחובר — PERSIST_DIR לבעלים/מערכת פתוחה, תיקייה נפרדת לכל חשבון רשום
+function baseDirFor(req) {
+  const u = req.pnksUser;
+  if (!u || u.id === auth.OWNER_ID) return PERSIST_DIR;
+  return pnksUsers.userDir(u.id);
+}
 
 // אנליטיקס פרטי — כניסות/מבקרים ייחודיים לפי עמוד. רק עמודי HTML אמיתיים, לא API/assets.
 app.use((req, res, next) => {
@@ -787,10 +810,10 @@ app.post("/api/finance/analyze", async (req, res) => {
   }
 });
 
-// ---------- פרופיל נייד (שם תצוגה שמתאים למחשב) ----------
-app.get("/api/profile", (req, res) => res.json(require("./lib/profile").read()));
+// ---------- פרופיל אישי (שם תצוגה — פרטי לכל חשבון) ----------
+app.get("/api/profile", (req, res) => res.json({ ...require("./lib/profile").read(baseDirFor(req)), account: req.pnksUser }));
 app.post("/api/profile", (req, res) => {
-  try { res.json(require("./lib/profile").write(req.body || {})); }
+  try { res.json(require("./lib/profile").write(req.body || {}, baseDirFor(req))); }
   catch (err) { res.status(400).json({ error: err.message }); }
 });
 
@@ -841,51 +864,52 @@ app.get("/api/torah/text", async (req, res) => {
   catch (err) { res.status(502).json({ error: err.message }); }
 });
 
-// ---------- ניהול עסק: לקוחות · חשבוניות · הנהלת חשבונות · יומן עסקי ----------
-const biz = require("./lib/business");
+// ---------- ניהול עסק: לקוחות · חשבוניות · הנהלת חשבונות · יומן עסקי (פרטי לכל חשבון) ----------
+const bizStore = require("./lib/business");
+const biz = (req) => bizStore(baseDirFor(req));
 
-app.get("/api/business/clients", (req, res) => res.json({ clients: biz.listClients() }));
+app.get("/api/business/clients", (req, res) => res.json({ clients: biz(req).listClients() }));
 app.post("/api/business/clients", (req, res) => {
-  try { res.json({ client: biz.saveClient(req.body || {}) }); } catch (err) { res.status(400).json({ error: err.message }); }
+  try { res.json({ client: biz(req).saveClient(req.body || {}) }); } catch (err) { res.status(400).json({ error: err.message }); }
 });
-app.delete("/api/business/clients/:id", (req, res) => res.json(biz.deleteClient(req.params.id)));
+app.delete("/api/business/clients/:id", (req, res) => res.json(biz(req).deleteClient(req.params.id)));
 
-app.get("/api/business/invoices", (req, res) => res.json({ invoices: biz.listInvoices() }));
+app.get("/api/business/invoices", (req, res) => res.json({ invoices: biz(req).listInvoices() }));
 app.get("/api/business/invoices/:id", (req, res) => {
-  const inv = biz.getInvoice(req.params.id);
+  const inv = biz(req).getInvoice(req.params.id);
   if (!inv) return res.status(404).json({ error: "לא נמצאה" });
   res.json(inv);
 });
 app.post("/api/business/invoices", (req, res) => {
-  try { res.json({ invoice: biz.saveInvoice(req.body || {}) }); } catch (err) { res.status(400).json({ error: err.message }); }
+  try { res.json({ invoice: biz(req).saveInvoice(req.body || {}) }); } catch (err) { res.status(400).json({ error: err.message }); }
 });
 app.put("/api/business/invoices/:id", (req, res) => {
-  try { res.json({ invoice: biz.saveInvoice({ ...req.body, id: req.params.id }) }); } catch (err) { res.status(400).json({ error: err.message }); }
+  try { res.json({ invoice: biz(req).saveInvoice({ ...req.body, id: req.params.id }) }); } catch (err) { res.status(400).json({ error: err.message }); }
 });
 app.post("/api/business/invoices/:id/status", (req, res) => {
-  try { res.json({ invoice: biz.setInvoiceStatus(req.params.id, (req.body || {}).status) }); } catch (err) { res.status(400).json({ error: err.message }); }
+  try { res.json({ invoice: biz(req).setInvoiceStatus(req.params.id, (req.body || {}).status) }); } catch (err) { res.status(400).json({ error: err.message }); }
 });
-app.delete("/api/business/invoices/:id", (req, res) => res.json(biz.deleteInvoice(req.params.id)));
+app.delete("/api/business/invoices/:id", (req, res) => res.json(biz(req).deleteInvoice(req.params.id)));
 
-app.get("/api/business/ledger", (req, res) => res.json(biz.listLedger(req.query.month)));
+app.get("/api/business/ledger", (req, res) => res.json(biz(req).listLedger(req.query.month)));
 app.post("/api/business/ledger", (req, res) => {
-  try { res.json({ entry: biz.saveLedgerEntry(req.body || {}) }); } catch (err) { res.status(400).json({ error: err.message }); }
+  try { res.json({ entry: biz(req).saveLedgerEntry(req.body || {}) }); } catch (err) { res.status(400).json({ error: err.message }); }
 });
-app.delete("/api/business/ledger/:id", (req, res) => res.json(biz.deleteLedgerEntry(req.params.id)));
+app.delete("/api/business/ledger/:id", (req, res) => res.json(biz(req).deleteLedgerEntry(req.params.id)));
 
 app.get("/api/business/calendar", (req, res) => res.json({
-  entries: biz.listCalendar(req.query.month), upcoming: req.query.upcoming ? biz.upcomingCalendar(Number(req.query.upcoming) || 14) : undefined
+  entries: biz(req).listCalendar(req.query.month), upcoming: req.query.upcoming ? biz(req).upcomingCalendar(Number(req.query.upcoming) || 14) : undefined
 }));
 app.post("/api/business/calendar", (req, res) => {
-  try { res.json({ entry: biz.saveCalendarEntry(req.body || {}) }); } catch (err) { res.status(400).json({ error: err.message }); }
+  try { res.json({ entry: biz(req).saveCalendarEntry(req.body || {}) }); } catch (err) { res.status(400).json({ error: err.message }); }
 });
-app.delete("/api/business/calendar/:id", (req, res) => res.json(biz.deleteCalendarEntry(req.params.id)));
+app.delete("/api/business/calendar/:id", (req, res) => res.json(biz(req).deleteCalendarEntry(req.params.id)));
 
 // חשבונית להדפסה — עמוד עצמאי ומעוצב, מוכן ל-Ctrl+P / שמירה כ-PDF
 app.get("/business/invoice/:id/print", (req, res) => {
-  const inv = biz.getInvoice(req.params.id);
+  const inv = biz(req).getInvoice(req.params.id);
   if (!inv) return res.status(404).send("חשבונית לא נמצאה");
-  const prof = require("./lib/profile").read();
+  const prof = require("./lib/profile").read(baseDirFor(req));
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const nis = (n) => Number(n || 0).toLocaleString("he-IL", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const rows = inv.items.map((it) => `<tr><td>${esc(it.desc)}</td><td>${it.qty}</td><td>${nis(it.price)} ₪</td><td>${nis(it.qty * it.price)} ₪</td></tr>`).join("");
@@ -1129,16 +1153,24 @@ app.get("/api/devops/projects/:id/pipeline", (req, res) => {
 
 // ---------- סטודיו עיצוב AIA (חבילת הפקה מ-AI: קונספט · פרומפטים · סטוריבורד · וידאו) ----------
 
-const aiaStudio = require("./lib/aiaStudio");
+const aiaStudioFactory = require("./lib/aiaStudio");
 const aiaRender = require("./lib/aiaRender");
+const aia = (req) => aiaStudioFactory(baseDirFor(req));
+const aiaDirFor = (req) => path.join(baseDirFor(req), "aia");
 
-setInterval(() => aiaStudio.purgeStaging(), 3 * 3600 * 1000);
-aiaStudio.purgeStaging();
+setInterval(() => {
+  try { aiaStudioFactory(PERSIST_DIR).purgeStaging(); } catch {}
+  try {
+    for (const uid of pnksUsers.listUsers().map((u) => u.id)) {
+      aiaStudioFactory(pnksUsers.userDir(uid)).purgeStaging();
+    }
+  } catch {}
+}, 3 * 3600 * 1000);
 
 app.get("/api/aia/projects", (req, res) => {
   res.json({
-    projects: aiaStudio.listProjects(),
-    maxImages: aiaStudio.MAX_IMAGES,
+    projects: aia(req).listProjects(),
+    maxImages: aiaStudioFactory.MAX_IMAGES,
     canRender: aiaRender.hasFFmpeg,
     beds: aiaRender.bedList(),
     transitions: aiaRender.transitionList()
@@ -1149,13 +1181,13 @@ app.get("/api/aia/projects", (req, res) => {
 app.post("/api/aia/stage", (req, res) => {
   try {
     const { stageId, dataUrl, note } = req.body || {};
-    res.json(aiaStudio.stageImage(stageId, dataUrl, note));
+    res.json(aia(req).stageImage(stageId, dataUrl, note));
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
 app.post("/api/aia/stage/clear", (req, res) => {
-  aiaStudio.clearStage((req.body || {}).stageId || "");
+  aia(req).clearStage((req.body || {}).stageId || "");
   res.json({ ok: true });
 });
 
@@ -1165,7 +1197,7 @@ app.post("/api/aia/generate", async (req, res) => {
     if (!b.text && !(b.files || []).length && !b.title && !b.stageId) {
       return res.status(400).json({ error: "צריך לפחות כותרת, תיאור טקסטואלי, או תמונת ייחוס" });
     }
-    const project = await aiaStudio.createProject(b);
+    const project = await aia(req).createProject(b);
     res.json(project);
   } catch (err) {
     res.status(502).json({ error: err.message });
@@ -1175,7 +1207,9 @@ app.post("/api/aia/generate", async (req, res) => {
 // ---- הפקת וידאו אמיתי (מונטאז' FFmpeg) ----
 app.post("/api/aia/project/:id/render", async (req, res) => {
   const id = req.params.id;
-  const project = aiaStudio.getProject(id);
+  const store = aia(req);
+  const aiaDir = aiaDirFor(req);
+  const project = store.getProject(id);
   if (!project) return res.status(404).json({ error: "פרויקט לא נמצא" });
   const cur = aiaRender.jobState(id);
   if (cur && cur.status === "running") return res.json(cur);
@@ -1185,7 +1219,7 @@ app.post("/api/aia/project/:id/render", async (req, res) => {
   if (opts.audioDataUrl) {
     const m = /^data:audio\/(\w+);base64,(.+)$/s.exec(opts.audioDataUrl);
     if (m) {
-      const ap = path.join(aiaStudio.AIA_DIR, "_work", `${id}-audio.${m[1] === "mpeg" ? "mp3" : m[1]}`);
+      const ap = path.join(aiaDir, "_work", `${id}-audio.${m[1] === "mpeg" ? "mp3" : m[1]}`);
       fs.mkdirSync(path.dirname(ap), { recursive: true });
       const buf = Buffer.from(m[2], "base64");
       if (buf.length <= 30 * 1024 * 1024) { fs.writeFileSync(ap, buf); opts.audioPath = ap; }
@@ -1194,21 +1228,21 @@ app.post("/api/aia/project/:id/render", async (req, res) => {
   }
 
   res.json({ status: "running", pct: 0, phase: "מתחיל" });
-  aiaRender.render(project, opts)
-    .then((job) => aiaStudio.attachRender(id, { file: job.file, durationSec: job.durationSec, images: job.images, mode: job.mode }))
+  aiaRender.render(aiaDir, project, opts)
+    .then((job) => store.attachRender(id, { file: job.file, durationSec: job.durationSec, images: job.images, mode: job.mode }))
     .catch((e) => console.error("[aia render]", id, e.message));
 });
 
 app.get("/api/aia/project/:id/render", (req, res) => {
   const job = aiaRender.jobState(req.params.id);
-  const project = aiaStudio.getProject(req.params.id);
+  const project = aia(req).getProject(req.params.id);
   if (!job && project && project.render) return res.json({ status: "done", pct: 100, ...project.render });
   res.json(job || { status: "none" });
 });
 
 app.get("/api/aia/render/:file", (req, res) => {
   const id = req.params.file.replace(/\.mp4$/, "");
-  const p = aiaRender.renderPath(id);
+  const p = aiaRender.renderPath(aiaDirFor(req), id);
   if (!p) return res.status(404).end();
   res.sendFile(p);
 });
@@ -1220,7 +1254,7 @@ app.get("/api/aia/video/providers", (req, res) => {
   res.json({ providers: aiaVideo.providerList() });
 });
 
-// שמירת מפתח API בצד השרת בלבד (לא חוזר לדפדפן)
+// שמירת מפתח API בצד השרת בלבד (לא חוזר לדפדפן) — תשתית משותפת לכלל החשבונות
 app.post("/api/aia/video/config", (req, res) => {
   try {
     const { provider, key, model } = req.body || {};
@@ -1231,19 +1265,19 @@ app.post("/api/aia/video/config", (req, res) => {
 });
 
 app.get("/api/aia/project/:id/video/prompt", (req, res) => {
-  const p = aiaStudio.getProject(req.params.id);
+  const p = aia(req).getProject(req.params.id);
   if (!p) return res.status(404).send("לא נמצא");
   res.set("Content-Type", "text/plain; charset=utf-8")
      .send(aiaVideo.exportPrompt(p, req.query.provider || "seedance"));
 });
 
 app.post("/api/aia/project/:id/video", async (req, res) => {
-  const project = aiaStudio.getProject(req.params.id);
+  const project = aia(req).getProject(req.params.id);
   if (!project) return res.status(404).json({ error: "פרויקט לא נמצא" });
   const cur = aiaVideo.jobState(project.id);
   if (cur && cur.status === "running") return res.json(cur);
   try {
-    const job = await aiaVideo.submit(project, req.body || {});
+    const job = await aiaVideo.submit(aiaDirFor(req), project, req.body || {});
     res.json(job);
   } catch (err) {
     const pid = (req.body || {}).provider || "seedance";
@@ -1265,11 +1299,12 @@ app.post("/api/aia/project/:id/video", async (req, res) => {
 
 // העלאת וידאו שהופק ידנית (Deevid וכו') לגלריית הפרויקט
 app.post("/api/aia/project/:id/video/upload", async (req, res) => {
-  const project = aiaStudio.getProject(req.params.id);
+  const store = aia(req);
+  const project = store.getProject(req.params.id);
   if (!project) return res.status(404).json({ error: "פרויקט לא נמצא" });
   try {
-    const job = await aiaVideo.attachUpload(project, (req.body || {}).dataUrl);
-    aiaStudio.attachRender(project.id, { file: job.file, durationSec: job.durationSec, mode: "deevid" });
+    const job = await aiaVideo.attachUpload(aiaDirFor(req), project, (req.body || {}).dataUrl);
+    store.attachRender(project.id, { file: job.file, durationSec: job.durationSec, mode: "deevid" });
     res.json(job);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -1282,26 +1317,26 @@ app.get("/api/aia/project/:id/video", (req, res) => {
 });
 
 app.get("/api/aia/project/:id", (req, res) => {
-  const p = aiaStudio.getProject(req.params.id);
+  const p = aia(req).getProject(req.params.id);
   if (!p) return res.status(404).json({ error: "לא נמצא" });
   res.json(p);
 });
 
 app.get("/api/aia/project/:id/markdown", (req, res) => {
-  const p = aiaStudio.getProject(req.params.id);
+  const p = aia(req).getProject(req.params.id);
   if (!p) return res.status(404).send("לא נמצא");
   res.set("Content-Type", "text/markdown; charset=utf-8")
      .set("Content-Disposition", `attachment; filename="aia-${req.params.id}.md"`)
-     .send(aiaStudio.toMarkdown(p));
+     .send(aia(req).toMarkdown(p));
 });
 
 app.delete("/api/aia/project/:id", (req, res) => {
-  res.json(aiaStudio.deleteProject(req.params.id));
+  res.json(aia(req).deleteProject(req.params.id));
 });
 
 app.get("/api/aia/asset/:id/:name", (req, res) => {
   try {
-    const p = aiaStudio.assetPath(req.params.id, req.params.name);
+    const p = aia(req).assetPath(req.params.id, req.params.name);
     if (!fs.existsSync(p)) return res.status(404).end();
     res.sendFile(p);
   } catch (err) {

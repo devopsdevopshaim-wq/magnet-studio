@@ -38,10 +38,17 @@
     document.body.appendChild(b);
   }).catch(() => {});
 
-  // --- שם תצוגה נייד: אם הפרופיל שונה מברירת המחדל, מחליף בכותרת ובלשונית ---
+  // --- שם תצוגה: אם החשבון המחובר שונה מהבעלים, מחליפים בכל מקום שמופיע השם הקבוע בעמוד ---
   fetch("/api/profile").then((r) => r.json()).then((p) => {
     if (p && p.displayName && p.displayName !== "חיים קריספין") {
       try { document.title = document.title.replace(/חיים קריספין/g, p.displayName); } catch {}
+      try {
+        document.querySelectorAll("h1, [data-name]").forEach((el) => {
+          if (el.textContent && el.textContent.includes("חיים קריספין")) {
+            el.textContent = el.textContent.replace(/חיים קריספין/g, p.displayName);
+          }
+        });
+      } catch {}
     }
   }).catch(() => {});
 
