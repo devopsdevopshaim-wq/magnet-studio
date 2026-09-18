@@ -773,9 +773,24 @@ async function applyProfile() {
   } catch {}
 }
 
+async function loadSocialSide() {
+  const el = document.getElementById("social-summary");
+  if (!el) return;
+  try {
+    const s = await fetch("/api/social/status").then((r) => r.json());
+    const on = [];
+    if (s.whatsapp && s.whatsapp.status === "ready") on.push("וואטסאפ");
+    if (s.meta && s.meta.facebookConnected) on.push("פייסבוק");
+    if (s.meta && s.meta.instagramConnected) on.push("אינסטגרם");
+    if (s.linkedin && s.linkedin.connected) on.push("לינקדין");
+    el.textContent = on.length ? `מחובר: ${on.join(" · ")}` : "אין חיבורים פעילים עדיין";
+  } catch { el.textContent = "לא זמין כרגע"; }
+}
+
 loadLotto();
 loadTehillimSide();
 loadMarketSide();
+loadSocialSide();
 applyProfile();
 setInterval(loadLotto, 30 * 60000);
 setInterval(loadMarketSide, 3 * 60000);

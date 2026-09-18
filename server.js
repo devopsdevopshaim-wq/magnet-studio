@@ -1344,6 +1344,75 @@ app.get("/api/aia/asset/:id/:name", (req, res) => {
   }
 });
 
+// ---------- רשתות חברתיות: וואטסאפ (QR לא-רשמי) + פייסבוק/אינסטגרם (Graph API) + לינקדין (OAuth) ----------
+
+const wa = require("./lib/whatsapp");
+const socialMeta = require("./lib/socialMeta");
+const linkedin = require("./lib/linkedin");
+
+app.get("/api/social/status", (req, res) => {
+  const baseDir = baseDirFor(req);
+  res.json({
+    whatsapp: wa.state(baseDir),
+    meta: socialMeta.status(baseDir),
+    linkedin: linkedin.status(baseDir)
+  });
+});
+
+// ---- וואטסאפ ----
+app.post("/api/whatsapp/connect", async (req, res) => {
+  try { res.json(await wa.connect(baseDirFor(req))); }
+  catch (err) { res.status(400).json({ error: err.message }); }
+});
+app.get("/api/whatsapp/status", (req, res) => res.json(wa.state(baseDirFor(req))));
+app.post("/api/whatsapp/disconnect", async (req, res) => res.json(await wa.disconnect(baseDirFor(req))));
+app.post("/api/whatsapp/send", async (req, res) => {
+  try {
+    const { to, text } = req.body || {};
+    res.json(await wa.sendMessage(baseDirFor(req), to, text));
+  } catch (err) { res.status(400).json({ error: err.message }); }
+});
+app.get("/api/whatsapp/chats", async (req, res) => res.json({ chats: await wa.recentChats(baseDirFor(req)) }));
+
+// ---- פייסבוק / אינסטגרם ----
+app.post("/api/social/meta/config", async (req, res) => {
+  try { res.json(await socialMeta.saveSettings(baseDirFor(req), req.body || {})); }
+  catch (err) { res.status(400).json({ error: err.message }); }
+});
+app.post("/api/social/meta/post/facebook", async (req, res) => {
+  try { res.json(await socialMeta.postToFacebook(baseDirFor(req), req.body || {})); }
+  catch (err) { res.status(400).json({ error: err.message }); }
+});
+app.post("/api/social/meta/post/instagram", async (req, res) => {
+  try { res.json(await socialMeta.postToInstagram(baseDirFor(req), req.body || {})); }
+  catch (err) { res.status(400).json({ error: err.message }); }
+});
+app.get("/api/social/meta/posts", async (req, res) => res.json({ posts: await socialMeta.recentPosts(baseDirFor(req)) }));
+
+// ---- לינקדין ----
+app.post("/api/social/linkedin/config", (req, res) => {
+  try { res.json(linkedin.saveApp(baseDirFor(req), req.body || {})); }
+  catch (err) { res.status(400).json({ error: err.message }); }
+});
+app.get("/api/social/linkedin/connect", (req, res) => {
+  try {
+    const redirectUri = `${req.protocol}://${req.get("host")}/api/social/linkedin/callback`;
+    res.redirect(linkedin.authUrl(baseDirFor(req), redirectUri));
+  } catch (err) { res.status(400).send(err.message); }
+});
+app.get("/api/social/linkedin/callback", async (req, res) => {
+  try {
+    const redirectUri = `${req.protocol}://${req.get("host")}/api/social/linkedin/callback`;
+    await linkedin.handleCallback(req.query.code, req.query.state, redirectUri);
+    res.redirect("/social.html?linkedin=connected");
+  } catch (err) { res.redirect("/social.html?linkedin=error&msg=" + encodeURIComponent(err.message)); }
+});
+app.post("/api/social/linkedin/disconnect", (req, res) => res.json(linkedin.disconnect(baseDirFor(req))));
+app.post("/api/social/linkedin/post", async (req, res) => {
+  try { res.json(await linkedin.postToLinkedIn(baseDirFor(req), (req.body || {}).text)); }
+  catch (err) { res.status(400).json({ error: err.message }); }
+});
+
 // ---------- עוזר JARVIS (פרוקסי ל-n8n Cloud - פותר CORS) ----------
 
 app.get("/api/jarvis/config", (req, res) => {

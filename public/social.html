@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>רשתות חברתיות · חיים קריספין</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/business.css" />
+<link rel="stylesheet" href="/css/setup.css" />
+<style>
+  .soc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 4px 0 6px; }
+  .soc-card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .soc-card h3 { margin: 0; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
+  .soc-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--cream-dim); flex: none; }
+  .soc-dot.on { background: #6fae7e; box-shadow: 0 0 8px #6fae7e; }
+  .soc-dot.warn { background: var(--ember); box-shadow: 0 0 8px var(--ember); }
+  .soc-meta { font-size: 0.82rem; color: var(--cream-dim); }
+  .soc-qr { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 10px 0; }
+  .soc-qr img { width: 220px; height: 220px; border-radius: 10px; background: #fff; padding: 8px; }
+  .soc-warn-box {
+    background: rgba(219,139,66,0.1); border: 1px solid rgba(219,139,66,0.35); border-radius: 10px;
+    padding: 10px 14px; font-size: 0.82rem; color: var(--brass-soft); line-height: 1.6;
+  }
+  .soc-help { font-size: 0.78rem; color: var(--cream-dim); line-height: 1.7; margin-top: 6px; }
+  .soc-help code { background: var(--surface-2); padding: 1px 5px; border-radius: 4px; }
+  .soc-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+  .field input[type="password"], .field textarea {
+    display: block; width: 100%; margin-top: 6px; background: var(--surface-2); border: 1px solid var(--line);
+    border-radius: 8px; padding: 10px 12px; color: var(--cream); font-family: var(--font-body); font-size: 0.88rem;
+    box-sizing: border-box; resize: vertical;
+  }
+  .field input[type="password"]:focus, .field textarea:focus { border-color: var(--brass); outline: none; }
+  .soc-posts { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+  .soc-post { border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; font-size: 0.85rem; }
+  .soc-post .meta { color: var(--cream-dim); font-size: 0.76rem; margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="shell" style="max-width:1080px;">
+
+  <header class="top-header">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="24" cy="24" r="6" stroke="currentColor" stroke-width="2.5"/>
+        <circle cx="12" cy="14" r="4" stroke="currentColor" stroke-width="2.5"/>
+        <circle cx="36" cy="14" r="4" stroke="currentColor" stroke-width="2.5"/>
+        <circle cx="12" cy="34" r="4" stroke="currentColor" stroke-width="2.5"/>
+        <circle cx="36" cy="34" r="4" stroke="currentColor" stroke-width="2.5"/>
+        <path d="M19 21l-6-5M29 21l6-5M19 27l-6 5M29 27l6 5" stroke="currentColor" stroke-width="2"/>
+      </svg>
+      <div>
+        <h1 data-name>רשתות חברתיות</h1>
+        <div class="tagline">וואטסאפ · אינסטגרם · פייסבוק · לינקדין — הכל במקום אחד</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <button class="btn ghost" onclick="location.href='/'">חזרה ללוח הבקרה</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <a href="/">לוח בקרה</a>
+    <a href="/daily.html">מענה יומי</a>
+    <a href="/jarvis.html">עוזר JARVIS</a>
+    <a href="/housing.html">דיור</a>
+    <a href="/jobs.html">דרושים</a>
+    <a href="/finance.html">פיננסים</a>
+    <a href="/health.html">בריאות</a>
+    <a href="/fitness.html">כושר</a>
+    <a href="/devops.html">DevOps</a>
+    <a href="/aia.html">עיצוב AIA</a>
+    <a href="/torah.html">ספריית קודש</a>
+    <a href="/marketing.html">פרסום ושיווק</a>
+    <a href="/logo.html">לוגו</a>
+    <a href="/business.html">ניהול עסק</a>
+    <a href="/social.html" class="active">רשתות חברתיות</a>
+    <a href="/tv.html">טלוויזיה</a>
+    <a href="/library.html">אוצר לחג</a>
+    <a href="/device.html">המכשיר</a>
+    <a href="/graphology.html">גרפולוגיה</a>
+    <a href="/astro-full.html">אסטרולוגיה</a>
+    <a href="/editor.html">עורך מסגרות</a>
+    <a href="/mail.html">מיילים</a>
+    <a href="/setup.html">הגדרות</a>
+    <a href="/analytics.html">נתוני שימוש</a>
+  </nav>
+
+  <div class="biz-tabbar" id="soc-tabbar">
+    <button class="biz-tab active" data-panel="overview">סקירה כללית</button>
+    <button class="biz-tab" data-panel="whatsapp">וואטסאפ</button>
+    <button class="biz-tab" data-panel="meta">אינסטגרם ופייסבוק</button>
+    <button class="biz-tab" data-panel="linkedin">לינקדין</button>
+  </div>
+
+  <main id="soc-main">
+
+    <!-- ---------- סקירה כללית ---------- -->
+    <section class="soc-panel" data-panel="overview">
+      <div class="soc-grid">
+        <div class="soc-card">
+          <h3><span class="soc-dot" id="dot-wa"></span> וואטסאפ</h3>
+          <div class="soc-meta" id="sum-wa">בודק…</div>
+          <button class="btn ghost" data-goto="whatsapp">ניהול</button>
+        </div>
+        <div class="soc-card">
+          <h3><span class="soc-dot" id="dot-fb"></span> פייסבוק</h3>
+          <div class="soc-meta" id="sum-fb">בודק…</div>
+          <button class="btn ghost" data-goto="meta">ניהול</button>
+        </div>
+        <div class="soc-card">
+          <h3><span class="soc-dot" id="dot-ig"></span> אינסטגרם</h3>
+          <div class="soc-meta" id="sum-ig">בודק…</div>
+          <button class="btn ghost" data-goto="meta">ניהול</button>
+        </div>
+        <div class="soc-card">
+          <h3><span class="soc-dot" id="dot-li"></span> לינקדין</h3>
+          <div class="soc-meta" id="sum-li">בודק…</div>
+          <button class="btn ghost" data-goto="linkedin">ניהול</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- וואטסאפ ---------- -->
+    <section class="soc-panel" data-panel="whatsapp" hidden>
+      <div class="soc-warn-box">
+        ⚠️ חיבור זה משתמש בספרייה לא-רשמית שמדמה את WhatsApp Web (לא ה-API העסקי הרשמי).
+        זה מאפשר לחבר כל טלפון קיים בסריקת QR — אבל נוגד את תנאי השימוש של וואטסאפ,
+        ויש סיכון (נמוך אך קיים) לחסימה זמנית של המספר בשימוש אגרסיבי. מומלץ לשימוש אישי מתון.
+      </div>
+      <div class="panel" id="wa-panel" style="margin-top:14px;">טוען…</div>
+    </section>
+
+    <!-- ---------- אינסטגרם + פייסבוק ---------- -->
+    <section class="soc-panel" data-panel="meta" hidden>
+      <div class="panel">
+        <div class="soc-row">
+          <label class="field" style="flex:1; min-width:220px; margin:0;">מזהה דף פייסבוק (Page ID)
+            <input type="text" id="meta-pageId" placeholder="1234567890" />
+          </label>
+          <label class="field" style="flex:2; min-width:260px; margin:0;">Page Access Token
+            <input type="password" id="meta-token" placeholder="EAAB..." />
+          </label>
+          <button class="btn primary" id="btn-meta-save">שמירה</button>
+        </div>
+        <div class="validate-result" id="meta-result"></div>
+        <p class="soc-help">
+          איך משיגים את זה: יוצרים אפליקציה חינמית ב-<code>developers.facebook.com</code> ←
+          נכנסים ל-Graph API Explorer ← בוחרים את האפליקציה ואת הדף שמנהלים ← מבקשים הרשאות
+          <code>pages_manage_posts</code>, <code>pages_read_engagement</code>, <code>instagram_basic</code>,
+          <code>instagram_content_publish</code> ← מייצרים Page Access Token ומדביקים כאן.
+          אם הדף מקושר לחשבון עסקי באינסטגרם, הוא יזוהה אוטומטית.
+        </p>
+        <div id="meta-status" class="soc-meta" style="margin-top:10px;">בודק חיבור…</div>
+      </div>
+
+      <div class="panel" style="margin-top:14px;">
+        <div class="soc-row">
+          <label class="field" style="flex:1; min-width:100%; margin:0;">טקסט הפוסט
+            <textarea id="meta-text" rows="3" placeholder="מה מפרסמים היום?"></textarea>
+          </label>
+        </div>
+        <div class="soc-row" style="margin-top:8px;">
+          <label class="field" style="flex:1; min-width:260px; margin:0;">קישור לתמונה (אופציונלי, חובה לאינסטגרם — חייב להיות נגיש מהאינטרנט)
+            <input type="text" id="meta-image" placeholder="https://..." />
+          </label>
+        </div>
+        <div class="soc-row" style="margin-top:10px;">
+          <button class="btn primary" id="btn-post-fb">פרסום בפייסבוק</button>
+          <button class="btn primary" id="btn-post-ig">פרסום באינסטגרם</button>
+        </div>
+        <div class="validate-result" id="meta-post-result"></div>
+      </div>
+
+      <div class="panel" style="margin-top:14px;">
+        <div class="block-heading" style="margin-bottom:8px;"><h2 style="font-size:0.95rem;">פוסטים אחרונים בדף</h2></div>
+        <div class="soc-posts" id="meta-posts">—</div>
+      </div>
+    </section>
+
+    <!-- ---------- לינקדין ---------- -->
+    <section class="soc-panel" data-panel="linkedin" hidden>
+      <div class="panel">
+        <div class="soc-row">
+          <label class="field" style="flex:1; min-width:220px; margin:0;">Client ID
+            <input type="text" id="li-clientId" />
+          </label>
+          <label class="field" style="flex:1; min-width:220px; margin:0;">Client Secret
+            <input type="password" id="li-clientSecret" />
+          </label>
+          <button class="btn ghost" id="btn-li-save">שמירת הגדרות</button>
+        </div>
+        <div class="validate-result" id="li-config-result"></div>
+        <p class="soc-help">
+          יוצרים אפליקציה חינמית ב-<code>developer.linkedin.com</code> ← בכרטיסיית Products מוסיפים
+          את <code>Share on LinkedIn</code> ← בכרטיסיית Auth מוסיפים Redirect URL:
+          <code id="li-redirect-hint">…</code> ← מעתיקים Client ID / Secret לכאן, שומרים, ואז
+          לוחצים "התחברות ללינקדין".
+        </p>
+        <div class="soc-row" style="margin-top:12px;">
+          <button class="btn primary" id="btn-li-connect">התחברות ללינקדין</button>
+          <button class="btn ghost" id="btn-li-disconnect">ניתוק</button>
+        </div>
+        <div id="li-status" class="soc-meta" style="margin-top:10px;">בודק חיבור…</div>
+      </div>
+
+      <div class="panel" style="margin-top:14px;">
+        <label class="field" style="margin:0;">טקסט לפרסום בפרופיל
+          <textarea id="li-text" rows="3" placeholder="מה משתפים היום?"></textarea>
+        </label>
+        <div class="soc-row" style="margin-top:10px;">
+          <button class="btn primary" id="btn-li-post">פרסום בלינקדין</button>
+        </div>
+        <div class="validate-result" id="li-post-result"></div>
+      </div>
+    </section>
+
+  </main>
+
+</div>
+<div class="toast" id="toast"></div>
+<script src="/js/social.js"></script>
+<script src="/js/dockbar.js" defer></script>
+</body>
+</html>
