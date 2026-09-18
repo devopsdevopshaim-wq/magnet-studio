@@ -31,6 +31,8 @@ data/devops-logs/
 
 # ═══ תלויות ובנייה ═══
 node_modules/
+.wwebjs_cache/
+.wwebjs_auth/
 public/downloads/
 dist-web/
 scratchpad/
