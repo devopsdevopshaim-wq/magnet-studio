@@ -575,6 +575,51 @@ async function loadIntegrations() {
   });
 }
 
+// ---------- ניהול משתמשים (רק לבעל המערכת) ----------
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+async function loadUsersSection() {
+  const auth = await fetch("/api/auth/status").then((r) => r.json()).catch(() => null);
+  const isOwner = !auth || !auth.user || auth.user.id === "owner";
+  const section = document.getElementById("users-section");
+  if (!isOwner) { section.hidden = true; return; }
+  section.hidden = false;
+  await loadUsersList();
+}
+
+async function loadUsersList() {
+  const el = document.getElementById("users-list");
+  try {
+    const { users } = await fetch("/api/admin/users").then((r) => r.json());
+    if (!users || !users.length) {
+      el.innerHTML = `<div class="validate-result">עדיין אין משתמשים רשומים — רק חשבון הבעלים.</div>`;
+      return;
+    }
+    el.innerHTML = `<div style="display:flex; flex-direction:column; gap:8px;">` + users.map((u) => `
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 14px; background:var(--surface-2); border:1px solid var(--line); border-radius:8px;">
+        <div>
+          <div style="font-weight:600;">${esc(u.name)}</div>
+          <div style="font-size:0.76rem; color:var(--cream-dim);">נרשם: ${esc((u.createdAt || "").slice(0, 10))}</div>
+        </div>
+        <button class="btn ghost" data-del="${esc(u.id)}" style="color:var(--danger); border-color:var(--danger);">הסרת חשבון</button>
+      </div>`).join("") + `</div>`;
+    el.querySelectorAll("[data-del]").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const id = btn.dataset.del;
+        if (!confirm(`להסיר לצמיתות את החשבון ואת כל הנתונים הפרטיים שלו? אי אפשר לשחזר.`)) return;
+        btn.disabled = true; btn.textContent = "מסיר…";
+        try {
+          const res = await fetch("/api/admin/users/" + encodeURIComponent(id), { method: "DELETE" });
+          const j = await res.json();
+          if (!res.ok) throw new Error(j.error || "שגיאה");
+          toast("החשבון הוסר");
+          loadUsersList();
+        } catch (err) { toast(err.message, true); btn.disabled = false; btn.textContent = "הסרת חשבון"; }
+      });
+    });
+  } catch { el.innerHTML = `<div class="validate-result error">שגיאה בטעינת רשימת המשתמשים</div>`; }
+}
+
 (async () => {
   await loadStatus();
   await loadInstalledApps();
@@ -582,4 +627,5 @@ async function loadIntegrations() {
   loadProfile();
   loadPhoneInstall();
   loadIntegrations();
+  loadUsersSection();
 })();

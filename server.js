@@ -81,6 +81,22 @@ function baseDirFor(req) {
   if (!u || u.id === auth.OWNER_ID) return PERSIST_DIR;
   return pnksUsers.userDir(u.id);
 }
+function isOwner(req) { return !req.pnksUser || req.pnksUser.id === auth.OWNER_ID; }
+function requireOwner(req, res, next) {
+  if (!isOwner(req)) return res.status(403).json({ error: "פעולה זו שמורה לבעל המערכת בלבד" });
+  next();
+}
+
+// ---------- ניהול משתמשים (רק לבעל המערכת) ----------
+app.get("/api/admin/users", requireOwner, (req, res) => {
+  res.json({ users: pnksUsers.listUsers() });
+});
+app.delete("/api/admin/users/:id", requireOwner, (req, res) => {
+  try {
+    if (req.params.id === auth.OWNER_ID) throw new Error("אי אפשר למחוק את חשבון הבעלים");
+    res.json(pnksUsers.deleteUser(req.params.id));
+  } catch (err) { res.status(400).json({ error: err.message }); }
+});
 
 // אנליטיקס פרטי — כניסות/מבקרים ייחודיים לפי עמוד. רק עמודי HTML אמיתיים, לא API/assets.
 app.use((req, res, next) => {

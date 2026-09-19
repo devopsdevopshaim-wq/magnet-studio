@@ -37,5 +37,12 @@ services:
         sync: false
       - key: AZURE_SPEECH_REGION
         value: westeurope
+      # אופציונלי — שער Maton (Gmail/Drive/Calendar/Slack/YouTube מאוחד). כרגע מוגדר רק במחשב
+      # המקומי (env var) — כדי שגם הענן/הטלפון יתחברו, מוסיפים את אותו ערך כאן בלוח של Render.
+      - key: MATON_API_KEY
+        sync: false
+      # אופציונלי — מפתח AI בענן (Claude/Anthropic) לתכונות AI שדורשות רשת ולא את Ollama המקומי.
+      - key: ANTHROPIC_API_KEY
+        sync: false
     # דיסק קבוע מחובר ב-/app/data (ראו disk למעלה) — data/*.json, data/aia/*, data/business/* וכו' שורדים redeploy.
     # נתוני המשתמש בכספים (מחשבון) עדיין ב-localStorage של הדפדפן בנוסף.
