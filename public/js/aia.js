@@ -253,7 +253,8 @@
       <h3>🎬 הפקת וידאו</h3>
       <div class="aia-mode-pick" id="st-mode">
         <button class="${defaultMode === "montage" ? "on" : ""}" data-mode="montage" ${canMontage ? "" : "disabled"}>מונטאז' תמונות (${imgCount})</button>
-        <button class="${defaultMode === "animation" ? "on" : ""}" data-mode="animation">אנימציית מושן (טקסט + גרפיקה)</button>
+        <button class="${defaultMode === "animation" ? "on" : ""}" data-mode="animation">אנימציית מושן (FFmpeg)</button>
+        <button data-mode="remotion">✨ מושן גרפיקס (Remotion — RTL מושלם)</button>
       </div>
       <div class="aia-studio-grid">
         <label class="st-montage-only">שניות לתמונה
@@ -264,12 +265,12 @@
         <label class="st-montage-only">מעבר בין תמונות
           <select id="st-transition">${TRANSITIONS.map((t) => `<option value="${esc(t.id)}">${esc(t.he)}</option>`).join("")}</select>
         </label>
-        <label class="st-anim-only">אורך (שניות)
+        <label class="st-anim-only st-remotion-only">אורך (שניות)
           <input type="number" id="st-dur" min="4" max="20" value="${project.package?.durationSec || 8}">
         </label>
         <label>כותרת פתיחה <input type="text" id="st-title" value="${esc(project.package?.title || "")}"></label>
-        <label>טקסט סיום <input type="text" id="st-end" placeholder="למשל: מזל טוב"></label>
-        <label>מוזיקת רקע
+        <label>טקסט סיום <span class="st-remotion-only" style="font-size:0.75em;color:var(--cream-dim)">(כתובית מתחת לכותרת ב-Remotion)</span><input type="text" id="st-end" placeholder="למשל: מזל טוב"></label>
+        <label class="st-hasaudio-only">מוזיקת רקע
           <select id="st-bed">${bedOpts}</select>
           <input type="file" id="st-audio" accept="audio/*" hidden>
           <span id="st-audio-name" class="aia-audio-name"></span>
@@ -284,7 +285,9 @@
     const applyMode = () => {
       wrap.querySelectorAll("#st-mode button").forEach((b) => b.classList.toggle("on", b.dataset.mode === mode));
       wrap.querySelectorAll(".st-montage-only").forEach((el) => el.hidden = mode !== "montage");
-      wrap.querySelectorAll(".st-anim-only").forEach((el) => el.hidden = mode !== "animation");
+      wrap.querySelectorAll(".st-anim-only").forEach((el) => el.hidden = mode === "montage");
+      wrap.querySelectorAll(".st-hasaudio-only").forEach((el) => el.hidden = mode === "remotion");
+      wrap.querySelectorAll(".st-remotion-only:not(input)").forEach((el) => el.hidden = mode !== "remotion");
       updEst();
     };
     wrap.querySelectorAll("#st-mode button").forEach((b) => b.addEventListener("click", () => {
@@ -331,6 +334,7 @@
             transition: $("st-transition") ? $("st-transition").value : "fade",
             titleText: $("st-title").value.trim(),
             endText: $("st-end").value.trim(),
+            subtitleText: mode === "remotion" ? $("st-end").value.trim() : undefined,
             bed: bedVal === "upload" ? "none" : bedVal,
             audioDataUrl: audioDataUrl || undefined
           })

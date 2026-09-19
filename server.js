@@ -1258,19 +1258,23 @@ app.post("/api/aia/generate", async (req, res) => {
   }
 });
 
-// ---- הפקת וידאו אמיתי (מונטאז' FFmpeg) ----
+// ---- הפקת וידאו אמיתי (מונטאז'/אנימציה FFmpeg, או Remotion — React אמיתי עם תמיכת RTL נכונה) ----
+const remotionRender = require("./lib/remotionRender");
+function rendererFor(mode) { return mode === "remotion" ? remotionRender : aiaRender; }
+
 app.post("/api/aia/project/:id/render", async (req, res) => {
   const id = req.params.id;
   const store = aia(req);
   const aiaDir = aiaDirFor(req);
   const project = store.getProject(id);
   if (!project) return res.status(404).json({ error: "פרויקט לא נמצא" });
-  const cur = aiaRender.jobState(id);
+  const opts = req.body || {};
+  const engine = rendererFor(opts.mode === "remotion" ? "remotion" : "ffmpeg");
+  const cur = engine.jobState(id);
   if (cur && cur.status === "running") return res.json(cur);
 
-  const opts = req.body || {};
-  // מוזיקה אופציונלית — נשמרת זמנית
-  if (opts.audioDataUrl) {
+  // מוזיקה אופציונלית (רק למנוע ה-FFmpeg) — נשמרת זמנית
+  if (opts.audioDataUrl && engine === aiaRender) {
     const m = /^data:audio\/(\w+);base64,(.+)$/s.exec(opts.audioDataUrl);
     if (m) {
       const ap = path.join(aiaDir, "_work", `${id}-audio.${m[1] === "mpeg" ? "mp3" : m[1]}`);
@@ -1278,17 +1282,17 @@ app.post("/api/aia/project/:id/render", async (req, res) => {
       const buf = Buffer.from(m[2], "base64");
       if (buf.length <= 30 * 1024 * 1024) { fs.writeFileSync(ap, buf); opts.audioPath = ap; }
     }
-    delete opts.audioDataUrl;
   }
+  delete opts.audioDataUrl;
 
   res.json({ status: "running", pct: 0, phase: "מתחיל" });
-  aiaRender.render(aiaDir, project, opts)
-    .then((job) => store.attachRender(id, { file: job.file, durationSec: job.durationSec, images: job.images, mode: job.mode }))
-    .catch((e) => console.error("[aia render]", id, e.message));
+  engine.render(aiaDir, project, opts)
+    .then((job) => store.attachRender(id, { file: job.file, durationSec: job.durationSec, images: job.images, mode: opts.mode === "remotion" ? "remotion" : job.mode }))
+    .catch((e) => console.error("[aia render]", opts.mode || "ffmpeg", id, e.message));
 });
 
 app.get("/api/aia/project/:id/render", (req, res) => {
-  const job = aiaRender.jobState(req.params.id);
+  const job = aiaRender.jobState(req.params.id) || remotionRender.jobState(req.params.id);
   const project = aia(req).getProject(req.params.id);
   if (!job && project && project.render) return res.json({ status: "done", pct: 100, ...project.render });
   res.json(job || { status: "none" });

@@ -8,6 +8,17 @@ FROM node:22-alpine
 RUN apk add --no-cache tini
 ENTRYPOINT ["/sbin/tini", "--"]
 
+# כרום מערכת + פונטים — נחוץ לכל מה שמפעיל דפדפן headless בתוך הקונטיינר:
+#   • lib/whatsapp.js (whatsapp-web.js/Puppeteer)
+#   • lib/remotionRender.js (Remotion — עיצוב סרטונים)
+# בלי זה: Puppeteer/Remotion מנסים להוריד כרום שנבנה ל-glibc, שלא רץ על Alpine (musl) — נכשל בשקט.
+# ttf-dejavu: אותו פונט ש-lib/aiaRender.js כבר מחפש כברירת מחדל (DejaVuSans.ttf) לכתוביות FFmpeg,
+# ותומך גם בעברית בסיסית לכל טקסט שמצטייר בדפדפן עצמו.
+RUN apk add --no-cache chromium nss freetype harfbuzz ca-certificates ttf-dejavu setpriv
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+ENV REMOTION_BROWSER_EXECUTABLE=/usr/bin/chromium-browser
+
 WORKDIR /app
 
 COPY package.json package-lock.json ./
