@@ -61,6 +61,23 @@
     </div>
     <div class="panel">
       <div id="int-list"><div class="validate-result">טוען…</div></div>
+      <div style="margin-top:18px; padding-top:16px; border-top:1px solid var(--line);">
+        <div style="font-size:0.85rem; color:var(--cream-dim); margin-bottom:10px;">
+          <b>העברה בין מחשב לענן:</b> הרצה מקומית (המחשב הזה) וההרצה בענן (Render / הטלפון) הן שני
+          מופעים נפרדים לגמרי, כל אחד עם אחסון משלו — מפתח שמוזן כאן לא מופיע אוטומטית שם.
+          מורידים גיבוי ממקום אחד, ומעלים אותו במקום השני כדי שיתאימו.
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+          <button class="btn ghost" id="btn-export-int">⬇ הורדת גיבוי כל המפתחות</button>
+          <button class="btn ghost" id="btn-import-int">⬆ העלאת גיבוי</button>
+          <input type="file" id="import-int-file" accept="application/json" hidden>
+        </div>
+        <div class="validate-result" id="import-int-result"></div>
+        <div style="font-size:0.76rem; color:var(--cream-dim); margin-top:8px;">
+          ⚠️ קובץ הגיבוי מכיל את המפתחות בטקסט גלוי. מיועד להעלאה ידנית למופע השני בלבד —
+          לא לשמור אותו בענן משותף ולא לשלוח אותו הלאה.
+        </div>
+      </div>
     </div>
   </section>
 

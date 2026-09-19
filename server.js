@@ -98,6 +98,44 @@ app.delete("/api/admin/users/:id", requireOwner, (req, res) => {
   } catch (err) { res.status(400).json({ error: err.message }); }
 });
 
+// גיבוי/שחזור כל מפתחות האינטגרציות בבת אחת — כדי להעביר בקלות בין הרצה מקומית לענן (או להפך).
+// הקובץ שיורד מכיל מפתחות אמיתיים בטקסט גלוי — נועד להעלאה ידנית לעותק האחר, לא לשמירה/שיתוף.
+const INTEGRATION_FILES = ["integrations-config.json", "aia-video-config.json", "social-meta-config.json", "social-linkedin-config.json"];
+app.get("/api/admin/integrations/export", requireOwner, (req, res) => {
+  const bundle = {};
+  for (const name of INTEGRATION_FILES) {
+    const p = path.join(name === "integrations-config.json" ? PERSIST_DIR : baseDirFor(req), name);
+    try { bundle[name] = JSON.parse(fs.readFileSync(p, "utf8")); } catch { /* אין קובץ — פשוט מדלגים */ }
+  }
+  res.set("Content-Type", "application/json; charset=utf-8")
+     .set("Content-Disposition", `attachment; filename="pnks-integrations-backup.json"`)
+     .send(JSON.stringify(bundle, null, 2));
+});
+app.post("/api/admin/integrations/import", requireOwner, (req, res) => {
+  try {
+    const bundle = req.body || {};
+    let count = 0;
+    for (const name of INTEGRATION_FILES) {
+      if (!bundle[name] || typeof bundle[name] !== "object") continue;
+      const dir = name === "integrations-config.json" ? PERSIST_DIR : baseDirFor(req);
+      const target = path.join(dir, name);
+      // מיזוג עם מה שכבר קיים — ייבוא גיבוי חלקי (למשל מפתח אחד בלבד) לא ימחק מפתחות אחרים שכבר מוגדרים
+      let existing = {};
+      try { existing = JSON.parse(fs.readFileSync(target, "utf8")) || {}; } catch { /* אין קובץ קיים */ }
+      fs.mkdirSync(dir, { recursive: true });
+      fs.writeFileSync(target, JSON.stringify({ ...existing, ...bundle[name] }, null, 2));
+      count++;
+    }
+    // מפתחות ה-AI/מדיה הכלליים נטענים ל-process.env באתחול — מרעננים גם עכשיו כדי שייכנסו לתוקף מיד
+    if (bundle["integrations-config.json"]) {
+      for (const [k, v] of Object.entries(bundle["integrations-config.json"])) {
+        if (v) process.env[k] = String(v);
+      }
+    }
+    res.json({ ok: true, filesImported: count });
+  } catch (err) { res.status(400).json({ error: err.message }); }
+});
+
 // אנליטיקס פרטי — כניסות/מבקרים ייחודיים לפי עמוד. רק עמודי HTML אמיתיים, לא API/assets.
 app.use((req, res, next) => {
   if (req.method === "GET" && req.path.endsWith(".html")) {

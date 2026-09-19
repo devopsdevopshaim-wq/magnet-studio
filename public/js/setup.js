@@ -620,6 +620,48 @@ async function loadUsersList() {
   } catch { el.innerHTML = `<div class="validate-result error">שגיאה בטעינת רשימת המשתמשים</div>`; }
 }
 
+// ---------- גיבוי/שחזור מפתחות אינטגרציה (להעברה בין מחשב לענן) ----------
+const btnExportInt = document.getElementById("btn-export-int");
+const btnImportInt = document.getElementById("btn-import-int");
+const importIntFile = document.getElementById("import-int-file");
+if (btnExportInt) {
+  btnExportInt.addEventListener("click", async () => {
+    try {
+      const res = await fetch("/api/admin/integrations/export");
+      if (!res.ok) throw new Error("שגיאה בהורדה");
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = "pnks-integrations-backup.json";
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+      toast("הגיבוי ירד — עכשיו מעלים אותו במופע השני");
+    } catch (err) { toast(err.message, true); }
+  });
+}
+if (btnImportInt) {
+  btnImportInt.addEventListener("click", () => importIntFile.click());
+  importIntFile.addEventListener("change", async () => {
+    const file = importIntFile.files[0];
+    if (!file) return;
+    const r = document.getElementById("import-int-result");
+    r.textContent = "מייבא…"; r.className = "validate-result";
+    try {
+      const text = await file.text();
+      const data = JSON.parse(text);
+      const res = await fetch("/api/admin/integrations/import", {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data)
+      });
+      const j = await res.json();
+      if (!res.ok) throw new Error(j.error || "שגיאה");
+      r.textContent = `יובאו ${j.filesImported} קבצים ✓`; r.className = "validate-result ok";
+      toast("הגיבוי יובא בהצלחה");
+      loadIntegrations();
+    } catch (err) { r.textContent = "שגיאה: " + err.message; r.className = "validate-result error"; }
+    importIntFile.value = "";
+  });
+}
+
 (async () => {
   await loadStatus();
   await loadInstalledApps();
