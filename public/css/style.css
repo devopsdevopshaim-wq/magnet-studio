@@ -518,10 +518,31 @@ section.block { margin-top: 46px; }
   clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
   padding: 18px 20px;
   box-shadow: var(--shadow-deep);
-  transition: box-shadow 0.2s, border-color 0.2s;
+  transition: box-shadow 0.25s, border-color 0.25s, transform 0.25s;
+  animation: fade-up 0.55s ease backwards;
 }
 
-.side-card:hover { border-color: var(--line); box-shadow: var(--glow), var(--shadow-deep); }
+.side-card::before {
+  content: "";
+  position: absolute; inset-inline: 0; top: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--brass) 25%, var(--ember) 50%, var(--brass) 75%, transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+
+.side-card:hover {
+  border-color: var(--line);
+  box-shadow: var(--glow), var(--shadow-deep), 0 18px 40px -18px rgba(219, 139, 66, 0.25);
+  transform: translateY(-2px);
+}
+.side-card:hover::before { opacity: 1; }
+
+.side-panel .side-card:nth-of-type(1) { animation-delay: 0.03s; }
+.side-panel .side-card:nth-of-type(2) { animation-delay: 0.09s; }
+.side-panel .side-card:nth-of-type(3) { animation-delay: 0.15s; }
+.side-panel .side-card:nth-of-type(4) { animation-delay: 0.21s; }
+.side-panel .side-card:nth-of-type(5) { animation-delay: 0.27s; }
+.side-panel .side-card:nth-of-type(6) { animation-delay: 0.33s; }
+.side-panel .side-card:nth-of-type(n+7) { animation-delay: 0.38s; }
 
 .side-card h4 {
   font-family: var(--font-display);
@@ -1360,10 +1381,18 @@ h1, h2 { line-height: 1.25; }
 .lball {
   display: inline-flex; align-items: center; justify-content: center;
   width: 24px; height: 24px; border-radius: 50%;
-  background: var(--surface-2); border: 1px solid var(--line);
-  font-family: var(--font-mono); font-size: 0.74rem; color: var(--cream);
+  background: linear-gradient(160deg, var(--surface-2), var(--surface));
+  border: 1px solid var(--line);
+  font-family: var(--font-mono); font-size: 0.74rem; font-weight: 600; color: var(--cream);
+  box-shadow: 0 2px 6px -2px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+  transition: transform 0.15s;
 }
-.lball.strong { background: color-mix(in srgb, var(--ember) 22%, var(--surface-2)); border-color: var(--ember); color: var(--ember); }
+.lball:hover { transform: translateY(-1px) scale(1.08); }
+.lball.strong {
+  background: linear-gradient(160deg, color-mix(in srgb, var(--ember) 30%, var(--surface-2)), var(--surface));
+  border-color: var(--ember); color: var(--brass-soft);
+  box-shadow: 0 2px 8px -2px rgba(219,139,66,0.45), inset 0 1px 0 rgba(255,255,255,0.06);
+}
 .lplus { color: var(--cream-dim); font-size: 0.8rem; margin: 0 2px; }
 .lotto-systems { display: flex; flex-direction: column; gap: 8px; margin: 8px 0; }
 .lotto-sysrow .lotto-label { margin-bottom: 3px; }
