@@ -181,3 +181,13 @@
 .aiv-steps b { color: var(--cream); }
 .aiv-upload { display: flex; flex-direction: column; gap: 5px; font-size: 0.82rem; color: var(--cream-dim); margin-top: 4px; }
 .aiv-upload input[type=file] { font-size: 0.8rem; color: var(--cream); }
+
+/* ComfyUI (מקומי) */
+.comfy-standalone { grid-column: 1 / -1; }
+.comfy-standalone label { display: block; font-size: 0.82rem; color: var(--cream-dim); }
+.comfy-standalone input[type=text], .comfy-standalone textarea {
+  display: block; width: 100%; margin-top: 5px; background: var(--surface-2); color: var(--cream);
+  border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 0.82rem;
+  font-family: var(--font-body); box-sizing: border-box; resize: vertical;
+}
+.comfy-standalone textarea { font-family: "Consolas", monospace; direction: ltr; text-align: left; }

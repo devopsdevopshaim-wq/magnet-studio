@@ -1376,6 +1376,33 @@ app.get("/api/aia/project/:id/video", (req, res) => {
   res.json(job || { status: "none" });
 });
 
+// ---- ComfyUI מקומי — תהליך עבודה משלכם, רץ על אותו מחשב כמו ComfyUI (לא דרך הענן, אלא אם יש טאנל) ----
+const comfyui = require("./lib/comfyui");
+app.get("/api/aia/comfyui/status", async (req, res) => res.json(await comfyui.status(baseDirFor(req))));
+app.post("/api/aia/comfyui/config", async (req, res) => {
+  try { res.json(await comfyui.saveConfig(baseDirFor(req), req.body || {})); }
+  catch (err) { res.status(400).json({ error: err.message }); }
+});
+app.post("/api/aia/project/:id/comfyui", async (req, res) => {
+  const project = aia(req).getProject(req.params.id);
+  if (!project) return res.status(404).json({ error: "פרויקט לא נמצא" });
+  const cur = comfyui.jobState(project.id);
+  if (cur && cur.status === "running") return res.json(cur);
+  try { res.json(await comfyui.submit(aiaDirFor(req), baseDirFor(req), project, req.body || {})); }
+  catch (err) { res.status(400).json({ error: err.message }); }
+});
+app.get("/api/aia/project/:id/comfyui", (req, res) => {
+  const job = comfyui.jobState(req.params.id);
+  res.json(job || { status: "none" });
+});
+app.get("/api/aia/comfyui/file/:filename", (req, res) => {
+  try {
+    const p = comfyui.filePath(aiaDirFor(req), req.params.filename);
+    if (!fs.existsSync(p)) return res.status(404).end();
+    res.sendFile(p);
+  } catch (err) { res.status(400).json({ error: err.message }); }
+});
+
 app.get("/api/aia/project/:id", (req, res) => {
   const p = aia(req).getProject(req.params.id);
   if (!p) return res.status(404).json({ error: "לא נמצא" });

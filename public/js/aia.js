@@ -353,8 +353,9 @@
     renderAiVideo(project, wrap);
   }
 
-  // ---------- מנועי וידאו AI: Seedance 2.5 · Deevid.AI ----------
+  // ---------- מנועי וידאו AI: Seedance 2.5 · Deevid.AI · ComfyUI מקומי ----------
   let aiVideoPoll = null;
+  let comfyPoll = null;
   async function renderAiVideo(project, wrap) {
     const host = document.createElement("div");
     host.className = "aia-aivideo";
@@ -414,7 +415,20 @@
 
     host.innerHTML = `<h3>✨ וידאו AI חיצוני</h3>
       <div class="aia-note">Seedance — עם מפתח API מפיק אוטומטית. Deevid — אין API, אז הפרומפט נפתח מוכן באתר שלך ואת הווידאו המוכן מעלים חזרה לכאן.</div>
-      <div class="aiv-grid">${providers.map(card).join("")}</div>`;
+      <div class="aiv-grid">${providers.map(card).join("")}</div>
+      <div class="aiv-card comfy-standalone" id="comfy-card">
+        <div class="aiv-head"><b>ComfyUI (מקומי)</b><span class="aiv-status" id="comfy-status">בודק…</span></div>
+        <div class="aiv-vendor">תהליך העבודה שלכם, רץ על המחשב הזה — עובד רק כשהאתר פתוח מאותו מחשב שבו ComfyUI רץ (אלא אם הגדרתם טאנל).</div>
+        <label>כתובת ComfyUI <input type="text" id="comfy-url" placeholder="http://127.0.0.1:8188"></label>
+        <label>תהליך עבודה (Workflow, API Format)
+          <textarea id="comfy-workflow" rows="5" placeholder='ב-ComfyUI: Workflow → Export (API Format). הדביקו כאן, ובתיבת הפרומפט כתבו בדיוק %%PROMPT%% במקום טקסט קבוע.'></textarea>
+        </label>
+        <div class="aiv-actions">
+          <button class="btn ghost" id="comfy-save">שמירת הגדרות</button>
+          <button class="btn primary" id="comfy-go">▶ הפק ב-ComfyUI</button>
+        </div>
+        <div class="aiv-msg" id="comfy-msg"></div>
+      </div>`;
 
     const copyPrompt = async (pid) => {
       const txt = await fetch(`/api/aia/project/${project.id}/video/prompt?provider=${pid}`).then((r) => r.text());
@@ -422,7 +436,7 @@
       return txt;
     };
 
-    host.querySelectorAll(".aiv-card").forEach((el) => {
+    host.querySelectorAll(".aiv-card:not(.comfy-standalone)").forEach((el) => {
       const pid = el.dataset.p;
       const msg = el.querySelector(".aiv-msg");
       const setMsg = (t, cls) => { msg.textContent = t; msg.className = "aiv-msg" + (cls ? " " + cls : ""); };
@@ -506,6 +520,79 @@
         } catch (e) { setMsg("שגיאה: " + e.message, "bad"); btn.disabled = false; }
       });
     });
+
+    // ---- ComfyUI מקומי ----
+    loadComfyStatus();
+    $("comfy-save").addEventListener("click", async () => {
+      const m = $("comfy-msg"); m.textContent = "שומר…"; m.className = "aiv-msg";
+      try {
+        await fetch("/api/aia/comfyui/config", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ baseUrl: $("comfy-url").value.trim(), workflowTemplate: $("comfy-workflow").value })
+        });
+        m.textContent = "נשמר ✓"; m.className = "aiv-msg ok";
+        loadComfyStatus();
+      } catch { m.textContent = "שגיאה בשמירה"; m.className = "aiv-msg bad"; }
+    });
+    $("comfy-go").addEventListener("click", async () => {
+      const btn = $("comfy-go"); btn.disabled = true;
+      const m = $("comfy-msg"); m.textContent = "שולח ל-ComfyUI…"; m.className = "aiv-msg";
+      try {
+        const r = await fetch(`/api/aia/project/${project.id}/comfyui`, { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" });
+        const j = await r.json();
+        if (!r.ok) { m.textContent = "שגיאה: " + (j.error || r.status); m.className = "aiv-msg bad"; btn.disabled = false; return; }
+        pollComfy(project.id, btn);
+      } catch (e) { m.textContent = "שגיאה: " + e.message; m.className = "aiv-msg bad"; btn.disabled = false; }
+    });
+  }
+
+  async function loadComfyStatus() {
+    const statusEl = $("comfy-status");
+    if (!statusEl) return;
+    try {
+      const s = await fetch("/api/aia/comfyui/status").then((r) => r.json());
+      $("comfy-url").value = s.baseUrl || "";
+      statusEl.className = "aiv-status " + (s.reachable ? "ok" : "off");
+      statusEl.textContent = s.reachable ? "ComfyUI מחובר ✓" : "לא מגיב בכתובת שהוגדרה";
+      if (s.hasTemplate && !s.hasPlaceholder) {
+        $("comfy-msg").textContent = "בתהליך העבודה השמור חסר %%PROMPT%% — הפרומפט לא יוזרק";
+        $("comfy-msg").className = "aiv-msg bad";
+      }
+    } catch { statusEl.textContent = "שגיאה בבדיקה"; }
+  }
+
+  function pollComfy(id, btn) {
+    const msg = $("comfy-msg");
+    clearInterval(comfyPoll);
+    comfyPoll = setInterval(async () => {
+      let j;
+      try { j = await fetch(`/api/aia/project/${id}/comfyui`).then((r) => r.json()); } catch { return; }
+      if (j.status === "running") {
+        msg.className = "aiv-msg";
+        msg.innerHTML = `<div class="aia-bar"><div style="width:${j.pct || 0}%"></div></div><span>${esc(j.phase || "מעבד")} · ${j.pct || 0}%</span>`;
+      } else if (j.status === "done") {
+        clearInterval(comfyPoll);
+        if (btn) btn.disabled = false;
+        msg.textContent = "";
+        showComfyResult(j.file, j.ext);
+        loadGallery();
+        toast("ComfyUI סיים!");
+      } else if (j.status === "error") {
+        clearInterval(comfyPoll);
+        if (btn) btn.disabled = false;
+        msg.textContent = "שגיאה: " + (j.error || "לא ידועה");
+        msg.className = "aiv-msg bad";
+      }
+    }, 2500);
+  }
+
+  function showComfyResult(url, ext) {
+    const isVideo = ["mp4", "webm", "gif"].includes((ext || "").toLowerCase());
+    $("st-out").innerHTML = isVideo
+      ? `<video class="aia-video" src="${esc(url)}" controls playsinline></video>
+         <div class="aia-video-actions"><a class="btn primary" href="${esc(url)}" download>⤓ הורדה</a></div>`
+      : `<img class="aia-video" src="${esc(url)}" alt="תוצר ComfyUI" style="max-width:100%; border-radius:12px;">
+         <div class="aia-video-actions"><a class="btn primary" href="${esc(url)}" download>⤓ הורדה</a></div>`;
   }
 
   function pollAiVideo(id, el, btn) {
