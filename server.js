@@ -182,16 +182,18 @@ if (!fs.existsSync(EMAIL_STATUS_FILE)) fs.writeFileSync(EMAIL_STATUS_FILE, "null
 if (!fs.existsSync(CALENDAR_STATUS_FILE)) fs.writeFileSync(CALENDAR_STATUS_FILE, "null", "utf8");
 
 // ---------- אינטגרציות: כל השירותים/ה-API-ים שהמערכת משתמשת בהם, במקום אחד ----------
-app.get("/api/integrations", async (req, res) => {
+// integrations-config.json הוא תשתית משותפת גלובלית (לא לפי חשבון) — שמור לבעל המערכת בלבד,
+// אחרת כל משתמש רשום היה יכול לקרוא/לדרוס את מפתחות ה-AI המשותפים של כולם.
+app.get("/api/integrations", requireOwner, async (req, res) => {
   try { res.json({ integrations: await require("./lib/integrations").list() }); }
   catch (err) { res.status(500).json({ integrations: [], error: err.message }); }
 });
-app.post("/api/integrations/:id", async (req, res) => {
+app.post("/api/integrations/:id", requireOwner, async (req, res) => {
   try { res.json({ ok: true, status: await require("./lib/integrations").save(req.params.id, req.body || {}) }); }
   catch (err) { res.status(400).json({ ok: false, error: err.message }); }
 });
 // חשיפת הערך המלא (לא מוסתר) — רק בבקשה מפורשת מהמשתמש, מאחורי מסך ההגדרות המוגן
-app.get("/api/integrations/:id/reveal", async (req, res) => {
+app.get("/api/integrations/:id/reveal", requireOwner, async (req, res) => {
   try { res.json({ values: await require("./lib/integrations").reveal(req.params.id) }); }
   catch (err) { res.status(400).json({ error: err.message }); }
 });
