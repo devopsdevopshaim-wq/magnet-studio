@@ -1,0 +1,154 @@
+/* הלכות חגים — כרטיסים מאוירים, אנימציית כניסה, ופאנל פירוט עשיר */
+
+.hol-toolbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+  margin: 4px 0 20px;
+}
+.hol-note { font-size: 0.8rem; color: var(--cream-dim); max-width: 560px; line-height: 1.6; }
+
+.hol-loading { color: var(--cream-dim); font-size: 0.9rem; padding: 30px; text-align: center; }
+
+.hol-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 18px;
+  margin-bottom: 30px;
+}
+
+@keyframes hol-in { from { opacity: 0; transform: translateY(18px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes hol-flicker { 0%, 100% { opacity: 1; } 45% { opacity: 0.85; } 50% { opacity: 1; } 78% { opacity: 0.92; } }
+@keyframes hol-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes hol-shine { from { background-position: -200% 0; } to { background-position: 200% 0; } }
+
+.hol-card {
+  position: relative; border-radius: 16px; overflow: hidden; cursor: pointer;
+  background: var(--surface); border: 1px solid var(--line);
+  animation: hol-in 0.55s cubic-bezier(.22,1,.36,1) backwards;
+  transition: transform 0.28s cubic-bezier(.22,1,.36,1), box-shadow 0.28s, border-color 0.28s;
+}
+.hol-grid .hol-card:nth-child(1) { animation-delay: 0.02s; } .hol-grid .hol-card:nth-child(2) { animation-delay: 0.07s; }
+.hol-grid .hol-card:nth-child(3) { animation-delay: 0.12s; } .hol-grid .hol-card:nth-child(4) { animation-delay: 0.17s; }
+.hol-grid .hol-card:nth-child(5) { animation-delay: 0.22s; } .hol-grid .hol-card:nth-child(6) { animation-delay: 0.27s; }
+.hol-grid .hol-card:nth-child(7) { animation-delay: 0.32s; } .hol-grid .hol-card:nth-child(8) { animation-delay: 0.37s; }
+.hol-grid .hol-card:nth-child(n+9) { animation-delay: 0.42s; }
+
+.hol-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px -18px rgba(0,0,0,0.55), var(--glow-warm); border-color: var(--ember); }
+
+.hol-card-art {
+  position: relative; height: 108px; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(150deg, var(--surface-2), var(--bg));
+  overflow: hidden;
+}
+.hol-card-art::before {
+  content: ""; position: absolute; inset: -40%;
+  background: radial-gradient(circle at 30% 20%, rgba(219,139,66,0.25), transparent 55%),
+              radial-gradient(circle at 75% 75%, rgba(139,160,124,0.14), transparent 50%);
+  animation: hol-float 6s ease-in-out infinite;
+}
+.hol-card-icon {
+  position: relative; font-size: 2.6rem; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+  animation: hol-float 4.5s ease-in-out infinite;
+}
+.hol-card.soon .hol-card-icon { animation: hol-float 4.5s ease-in-out infinite, hol-flicker 2.6s ease-in-out infinite; }
+
+.hol-card-body { padding: 14px 16px 16px; }
+.hol-card-body h3 { margin: 0 0 4px; font-family: var(--font-display); font-size: 1.08rem; color: var(--cream); }
+.hol-card-tag { font-size: 0.76rem; color: var(--cream-dim); line-height: 1.5; min-height: 2.2em; }
+
+.hol-badge {
+  position: absolute; top: 10px; inset-inline-start: 10px; font-size: 0.68rem; font-weight: 700;
+  padding: 3px 9px; border-radius: 999px; background: rgba(219,139,66,0.9); color: #201810;
+  box-shadow: 0 2px 8px -2px rgba(0,0,0,0.5);
+}
+
+.hol-card-times { display: flex; gap: 10px; margin-top: 10px; font-size: 0.72rem; color: var(--brass-soft); flex-wrap: wrap; }
+.hol-card-times span { background: var(--surface-2); border: 1px solid var(--line); border-radius: 6px; padding: 2px 7px; }
+
+/* ---------- פאנל פירוט ---------- */
+
+.hol-detail {
+  border-radius: 18px; background: var(--surface); border: 1px solid var(--line);
+  box-shadow: var(--shadow-deep); overflow: hidden; animation: hol-in 0.4s ease;
+  margin-bottom: 40px;
+}
+.hol-detail-hero {
+  position: relative; padding: 34px 30px 26px; text-align: center;
+  background: linear-gradient(160deg, var(--surface-2), var(--bg));
+  overflow: hidden;
+}
+.hol-detail-hero::before {
+  content: ""; position: absolute; inset: -50%;
+  background: conic-gradient(from 0deg, transparent, rgba(219,139,66,0.12), transparent 30%);
+  animation: hol-spin 14s linear infinite;
+}
+@keyframes hol-spin { to { transform: rotate(360deg); } }
+.hol-detail-icon { position: relative; font-size: 3.6rem; margin-bottom: 8px; display: block; animation: hol-float 4s ease-in-out infinite; }
+.hol-detail-hero h2 { position: relative; margin: 0 0 6px; font-family: var(--font-display); font-size: 1.7rem; color: var(--cream); }
+.hol-detail-hero .hol-tag { position: relative; color: var(--brass-soft); font-size: 0.9rem; }
+.hol-detail-hero .hol-intro { position: relative; max-width: 640px; margin: 14px auto 0; color: var(--cream-dim); font-size: 0.88rem; line-height: 1.8; }
+
+.hol-close { position: absolute; top: 16px; inset-inline-end: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 50%; width: 34px; height: 34px; color: var(--cream); cursor: pointer; font-size: 1rem; }
+.hol-close:hover { border-color: var(--ember); color: var(--ember); }
+
+.hol-times-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 18px; position: relative; }
+.hol-time-pill {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 20px;
+  box-shadow: var(--shadow-soft);
+}
+.hol-time-pill .lbl { font-size: 0.7rem; color: var(--cream-dim); }
+.hol-time-pill .val { font-family: var(--font-mono); font-size: 1.15rem; color: var(--ember); font-weight: 600; }
+
+.hol-actions { display: flex; gap: 10px; justify-content: center; margin-top: 18px; position: relative; flex-wrap: wrap; }
+
+.hol-sections { padding: 26px 30px 10px; display: flex; flex-direction: column; gap: 16px; }
+.hol-section {
+  border-radius: 12px; padding: 16px 18px; background: var(--surface-2); border-inline-start: 3px solid var(--line);
+  animation: hol-in 0.4s ease backwards;
+}
+.hol-section.src-torah { border-inline-start-color: var(--brass); }
+.hol-section.src-halacha { border-inline-start-color: var(--sage); }
+.hol-section.src-kabbalah { border-inline-start-color: var(--tech); }
+.hol-section.src-minhag { border-inline-start-color: var(--ember); }
+
+.hol-src-label {
+  display: inline-block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em;
+  padding: 2px 9px; border-radius: 999px; margin-bottom: 8px;
+}
+.src-torah .hol-src-label { background: rgba(198,154,99,0.18); color: var(--brass-soft); }
+.src-halacha .hol-src-label { background: rgba(139,160,124,0.18); color: var(--sage); }
+.src-kabbalah .hol-src-label { background: rgba(47,227,255,0.14); color: var(--tech); }
+.src-minhag .hol-src-label { background: rgba(219,139,66,0.16); color: var(--ember); }
+
+.hol-section h4 { margin: 0 0 8px; font-family: var(--font-display); font-size: 1rem; color: var(--cream); }
+.hol-section p { margin: 0; font-size: 0.87rem; line-height: 1.85; color: var(--cream-dim); }
+
+.hol-blessings { padding: 6px 30px 30px; }
+.hol-blessings h3 { font-family: var(--font-display); font-size: 1.1rem; color: var(--brass-soft); margin: 10px 0 14px; }
+.hol-blessing-card {
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; margin-bottom: 12px;
+}
+.hol-blessing-when { font-size: 0.76rem; color: var(--cream-dim); margin-bottom: 8px; }
+.hol-blessing-he {
+  font-family: var(--font-display); font-size: 1.15rem; line-height: 2; color: var(--cream); text-align: center;
+  padding: 10px 0;
+}
+.hol-blessing-translit { font-size: 0.78rem; color: var(--cream-dim); direction: ltr; text-align: center; font-style: italic; }
+.hol-blessing-note { font-size: 0.78rem; color: var(--cream-dim); margin-top: 8px; border-top: 1px dashed var(--line); padding-top: 8px; }
+
+.hol-extra { margin: 0 30px 30px; padding: 14px 18px; border-radius: 10px; background: rgba(219,139,66,0.08); border: 1px solid rgba(219,139,66,0.25); font-size: 0.83rem; color: var(--brass-soft); line-height: 1.7; }
+
+@media (max-width: 640px) {
+  .hol-detail-hero, .hol-sections, .hol-blessings { padding-inline: 18px; }
+  .hol-extra { margin-inline: 18px; }
+}
+
+/* ---------- הדפסה ---------- */
+@media print {
+  .top-header, nav.tabs, .hol-toolbar, .hol-grid, .hol-close, .hol-actions, .dockbar { display: none !important; }
+  body, .shell { background: #fff !important; color: #000 !important; }
+  .hol-detail { box-shadow: none; border: none; }
+  .hol-detail-hero { background: none !important; }
+  .hol-detail-hero::before { display: none; }
+  .hol-section, .hol-blessing-card { background: none !important; border: 1px solid #ccc; break-inside: avoid; }
+  .hol-section h4, .hol-detail-hero h2, .hol-blessing-he { color: #000 !important; }
+  .hol-section p, .hol-blessing-translit, .hol-blessing-when { color: #333 !important; }
+}

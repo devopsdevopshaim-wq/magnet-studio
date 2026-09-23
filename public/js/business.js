@@ -45,7 +45,7 @@
             <div class="biz-row2">
               <label>סוג <select id="cal-type">
                 <option value="meeting">פגישה</option><option value="delivery">משלוח</option>
-                <option value="deadline">דדליין</option><option value="other">אחר</option>
+                <option value="deadline">דדליין</option><option value="holiday">חג/שבת</option><option value="other">אחר</option>
               </select></label>
               <label>לקוח <select id="cal-client">${clientOptions()}</select></label>
             </div>
@@ -107,7 +107,7 @@
     $("cal-upcoming").innerHTML = upcoming.length ? upcoming.map(upcomingRow).join("") : `<div class="biz-empty">אין אירועים קרובים.</div>`;
     wireDelete($("cal-upcoming"), "/api/business/calendar/", paintMonth);
   }
-  const TYPE_HE = { meeting: "פגישה", delivery: "משלוח", deadline: "דדליין", other: "אחר" };
+  const TYPE_HE = { meeting: "פגישה", delivery: "משלוח", deadline: "דדליין", holiday: "חג/שבת", other: "אחר" };
   const upcomingRow = (e) => `<div class="biz-row" data-id="${esc(e.id)}">
     <span class="biz-row-date">${esc(fmtDate(e.date))}${e.time ? " " + esc(e.time) : ""}</span>
     <span class="biz-row-main">${esc(e.title)} <small>· ${esc(TYPE_HE[e.type] || e.type)}</small></span>

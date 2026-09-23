@@ -3,22 +3,22 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>אוצר לחג · חיים קריספין</title>
+<title>הלכות חגים · חיים קריספין</title>
 <link rel="stylesheet" href="/css/style.css" />
-<link rel="stylesheet" href="/css/library.css" />
+<link rel="stylesheet" href="/css/holidays.css" />
 </head>
 <body>
-<div class="lib-wrap">
+<div class="shell" style="max-width:1180px;">
 
   <header class="top-header">
     <div class="brand">
       <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
         <polygon points="24,4 41,14 41,34 24,44 7,34 7,14" stroke="currentColor" stroke-width="2.5"/>
-        <path d="M17 15h14v18l-7-4-7 4z" fill="currentColor" opacity="0.9"/>
+        <path d="M24 12v10M24 22l-6 4M24 22l6 4M18 26v6M30 26v6M15 22c0-5 4-9 9-9s9 4 9 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       <div>
-        <h1>אוצר לחג</h1>
-        <div class="tagline">הגדות, ברכות וקבצים — צצים במענה היומי לפי התאריך והחג</div>
+        <h1 data-name>הִלְכוֹת חַגִּים</h1>
+        <div class="tagline">מנהגים · הלכות · ברכות ופרושים — תורה, הלכה וקבלה, לכל חג</div>
       </div>
     </div>
     <div class="header-meta">
@@ -38,13 +38,13 @@
     <a href="/devops.html">DevOps</a>
     <a href="/aia.html">עיצוב AIA</a>
     <a href="/torah.html">ספריית קודש</a>
-    <a href="/holidays.html">הלכות חגים</a>
+    <a href="/holidays.html" class="active">הלכות חגים</a>
     <a href="/marketing.html">פרסום ושיווק</a>
     <a href="/logo.html">לוגו</a>
     <a href="/business.html">ניהול עסק</a>
     <a href="/social.html">רשתות חברתיות</a>
     <a href="/tv.html">טלוויזיה</a>
-    <a href="/library.html" class="active">אוצר לחג</a>
+    <a href="/library.html">אוצר לחג</a>
     <a href="/device.html">המכשיר</a>
     <a href="/graphology.html">גרפולוגיה</a>
     <a href="/astro-full.html">אסטרולוגיה</a>
@@ -54,23 +54,18 @@
     <a href="/analytics.html">נתוני שימוש</a>
   </nav>
 
-  <div class="lib-note">
-    כל קובץ כאן משויך ל<b>אירוע</b> — חג, שבת, או "כל השנה". כשהאירוע מתקרב, הקובץ מופיע אוטומטית
-    בכרטיס "אוצר לחג" במענה היומי, עם ספירה לאחור. להוספת קבצים: <code class="mono">data/holiday-resources.json</code>
-    + קובץ ב-<code class="mono">public/library/</code>.
+  <div class="hol-toolbar">
+    <div class="hol-note">כל תאריך וזמן כניסה/יציאה מחושב בזמן אמת לפי המיקום שלכם. זהו סיכום לימודי — לשאלות מעשיות אישיות פנו לרב מורה הוראה.</div>
+    <button class="btn ghost" id="hol-sync">📅 סנכרון ליומן העסקי</button>
   </div>
 
-  <main id="lib-main">
-    <div class="lib-loading" id="lib-loading">טוען…</div>
-  </main>
+  <div class="hol-grid" id="hol-grid"><div class="hol-loading">טוען חגים…</div></div>
+
+  <div class="hol-detail" id="hol-detail" hidden></div>
 
 </div>
-
 <div class="toast" id="toast"></div>
-
-<script src="/js/pnks-core.js"></script>
-<script src="/js/pnks-offline.js"></script>
-<script src="/js/library.js"></script>
+<script src="/js/holidays.js"></script>
 <script src="/js/dockbar.js" defer></script>
 </body>
 </html>

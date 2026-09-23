@@ -1620,6 +1620,30 @@ app.get("/api/shabbat", async (req, res) => {
   }
 });
 
+// ---------- הלכות חגים: מנהגים/הלכות/ברכות + תאריכים אמיתיים + סנכרון ליומן ----------
+
+const holidayHalacha = require("./lib/holidayHalacha");
+
+app.get("/api/holidays", (req, res) => {
+  res.json({ holidays: holidayHalacha.listAll() });
+});
+app.get("/api/holidays/upcoming", async (req, res) => {
+  try { res.json({ upcoming: await holidayHalacha.computeUpcoming() }); }
+  catch (err) { res.status(500).json({ upcoming: [], error: err.message }); }
+});
+app.get("/api/holidays/:id", (req, res) => {
+  const c = holidayHalacha.getContent(req.params.id);
+  if (!c) return res.status(404).json({ error: "חג לא נמצא" });
+  res.json(c);
+});
+app.post("/api/holidays/sync-calendar", async (req, res) => {
+  try { res.json(await holidayHalacha.syncToCalendar(baseDirFor(req))); }
+  catch (err) { res.status(500).json({ ok: false, error: err.message }); }
+});
+// אחת ליום — מסנכרן חגים קרובים ליומן העסקי של הבעלים (לא חוסם עלייה, ולא כפול בכל הרצה)
+setTimeout(() => holidayHalacha.syncToCalendar(PERSIST_DIR).catch((e) => console.error("[holidays] sync", e.message)), 5000);
+setInterval(() => holidayHalacha.syncToCalendar(PERSIST_DIR).catch(() => {}), 24 * 3600 * 1000);
+
 // ---------- מצפן בריאות — ניתוח אישי מבוסס-הנחיות (לא ייעוץ רפואי) ----------
 
 app.post("/api/health/analyze", async (req, res) => {
