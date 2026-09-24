@@ -54,6 +54,25 @@
     <a href="/analytics.html">נתוני שימוש</a>
   </nav>
 
+  <div class="mail-account-card" id="mail-account-card">
+    <div id="mail-account-connected" hidden>
+      <span class="sub">מחובר כ-<b id="mail-account-email"></b></span>
+      <button class="btn ghost" id="btn-mail-disconnect">ניתוק</button>
+    </div>
+    <form id="mail-connect-form" class="mail-connect-form">
+      <span class="sub">חברו את תיבת המייל האישית שלכם (Gmail/Outlook/Yahoo וכו') — פרטית לחשבון שלכם בלבד</span>
+      <div class="mail-connect-row">
+        <input type="email" id="mail-connect-email" placeholder="הכתובת שלך@gmail.com" required>
+        <input type="password" id="mail-connect-pass" placeholder="סיסמת אפליקציה" required>
+        <button class="btn primary" type="submit">חיבור</button>
+      </div>
+      <div class="mail-connect-hint" id="mail-connect-hint">
+        ⚠️ Gmail/Outlook/Yahoo חוסמים כניסה עם הסיסמה הרגילה — יש ליצור "סיסמת אפליקציה" ייעודית בהגדרות האבטחה של החשבון ולהדביק אותה כאן.
+      </div>
+      <div class="validate-result" id="mail-connect-result"></div>
+    </form>
+  </div>
+
   <div class="mail-toolbar">
     <span class="sub" id="mail-summary">טוען מיילים…</span>
     <button class="btn ghost" id="btn-refresh-mail">רענון</button>

@@ -33,12 +33,34 @@
   }
   .housing-bar button:hover { border-color: var(--brass); color: var(--brass-soft); }
   iframe#dira { flex: 1; width: 100%; border: 0; background: #f2f3f6; }
+
+  .housing-free { flex: 1; overflow-y: auto; padding: 26px; }
+  .hf-wrap { max-width: 780px; margin: 0 auto; }
+  .hf-note { font-size: 0.82rem; color: var(--cream-dim); line-height: 1.7; margin-bottom: 22px; }
+  .hf-form { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; }
+  .hf-form label { font-size: 0.8rem; color: var(--cream-dim); flex: 1; min-width: 130px; }
+  .hf-form input, .hf-form select {
+    display: block; width: 100%; margin-top: 5px; background: var(--surface-2); color: var(--cream);
+    border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; font-family: var(--font-body); font-size: 0.9rem;
+  }
+  .hf-chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 12px 0 0; }
+  .hf-chip { font-size: 0.76rem; padding: 4px 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface-2); color: var(--cream-dim); cursor: pointer; }
+  .hf-chip:hover { border-color: var(--brass); color: var(--brass-soft); }
+  .hf-results { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin-top: 24px; }
+  .hf-card {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px;
+    text-decoration: none; color: var(--cream); transition: transform 0.2s, border-color 0.2s;
+  }
+  .hf-card:hover { transform: translateY(-3px); border-color: var(--ember); }
+  .hf-card b { font-family: var(--font-display); font-size: 1rem; }
+  .hf-card span { color: var(--brass-soft); font-size: 1.2rem; }
 </style>
 </head>
 <body>
 <div class="housing-shell">
   <div class="housing-bar">
-    <span class="brand-mini">דיור · DiraFinder</span>
+    <span class="brand-mini">דיור</span>
     <nav>
       <a href="/">לוח בקרה</a>
       <a href="/daily.html">מענה יומי</a>
@@ -50,23 +72,46 @@
       <a href="/fitness.html">כושר</a>
       <a href="/devops.html">DevOps</a>
       <a href="/aia.html">עיצוב AIA</a>
-    <a href="/torah.html">ספריית קודש</a>
-    <a href="/holidays.html">הלכות חגים</a>
-    <a href="/marketing.html">פרסום ושיווק</a>
-    <a href="/logo.html">לוגו</a>
-    <a href="/business.html">ניהול עסק</a>
-    <a href="/social.html">רשתות חברתיות</a>
-    <a href="/tv.html">טלוויזיה</a>
+      <a href="/torah.html">ספריית קודש</a>
+      <a href="/holidays.html">הלכות חגים</a>
+      <a href="/marketing.html">פרסום ושיווק</a>
+      <a href="/logo.html">לוגו</a>
+      <a href="/business.html">ניהול עסק</a>
+      <a href="/social.html">רשתות חברתיות</a>
+      <a href="/tv.html">טלוויזיה</a>
       <a href="/library.html">אוצר לחג</a>
       <a href="/device.html">המכשיר</a>
       <a href="/graphology.html">גרפולוגיה</a>
       <a href="/astro-full.html">אסטרולוגיה</a>
     </nav>
     <span class="status-pill" id="status-pill">בודק מצב…</span>
-    <button id="btn-stack">הפעל סטאק</button>
-    <button id="btn-open" onclick="window.open('/housing/landing','_blank')">פתיחה בחלון</button>
+    <button id="btn-stack" hidden>הפעל סטאק</button>
+    <button id="btn-open" hidden onclick="window.open('/housing/landing','_blank')">פתיחה בחלון</button>
   </div>
-  <iframe id="dira" src="/housing/landing" title="DiraFinder"></iframe>
+
+  <iframe id="dira" src="/housing/landing" title="DiraFinder" hidden></iframe>
+
+  <!-- מצב חופשי — עובד תמיד, בכל מקום, בלי תלות בסטאק מקומי: קישורי חיפוש ישירים ללוחות דיור -->
+  <div class="housing-free" id="housing-free">
+    <div class="hf-wrap">
+      <div class="hf-note">
+        חיפוש חופשי דרך לוחות הדיור המובילים בישראל — בלי תלות במחשב או בבסיס נתונים מקומי, עובד מכל מכשיר.
+        (אם מריצים את הסטאק המקומי המלא של DiraFinder על המחשב — כולל ניתוח שווי וציון להשקעה —
+        הוא יופיע כאן אוטומטית במקום זה.)
+      </div>
+      <form class="hf-form" id="hf-form">
+        <label>עיר <input type="text" id="hf-city" placeholder="לדוגמה: רחובות" list="hf-cities"></label>
+        <datalist id="hf-cities"></datalist>
+        <label>חדרים <input type="number" id="hf-rooms" min="1" max="10" step="0.5" placeholder="3"></label>
+        <label>סוג עסקה
+          <select id="hf-deal"><option value="sale">מכירה</option><option value="rent">השכרה</option></select>
+        </label>
+        <button class="btn primary" type="submit" style="align-self:stretch;">🔍 חיפוש</button>
+      </form>
+      <div class="hf-chips" id="hf-chips"></div>
+      <div class="hf-results" id="hf-results"></div>
+    </div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -76,33 +121,65 @@
   function toast(m, e) { toastEl.textContent = m; toastEl.className = "toast show" + (e ? " error" : ""); setTimeout(() => toastEl.className = "toast", 3000); }
 
   const pill = document.getElementById("status-pill");
+  const dira = document.getElementById("dira");
+  const free = document.getElementById("housing-free");
+  const btnStack = document.getElementById("btn-stack");
+  const btnOpen = document.getElementById("btn-open");
+
   async function refreshStatus() {
     try {
       const st = await fetch("/api/housing/status").then(r => r.json());
       if (st.up) {
-        const n = st.count != null ? st.count : (await fetch("/api/housing/listings?limit=1").then(r => r.json()).then(d => (d.listings || []).length ? "?" : 0).catch(() => "?"));
-        pill.textContent = `פעיל · ${st.count ?? n} נכסים · ${st.source === "postgres" ? "Postgres מקומי" : "API"}`;
+        pill.textContent = `סטאק מקומי פעיל · ${st.count ?? "?"} נכסים · ${st.source === "postgres" ? "Postgres" : "API"}`;
         pill.className = "status-pill up";
+        dira.hidden = false; free.hidden = true; btnStack.hidden = true; btnOpen.hidden = false;
       } else {
-        pill.textContent = "הסטאק כבוי";
-        pill.className = "status-pill down";
+        pill.textContent = "מצב חופשי (לוחות חיפוש)";
+        pill.className = "status-pill";
+        dira.hidden = true; free.hidden = false; btnStack.hidden = false; btnOpen.hidden = true;
       }
     } catch {
-      pill.textContent = "שגיאת בדיקה";
-      pill.className = "status-pill down";
+      pill.textContent = "מצב חופשי (לוחות חיפוש)";
+      dira.hidden = true; free.hidden = false; btnStack.hidden = false; btnOpen.hidden = true;
     }
   }
   refreshStatus();
 
-  document.getElementById("btn-stack").addEventListener("click", async (e) => {
-    e.target.disabled = true;
-    e.target.textContent = "מפעיל…";
+  btnStack.addEventListener("click", async (e) => {
+    e.target.disabled = true; e.target.textContent = "מפעיל…";
     const r = await fetch("/api/housing/stack-up", { method: "POST" }).then(r => r.json()).catch(() => ({ ok: false }));
-    e.target.disabled = false;
-    e.target.textContent = "הפעל סטאק";
+    e.target.disabled = false; e.target.textContent = "הפעל סטאק";
     if (r.ok) { toast("הסטאק הופעל"); setTimeout(refreshStatus, 4000); }
     else toast(r.error || "לא הצלחתי להפעיל את הסטאק (Docker Desktop פתוח?)", true);
   });
+
+  // ---------- מצב חופשי ----------
+  async function runSearch() {
+    const city = document.getElementById("hf-city").value.trim();
+    const rooms = document.getElementById("hf-rooms").value.trim();
+    const dealType = document.getElementById("hf-deal").value;
+    try {
+      const q = new URLSearchParams({ city, rooms, dealType });
+      const { links } = await fetch("/api/housing/search-links?" + q.toString()).then(r => r.json());
+      document.getElementById("hf-results").innerHTML = links.map((l) =>
+        `<a class="hf-card" href="${l.url}" target="_blank" rel="noopener"><b>${l.name}</b><span>↗</span></a>`
+      ).join("");
+    } catch { toast("שגיאה בבניית קישורי חיפוש", true); }
+  }
+  document.getElementById("hf-form").addEventListener("submit", (e) => { e.preventDefault(); runSearch(); });
+
+  fetch("/api/housing/cities").then(r => r.json()).then(({ cities }) => {
+    document.getElementById("hf-cities").innerHTML = (cities || []).map((c) => `<option value="${c}">`).join("");
+    document.getElementById("hf-chips").innerHTML = (cities || []).slice(0, 6).map((c) =>
+      `<span class="hf-chip" data-city="${c}">${c}</span>`
+    ).join("");
+    document.querySelectorAll(".hf-chip").forEach((chip) => chip.addEventListener("click", () => {
+      document.getElementById("hf-city").value = chip.dataset.city;
+      runSearch();
+    }));
+  }).catch(() => {});
+
+  runSearch();
 </script>
 <script src="/js/dockbar.js" defer></script>
 </body>

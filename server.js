@@ -873,6 +873,19 @@ app.post("/api/profile", (req, res) => {
   catch (err) { res.status(400).json({ error: err.message }); }
 });
 
+// ---------- חשבון מייל אישי (IMAP — פרטי לכל חשבון, לא רק לבעלים) ----------
+const emailAccounts = require("./lib/emailAccounts");
+app.get("/api/email-account/status", (req, res) => res.json(emailAccounts.status(baseDirFor(req))));
+app.post("/api/email-account/connect", async (req, res) => {
+  try { res.json(await emailAccounts.connect(baseDirFor(req), req.body || {})); }
+  catch (err) { res.status(400).json({ error: err.message }); }
+});
+app.post("/api/email-account/disconnect", (req, res) => res.json(emailAccounts.disconnect(baseDirFor(req))));
+app.get("/api/email-account/recent", async (req, res) => {
+  try { res.json(await emailAccounts.recentMessages(baseDirFor(req), Math.min(parseInt(req.query.limit, 10) || 15, 50))); }
+  catch (err) { res.status(400).json({ error: err.message }); }
+});
+
 // ---------- פס תחתון: חדשות רצות + המלצת יום + טראק מוזיקה ----------
 
 app.get("/api/news", async (req, res) => {
@@ -1673,6 +1686,15 @@ app.get("/api/housing/listings", async (req, res) => {
   } catch (err) {
     res.status(502).json({ listings: [], error: err.message });
   }
+});
+
+// מצב חופשי — קישורי חיפוש ללוחות דיור, בלי תלות בסטאק מקומי. עובד בכל מקום.
+const housingLinks = require("./lib/housingLinks");
+app.get("/api/housing/search-links", (req, res) => {
+  res.json({ links: housingLinks.searchLinks({ city: req.query.city, rooms: req.query.rooms, dealType: req.query.dealType }) });
+});
+app.get("/api/housing/cities", (req, res) => {
+  res.json({ cities: housingLinks.POPULAR_CITIES });
 });
 
 // דף הנחיתה של DiraFinder חי בתיקייה אחות (housing-system/). הקובץ הוא פרגמנט (נכתב
