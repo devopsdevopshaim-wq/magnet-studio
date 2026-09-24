@@ -1,7 +1,7 @@
 {
   "name": "magnet-studio",
   "version": "1.0.0",
-  "description": "HKDELY — מערכת הפעלה אישית רב-משתמשית: תוכנות, מגנטים, מיילים, יומן ולוח שנה עברי",
+  "description": "HKDAILY — מערכת הפעלה אישית רב-משתמשית: תוכנות, מגנטים, מיילים, יומן ולוח שנה עברי",
   "private": true,
   "main": "server.js",
   "scripts": {

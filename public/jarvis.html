@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>עוזר JARVIS · HKDELY</title>
+<title>צ'אט AI · HKDAILY</title>
 <link rel="stylesheet" href="/css/style.css" />
 <link rel="stylesheet" href="/css/jarvis.css" />
 </head>
@@ -17,8 +17,8 @@
         <polygon points="24,16 32,20.5 32,29.5 24,34 16,29.5 16,20.5" fill="currentColor" opacity="0.85"/>
       </svg>
       <div>
-        <h1>עוזר JARVIS</h1>
-        <div class="tagline">צ'אט רב-סוכנים · מחובר ל-n8n</div>
+        <h1>צ'אט AI</h1>
+        <div class="tagline">צ'אט רב-סוכנים · מחובר ל-n8n Cloud</div>
       </div>
     </div>
     <div class="header-meta">
@@ -29,7 +29,7 @@
   <nav class="tabs">
     <a href="/">לוח בקרה</a>
     <a href="/daily.html">מענה יומי</a>
-    <a href="/jarvis.html" class="active">עוזר JARVIS</a>
+    <a href="/jarvis.html" class="active">צ'אט AI</a>
     <a href="/housing.html">דיור</a>
     <a href="/jobs.html">דרושים</a>
     <a href="/finance.html">פיננסים</a>
@@ -56,7 +56,7 @@
 
   <div class="jarvis-persona">
     <div id="jarvis-avatar"></div>
-    <div class="jarvis-face-caption">JARVIS · <span class="state">כאן</span></div>
+    <div class="jarvis-face-caption">צ'אט AI · <span class="state">כאן</span></div>
   </div>
 
   <div class="jarvis-statusbar">
@@ -80,7 +80,7 @@
 
   <div class="jarvis-composer">
     <button class="jarvis-mic" id="btn-mic" title="דבר אליי" aria-label="דבר אליי">🎤</button>
-    <textarea id="input" placeholder="כתוב הודעה ל-JARVIS…  (Enter לשליחה · Shift+Enter לשורה חדשה)"></textarea>
+    <textarea id="input" placeholder="כתוב הודעה…  (Enter לשליחה · Shift+Enter לשורה חדשה)"></textarea>
     <button class="btn primary" id="btn-send">שלח</button>
   </div>
   <div class="jarvis-voicebar" id="voicebar" hidden>
@@ -92,31 +92,17 @@
 
 <div class="jarvis-modal-backdrop hidden" id="settings-modal">
   <div class="jarvis-modal">
-    <h2>הגדרות חיבור JARVIS</h2>
+    <h2>הגדרות חיבור לצ'אט AI</h2>
+    <p class="jarvis-modal-hint">הצ'אט מחובר תמיד ל-n8n Cloud (הרשת שלכם, לא Docker מקומי).</p>
     <div class="jarvis-field">
-      <label>יעד</label>
-      <div class="modes">
-        <label><input type="radio" name="cfg-target" value="local" /> n8n מקומי (Docker)</label>
-        <label><input type="radio" name="cfg-target" value="cloud" /> n8n Cloud</label>
-      </div>
-    </div>
-    <div class="jarvis-field" data-target="local">
-      <label for="cfg-local-base">כתובת n8n מקומי</label>
-      <input type="text" id="cfg-local-base" dir="ltr" placeholder="http://localhost:5680" />
-    </div>
-    <div class="jarvis-field" data-target="local">
-      <label for="cfg-local-path">Webhook path</label>
-      <input type="text" id="cfg-local-path" dir="ltr" placeholder="jarvis" />
-    </div>
-    <div class="jarvis-field" data-target="cloud">
       <label for="cfg-base">כתובת בסיס של n8n Cloud</label>
       <input type="text" id="cfg-base" dir="ltr" />
     </div>
-    <div class="jarvis-field" data-target="cloud">
+    <div class="jarvis-field">
       <label for="cfg-id">Webhook ID (Chat Trigger)</label>
       <input type="text" id="cfg-id" dir="ltr" />
     </div>
-    <div class="jarvis-field" data-target="cloud">
+    <div class="jarvis-field">
       <label>מצב</label>
       <div class="modes">
         <label><input type="radio" name="cfg-mode" value="prod" /> Production</label>

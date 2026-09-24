@@ -28,12 +28,21 @@
 .ft-routine-item .ds { font-family: var(--font-mono); font-size: 0.76rem; color: var(--cream-dim); flex: none; }
 .ft-routine-item a { color: inherit; text-decoration: none; }
 .ft-routine-item a:hover .nm { color: var(--brass-soft); }
+.ft-routine-item.is-done { border-inline-start: 2px solid var(--sage); }
+
+.ft-sets { display: flex; gap: 5px; flex: none; }
+.ft-set-dot {
+  width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid var(--line);
+  background: transparent; cursor: pointer; padding: 0; transition: background 0.12s, border-color 0.12s, transform 0.1s;
+}
+.ft-set-dot:hover { border-color: var(--sage); transform: scale(1.12); }
+.ft-set-dot.on { background: var(--sage); border-color: var(--sage); }
 
 .ft-done-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-.ft-streak {
+.ft-streak, .ft-vol {
   font-family: var(--font-mono); font-size: 0.84rem; color: var(--cream-dim);
 }
-.ft-streak b { color: var(--sage); font-size: 1.1rem; }
+.ft-streak b, .ft-vol b { color: var(--sage); font-size: 1.1rem; }
 .btn.ft-done.is-done { background: var(--sage); color: var(--bg); border-color: var(--sage); }
 
 /* ── תוכנית שבועית ── */

@@ -1,7 +1,7 @@
-// עוזר JARVIS - כל הקריאות עוברות דרך /api/jarvis/* (same-origin, פותר CORS).
+// צ'אט AI - כל הקריאות עוברות דרך /api/jarvis/* (same-origin, פותר CORS) אל n8n Cloud.
 // היסטוריית השיחה ומזהה ה-session נשמרים ב-localStorage של הדפדפן.
 
-const GREETING = "שלום, כאן JARVIS. איך אפשר לעזור?";
+const GREETING = "שלום, איך אפשר לעזור?";
 
 const $ = (s) => document.querySelector(s);
 const chatEl = $("#chat");
@@ -85,7 +85,7 @@ function fmt(text) {
 function addMsg(role, text, { save = true, error = false } = {}) {
   const wrap = document.createElement("div");
   wrap.className = "jmsg " + (role === "user" ? "user" : "bot") + (error ? " error" : "");
-  wrap.innerHTML = `<div class="avatar">${role === "user" ? "א" : "J"}</div><div class="bubble">${fmt(text)}</div>`;
+  wrap.innerHTML = `<div class="avatar">${role === "user" ? "א" : "AI"}</div><div class="bubble">${fmt(text)}</div>`;
   chatEl.appendChild(wrap);
   chatEl.scrollTop = chatEl.scrollHeight;
   if (save) {
@@ -100,7 +100,7 @@ function showTyping() {
   const wrap = document.createElement("div");
   wrap.className = "jmsg bot";
   wrap.id = "typing";
-  wrap.innerHTML = `<div class="avatar">J</div><div class="bubble"><span class="typing"><span></span><span></span><span></span></span></div>`;
+  wrap.innerHTML = `<div class="avatar">AI</div><div class="bubble"><span class="typing"><span></span><span></span><span></span></span></div>`;
   chatEl.appendChild(wrap);
   chatEl.scrollTop = chatEl.scrollHeight;
 }
@@ -150,7 +150,7 @@ async function send(text) {
     }
   } catch (err) {
     hideTyping();
-    addBot(`**שגיאת רשת מול השרת המקומי.**\n\n\`${esc(err.message)}\``, { error: true });
+    addBot(`**שגיאת רשת מול השרת.**\n\n\`${esc(err.message)}\``, { error: true });
     setStatus("bad", "אין חיבור");
     faceState("idle");
   } finally {
@@ -168,11 +168,10 @@ function setStatus(kind, text) {
 async function ping() {
   setStatus("", "בודק חיבור…");
   try {
-    const cfg = await fetch("/api/jarvis/config").then((r) => r.json());
-    const where = cfg.target === "cloud" ? "n8n Cloud" : `n8n מקומי (${(cfg.localBase || "").replace(/^https?:\/\//, "")})`;
-    setStatus("", `${where} · שלח הודעה לבדיקה`);
+    await fetch("/api/jarvis/config").then((r) => r.json());
+    setStatus("", "n8n Cloud · שלח הודעה לבדיקה");
   } catch {
-    setStatus("bad", "השרת המקומי לא נגיש");
+    setStatus("bad", "השרת לא נגיש");
   }
 }
 
@@ -209,38 +208,20 @@ $("#btn-new-chat").addEventListener("click", () => {
 
 const modal = $("#settings-modal");
 
-function applyTargetVisibility(target) {
-  document.querySelectorAll("#settings-modal [data-target]").forEach((el) => {
-    el.style.display = el.dataset.target === target ? "" : "none";
-  });
-}
-
 async function openSettings() {
   const cfg = await fetch("/api/jarvis/config").then((r) => r.json()).catch(() => null);
   if (cfg) {
-    const target = cfg.target === "cloud" ? "cloud" : "local";
-    document.querySelector(`input[name="cfg-target"][value="${target}"]`).checked = true;
-    $("#cfg-local-base").value = cfg.localBase || "http://localhost:5680";
-    $("#cfg-local-path").value = cfg.localPath || "jarvis";
     $("#cfg-base").value = cfg.base || "";
     $("#cfg-id").value = cfg.id || "";
     document.querySelector(`input[name="cfg-mode"][value="${cfg.mode || "prod"}"]`).checked = true;
-    applyTargetVisibility(target);
   }
   $("#test-result").textContent = "";
   $("#test-result").className = "jarvis-test-result";
   modal.classList.remove("hidden");
 }
 
-document.querySelectorAll('input[name="cfg-target"]').forEach((r) =>
-  r.addEventListener("change", () => applyTargetVisibility(r.value))
-);
-
 function collectCfg() {
   return {
-    target: document.querySelector('input[name="cfg-target"]:checked').value,
-    localBase: $("#cfg-local-base").value.trim(),
-    localPath: $("#cfg-local-path").value.trim(),
     base: $("#cfg-base").value.trim(),
     id: $("#cfg-id").value.trim(),
     mode: document.querySelector('input[name="cfg-mode"]:checked').value
@@ -291,7 +272,7 @@ $("#btn-test").addEventListener("click", async () => {
       rEl.className = "jarvis-test-result bad";
     }
   } catch (e) {
-    rEl.textContent = "✗ השרת המקומי לא נגיש: " + e.message;
+    rEl.textContent = "✗ השרת לא נגיש: " + e.message;
     rEl.className = "jarvis-test-result bad";
   }
 });

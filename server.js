@@ -1139,7 +1139,7 @@ app.post("/api/ambient/add", (req, res) => {
   }
 });
 
-// ---------- n8n מקומי (Docker) - JARVIS עצמו נשאר מול n8n Cloud ----------
+// ---------- n8n מקומי (Docker) - צ'אט AI עצמו נשאר מול n8n Cloud ----------
 
 const MS_N8N_COMPOSE = path.join(__dirname, "n8n", "docker-compose.yml");
 const DIRA_COMPOSE = path.join(__dirname, "..", "housing-system", "infra", "docker-compose.local.yml");
@@ -1513,15 +1513,15 @@ app.post("/api/social/linkedin/post", async (req, res) => {
   catch (err) { res.status(400).json({ error: err.message }); }
 });
 
-// ---------- עוזר JARVIS (פרוקסי ל-n8n Cloud - פותר CORS) ----------
+// ---------- צ'אט AI (פרוקסי ל-n8n Cloud - פותר CORS) ----------
 
 app.get("/api/jarvis/config", (req, res) => {
   res.json(jarvis.readConfig());
 });
 
 app.post("/api/jarvis/config", (req, res) => {
-  const { target, localBase, localPath, base, id, mode } = req.body || {};
-  res.json(jarvis.writeConfig({ target, localBase, localPath, base, id, mode }));
+  const { base, id, mode } = req.body || {};
+  res.json(jarvis.writeConfig({ base, id, mode }));
 });
 
 app.post("/api/jarvis/ask", async (req, res) => {

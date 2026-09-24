@@ -9,6 +9,35 @@
   function readLog() { try { return JSON.parse(localStorage.getItem(LOG_KEY) || "{}") || {}; } catch (e) { return {}; } }
   function writeLog(l) { try { localStorage.setItem(LOG_KEY, JSON.stringify(l)); } catch (e) {} }
   function todayKey() { return new Date().toISOString().slice(0, 10); }
+
+  // ── יומן סטים בפועל (לא רק "בוצע/לא בוצע") ──
+  var SETS_KEY = "fit_sets_v1";
+  function readSets() { try { return JSON.parse(localStorage.getItem(SETS_KEY) || "{}") || {}; } catch (e) { return {}; } }
+  function writeSets(s) { try { localStorage.setItem(SETS_KEY, JSON.stringify(s)); } catch (e) {} }
+  function targetSets(dose) {
+    var m = /(\d+)\s*(?:–\d+)?\s*סטים/.exec(dose || "");
+    return m ? parseInt(m[1], 10) : 1; // תרגיל בלי "סטים" מפורש (למשל הליכה) — יעד יחיד
+  }
+  function completedSets(dayKey, exId) {
+    var d = readSets()[dayKey];
+    return (d && d[exId]) || 0;
+  }
+  function setCompleted(dayKey, exId, n) {
+    var s = readSets();
+    if (!s[dayKey]) s[dayKey] = {};
+    s[dayKey][exId] = Math.max(0, n);
+    writeSets(s);
+  }
+  function syncDoneFromSets(dayKey, ids) {
+    var allDone = ids.length > 0 && ids.every(function (id) {
+      var e = exById(id);
+      return e && completedSets(dayKey, id) >= targetSets(e.dose);
+    });
+    var l = readLog();
+    if (allDone) l[dayKey] = true; else delete l[dayKey];
+    writeLog(l);
+    return allDone;
+  }
   function streak(log) {
     var n = 0, d = new Date();
     for (var i = 0; i < 400; i++) {
@@ -35,14 +64,24 @@
   function renderToday() {
     var r = DATA.routine;
     var card = $("ft-today-card");
-    var log = readLog();
-    var doneToday = !!log[todayKey()];
-    var items = (r.ids || []).map(function (id, i) {
+    var k = todayKey();
+    var ids = r.ids || [];
+    var doneToday = syncDoneFromSets(k, ids);
+    var totalTarget = 0, totalDone = 0;
+    var items = ids.map(function (id, i) {
       var e = exById(id);
       if (!e) return "";
-      return '<div class="ft-routine-item"><span class="n">' + (i + 1) + '</span>' +
+      var target = targetSets(e.dose);
+      var done = completedSets(k, id);
+      totalTarget += target; totalDone += Math.min(done, target);
+      var dots = "";
+      for (var s = 1; s <= target; s++) {
+        dots += '<button type="button" class="ft-set-dot' + (s <= done ? " on" : "") + '" data-id="' + esc(id) + '" data-n="' + s + '" title="סט ' + s + '"></button>';
+      }
+      return '<div class="ft-routine-item' + (done >= target ? " is-done" : "") + '"><span class="n">' + (i + 1) + '</span>' +
         '<a href="#ex-' + esc(id) + '"><span class="nm">' + esc(e.name) + "</span></a>" +
-        '<span class="ds">' + esc(e.dose) + "</span></div>";
+        '<span class="ds">' + esc(e.dose) + "</span>" +
+        '<span class="ft-sets">' + dots + "</span></div>";
     }).join("");
     card.innerHTML =
       '<div class="ft-focus">' + esc(r.name) + "</div>" +
@@ -50,14 +89,26 @@
       '<div class="ft-routine-list">' + items + "</div>" +
       '<div class="ft-done-row">' +
       '<button class="btn primary ft-done' + (doneToday ? " is-done" : "") + '" id="ft-done-btn">' +
-      (doneToday ? "✓ בוצע היום" : "סמן שהתאמנתי היום") + "</button>" +
-      '<span class="ft-streak">רצף נוכחי: <b id="ft-streak-n">' + streak(log) + "</b> ימים</span>" +
+      (doneToday ? "✓ בוצע היום" : "סמן הכל כבוצע") + "</button>" +
+      '<span class="ft-streak">רצף נוכחי: <b id="ft-streak-n">' + streak(readLog()) + "</b> ימים</span>" +
+      '<span class="ft-vol">נפח היום: <b>' + totalDone + "/" + totalTarget + "</b> סטים</span>" +
       "</div>";
+    card.querySelectorAll(".ft-set-dot").forEach(function (dot) {
+      dot.addEventListener("click", function () {
+        var id = dot.dataset.id, n = parseInt(dot.dataset.n, 10);
+        var cur = completedSets(k, id);
+        setCompleted(k, id, cur === n ? n - 1 : n); // לחיצה על הנקודה הפעילה האחרונה — ביטול
+        renderToday();
+        renderWeek();
+      });
+    });
     $("ft-done-btn").addEventListener("click", function () {
-      var l = readLog();
-      var k = todayKey();
-      if (l[k]) delete l[k]; else l[k] = true;
-      writeLog(l);
+      var allDone = ids.every(function (id) { var e = exById(id); return e && completedSets(k, id) >= targetSets(e.dose); });
+      ids.forEach(function (id) {
+        var e = exById(id);
+        if (!e) return;
+        setCompleted(k, id, allDone ? 0 : targetSets(e.dose));
+      });
       renderToday();
       renderWeek();
     });

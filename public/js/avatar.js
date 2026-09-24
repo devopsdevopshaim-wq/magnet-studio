@@ -1,4 +1,4 @@
-// דמות JARVIS — פנים מצוירות ב-SVG שמדברות, ממצמצות, מקשיבות וחושבות.
+// דמות הצ'אט — פנים מצוירות ב-SVG שמדברות, ממצמצות, מקשיבות וחושבות.
 // window.JarvisAvatar.create(el, {size}) -> { setState, attachAudio, flapWhile, destroy }
 
 (function () {
@@ -13,7 +13,7 @@
   }
 
   const SVG = `
-<svg class="jarvis-face" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="הדמות של JARVIS">
+<svg class="jarvis-face" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="הדמות של הצ'אט">
   <defs>
     <linearGradient id="jf-skin" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#ecd8b8"/><stop offset="1" stop-color="#dcc09a"/>

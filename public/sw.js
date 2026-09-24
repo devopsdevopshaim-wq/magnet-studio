@@ -2,7 +2,7 @@
 // אסטרטגיה: קליפה (app shell) ב-cache-first, נתונים תמיד מהרשת עם נפילה ל-cache.
 // המערכת עובדת גם אופליין — התוכן האחרון שנטען נשמר.
 
-const VERSION = "pnks-v5";
+const VERSION = "pnks-v6";
 const SHELL = `shell-${VERSION}`;
 const RUNTIME = `runtime-${VERSION}`;
 
