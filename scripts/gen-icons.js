@@ -80,6 +80,19 @@ function inHexagon(px, py, cx, cy, R) {
   return y <= R - x * (0.5 / COS30);
 }
 
+// מונוגרם HKDELY: אות H בענבר זוהר בתוך משושה פנימי כהה (מסגרת), בתוך משושה חיצוני פליז.
+function inH(px, py, cx, cy, hexInner) {
+  const halfW = hexInner * COS30 * 0.62;
+  const halfH = hexInner * 0.78;
+  const barT = hexInner * 0.26; // עובי הקורות
+  const x = px - cx, y = py - cy;
+  if (Math.abs(y) > halfH) return false;
+  const inLeftBar = x >= -halfW && x <= -halfW + barT;
+  const inRightBar = x <= halfW && x >= halfW - barT;
+  const inMidBar = Math.abs(y) <= barT / 2 && x >= -halfW && x <= halfW;
+  return inLeftBar || inRightBar || inMidBar;
+}
+
 // צבע של נקודה בודדת (ללא אלפא-מיזוג — ההחלטה הסופית) — מחזיר [r,g,b,a] 0..255
 function sampleColor(x, y, size, bleed) {
   const cx = size / 2;
@@ -93,7 +106,9 @@ function sampleColor(x, y, size, bleed) {
   const dy = y - cy;
   const dist = Math.sqrt(dx * dx + dy * dy);
 
-  if (inHexagon(x, y, cx, cy, hexInner)) return palette.ember;
+  if (inHexagon(x, y, cx, cy, hexInner)) {
+    return inH(x, y, cx, cy, hexInner) ? palette.ember : [34, 26, 18, 255];
+  }
   if (inHexagon(x, y, cx, cy, hexOuter)) return palette.brass;
   if (bleed) {
     const g = Math.min(1, dist / (size / 2));
