@@ -1,4 +1,4 @@
-/* DevOps Hub — לוח בקרה ל-n8n המקומי, תשתית, הרצת פרויקטים וצנרת CI. הכל מול השרת המקומי. */
+/* DevOps Hub — לוח בקרה ל-n8n Cloud, תשתית, הרצת פרויקטים וצנרת CI. הכל מול השרת המקומי. */
 (function () {
   "use strict";
   const $ = (id) => document.getElementById(id);
@@ -42,7 +42,7 @@
     const sys = s.infra.system || {};
     const mem = sys.memory || {}, disk = sys.disk || {};
     g.innerHTML = [
-      statCard("n8n מקומי", s.n8n.up ? "פעיל" : "כבוי", s.n8n.up ? "ok" : "bad",
+      statCard("n8n Cloud", s.n8n.up ? "פעיל" : "כבוי", s.n8n.up ? "ok" : "bad",
         s.n8n.up ? (s.n8n.apiOk ? "API מחובר" : s.n8n.hasKey ? "מפתח לא תקף" : "ללא מפתח API") : s.n8n.base),
       statCard("שירותים", `${svcUp}/${svcTot}`, svcUp === svcTot ? "ok" : svcUp ? "warn" : "bad", "בריאות שירותי ליבה"),
       statCard("קונטיינרים", String(ctrUp), ctrUp ? "ok" : "warn", `${(s.infra.containers || []).length} סה״כ`),
@@ -56,13 +56,11 @@
   // ---------- n8n ----------
   async function loadN8n() {
     const s = STATE.n8n;
-    $("n8n-base").value = s.base || "http://localhost:5680";
+    $("n8n-base").value = s.base || "https://haimkripisn.app.n8n.cloud";
     $("n8n-open").href = (s.base || "") + "/home/workflows";
     if (!s.apiOk) {
       $("n8n-connect").hidden = false;
       $("n8n-panel").hidden = true;
-      const emb = $("n8n-embed");
-      if (emb.src === "about:blank" && s.up) emb.src = s.base;
       return;
     }
     $("n8n-connect").hidden = true;

@@ -19,7 +19,7 @@
       </svg>
       <div>
         <h1>DevOps Hub</h1>
-        <div class="tagline">n8n מקומי · תשתית · הרצת פרויקטים · צנרת CI</div>
+        <div class="tagline">n8n Cloud · תשתית · הרצת פרויקטים · צנרת CI</div>
       </div>
     </div>
     <div class="header-meta">
@@ -78,21 +78,18 @@
     <!-- n8n -->
     <section class="do-panel" id="panel-n8n" hidden>
       <div class="do-card" id="n8n-connect" hidden>
-        <h3>חיבור ל-n8n המקומי</h3>
+        <h3>חיבור ל-n8n Cloud</h3>
         <p class="do-muted">
-          כדי לשלוט ב-workflows מכאן צריך מפתח API של n8n (חד־פעמי).
-          פותחים את n8n → <b>Settings → n8n API → Create an API key</b>, מעתיקים ומדביקים כאן.
+          כדי לשלוט ב-workflows מכאן צריך מפתח API של n8n Cloud (חד־פעמי).
+          פותחים את n8n Cloud → <b>Settings → n8n API → Create an API key</b>, מעתיקים ומדביקים כאן.
+          זה אותו חשבון n8n Cloud שמשמש את צ'אט AI.
         </p>
         <div class="do-field-row">
-          <input type="text" id="n8n-base" dir="ltr" placeholder="http://localhost:5680" />
-          <input type="password" id="n8n-key" dir="ltr" placeholder="מפתח API של n8n — נשמר במחשב בלבד" />
+          <input type="text" id="n8n-base" dir="ltr" placeholder="https://xxx.app.n8n.cloud" />
+          <input type="password" id="n8n-key" dir="ltr" placeholder="מפתח API של n8n Cloud — נשמר בשרת בלבד" />
           <button class="btn primary" id="n8n-save">שמור ובדוק</button>
         </div>
         <div class="do-inline-result" id="n8n-save-result"></div>
-        <div class="do-embed-wrap">
-          <div class="do-muted" style="margin-bottom:6px">בינתיים — עורך n8n מוטמע:</div>
-          <iframe id="n8n-embed" title="n8n" src="about:blank"></iframe>
-        </div>
       </div>
 
       <div id="n8n-panel" hidden>
