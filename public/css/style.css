@@ -68,6 +68,17 @@ a { color: inherit; }
 
 ::selection { background: var(--ember); color: #211a12; }
 
+/* פס גלילה תואם לערכת הנושא הכהה — במקום ברירת המחדל הבהירה של הדפדפן */
+* { scrollbar-width: thin; scrollbar-color: var(--brass) var(--bg-texture); }
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: var(--bg-texture); }
+::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--brass) 55%, var(--surface-2)); border-radius: 8px; border: 2px solid var(--bg-texture); }
+::-webkit-scrollbar-thumb:hover { background: var(--brass); }
+
+/* עמעום-כניסה עדין לתוכן הראשי בטעינת עמוד — מרגיש פחות "מקפיץ", יותר מלוטש */
+.shell { animation: shell-in 0.4s ease; }
+@keyframes shell-in { from { opacity: 0; } to { opacity: 1; } }
+
 :focus-visible {
   outline: 2px solid var(--tech);
   outline-offset: 3px;
@@ -285,24 +296,38 @@ code.mono {
 nav.tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 3px;
   margin-bottom: 4px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line-soft);
 }
 
 nav.tabs a {
   text-decoration: none;
-  padding: 8px 18px;
-  font-size: 0.9rem;
+  padding: 6px 14px;
+  font-size: 0.84rem;
   font-family: var(--font-display);
   letter-spacing: 0.02em;
   color: var(--cream-dim);
   clip-path: polygon(8px 0, 100% 0, 100% 100%, 0 100%, 0 8px);
   border: 1px solid transparent;
-  transition: color 0.15s, background 0.15s, border-color 0.15s;
+  border-radius: 2px;
+  transition: color 0.15s, background 0.15s, border-color 0.15s, transform 0.15s;
 }
 
-nav.tabs a:hover { color: var(--cream); background: var(--surface); border-color: var(--line); }
+nav.tabs a:hover { color: var(--cream); background: var(--surface); border-color: var(--line); transform: translateY(-1px); }
 nav.tabs a.active { color: var(--bg); background: var(--brass); font-weight: 600; box-shadow: var(--glow); }
+
+/* קיבוץ חזותי של לשוניות הניווט לפי נושא — קו מפריד עדין בגבולות הקבוצה, בלי לגעת ב-HTML.
+   הסדר הקבוע בעמודי הניווט המלא: ליבה(3) · חיי יומיום(5) · תוכן וכלים(4) · עסק(4) · אישי(6) · מערכת(3) */
+nav.tabs a:nth-of-type(3), nav.tabs a:nth-of-type(8), nav.tabs a:nth-of-type(12),
+nav.tabs a:nth-of-type(16), nav.tabs a:nth-of-type(22) {
+  margin-inline-end: 11px; position: relative;
+}
+nav.tabs a:nth-of-type(3)::after, nav.tabs a:nth-of-type(8)::after, nav.tabs a:nth-of-type(12)::after,
+nav.tabs a:nth-of-type(16)::after, nav.tabs a:nth-of-type(22)::after {
+  content: ""; position: absolute; inset-inline-end: -7px; top: 15%; bottom: 15%; width: 1px; background: var(--line);
+}
 
 section.block { margin-top: 46px; }
 
@@ -1213,7 +1238,8 @@ footer.credit {
   font-weight: 400;
   font-size: 0.8rem;
 }
-.brand .mark { color: var(--ember); }
+.brand .mark { color: var(--ember); filter: drop-shadow(0 0 6px rgba(219,139,66,0.3)); transition: filter 0.3s, transform 0.4s; }
+.brand:hover .mark { filter: drop-shadow(0 0 12px rgba(219,139,66,0.55)); transform: rotate(8deg) scale(1.06); }
 
 .top-header {
   border-bottom: 1px solid var(--line);
@@ -1313,10 +1339,13 @@ nav.tabs a.active {
   letter-spacing: 0.01em;
   border: 1px solid transparent;
 }
+.btn { transition: filter 0.15s, transform 0.12s, box-shadow 0.15s, background 0.15s, border-color 0.15s, color 0.15s; }
 .btn.primary { background: var(--ember); color: #211a12; }
-.btn.primary:hover { background: var(--ember-deep); filter: none; box-shadow: 0 0 16px -2px rgba(219,139,66,0.55); }
+.btn.primary:hover { background: var(--ember-deep); filter: none; box-shadow: 0 0 16px -2px rgba(219,139,66,0.55); transform: translateY(-1px); }
 .btn.ghost { background: none; color: var(--cream-dim); border-color: var(--line); }
-.btn.ghost:hover { border-color: var(--tech); color: var(--brass-soft); background: rgba(198,154,99,0.06); box-shadow: 0 0 10px -3px var(--tech-dim); }
+.btn.ghost:hover { border-color: var(--tech); color: var(--brass-soft); background: rgba(198,154,99,0.06); box-shadow: 0 0 10px -3px var(--tech-dim); transform: translateY(-1px); }
+.btn:active { transform: translateY(0) scale(0.97); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none !important; }
 
 /* --- צ'יפים --- */
 .chip, .maton-connect-chip {
