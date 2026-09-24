@@ -5,49 +5,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>אסטרולוגיה מלאה · HKDELY</title>
 <link rel="stylesheet" href="/css/style.css" />
-<style>
-  body { overflow: hidden; padding-bottom: 0 !important; }
-  .ext-shell { display: flex; flex-direction: column; height: calc(100vh - 46px); }
-  body.dock-collapsed .ext-shell { height: calc(100vh - 26px); }
-  .ext-bar {
-    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-    padding: 11px 20px; border-bottom: 1px solid var(--line); background: var(--surface);
-  }
-  .ext-bar .brand-mini { font-family: var(--font-display); font-weight: 500; font-size: 1.1rem; color: var(--cream); }
-  .ext-bar nav { display: flex; gap: 2px; flex-wrap: wrap; }
-  .ext-bar nav a {
-    text-decoration: none; font-size: 0.82rem; font-weight: 500; padding: 5px 12px;
-    color: var(--cream-dim); border-bottom: 2px solid transparent;
-  }
-  .ext-bar nav a:hover { color: var(--cream); }
-  .ext-bar nav a.active { color: var(--ember); border-bottom-color: var(--ember); }
-  .ext-bar .spring { margin-inline-start: auto; }
-  .ext-bar button {
-    font-family: var(--font-body); font-size: 0.76rem; padding: 6px 13px; cursor: pointer;
-    background: none; color: var(--cream-dim); border: 1px solid var(--line); border-radius: 2px;
-  }
-  .ext-bar button:hover { border-color: var(--brass); color: var(--brass-soft); }
-  iframe.ext { flex: 1; width: 100%; border: 0; background: #0f0d16; }
-  .ext-fallback { flex: 1; display: none; flex-direction: column; align-items: center; justify-content: center;
-    gap: 14px; text-align: center; padding: 30px; color: var(--cream-dim); }
-  .ext-fallback h2 { color: var(--brass-soft); font-family: var(--font-display); margin: 0; }
-  .ext-fallback a { color: var(--ember); }
-</style>
+<link rel="stylesheet" href="/css/astro-deep.css" />
 </head>
 <body>
-<div class="ext-shell">
-  <div class="ext-bar">
-    <span class="brand-mini">פענוח אסטרולוגי מלא</span>
-    <nav>
-      <a href="/">לוח בקרה</a>
-      <a href="/daily.html">מענה יומי</a>
-      <a href="/jarvis.html">JARVIS</a>
-      <a href="/jobs.html">דרושים</a>
-      <a href="/finance.html">פיננסים</a>
-      <a href="/health.html">בריאות</a>
-      <a href="/fitness.html">כושר</a>
-      <a href="/devops.html">DevOps</a>
-      <a href="/aia.html">עיצוב AIA</a>
+<div class="shell" style="max-width:1080px;">
+
+  <header class="top-header">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="24" cy="24" r="17" stroke="currentColor" stroke-width="2"/>
+        <circle cx="24" cy="12" r="2.2" fill="currentColor"/>
+        <circle cx="35" cy="24" r="2.2" fill="currentColor"/>
+        <circle cx="24" cy="36" r="2.2" fill="currentColor"/>
+        <circle cx="13" cy="24" r="2.2" fill="currentColor"/>
+        <path d="M24 12L35 24L24 36L13 24Z" stroke="currentColor" stroke-width="1.4" opacity="0.6"/>
+      </svg>
+      <div>
+        <h1>פענוח אסטרולוגי מלא</h1>
+        <div class="tagline">מפת לידה · בתים · היבטים · טרנזיטים · נומרולוגיה — מחושב באתר, לא במחשב</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <button class="btn ghost" onclick="location.href='/'">חזרה ללוח הבקרה</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <a href="/">לוח בקרה</a>
+    <a href="/daily.html">מענה יומי</a>
+    <a href="/jarvis.html">עוזר JARVIS</a>
+    <a href="/housing.html">דיור</a>
+    <a href="/jobs.html">דרושים</a>
+    <a href="/finance.html">פיננסים</a>
+    <a href="/health.html">בריאות</a>
+    <a href="/fitness.html">כושר</a>
+    <a href="/devops.html">DevOps</a>
+    <a href="/aia.html">עיצוב AIA</a>
     <a href="/torah.html">ספריית קודש</a>
     <a href="/holidays.html">הלכות חגים</a>
     <a href="/marketing.html">פרסום ושיווק</a>
@@ -55,45 +48,40 @@
     <a href="/business.html">ניהול עסק</a>
     <a href="/social.html">רשתות חברתיות</a>
     <a href="/tv.html">טלוויזיה</a>
-      <a href="/library.html">אוצר לחג</a>
-      <a href="/device.html">המכשיר</a>
-      <a href="/graphology.html">גרפולוגיה</a>
-      <a href="/astro-full.html" class="active">אסטרולוגיה</a>
-    </nav>
-    <span class="spring"></span>
-    <button onclick="window.open('/astro/full','_blank')">פתיחה בחלון</button>
+    <a href="/library.html">אוצר לחג</a>
+    <a href="/device.html">המכשיר</a>
+    <a href="/graphology.html">גרפולוגיה</a>
+    <a href="/astro-full.html" class="active">אסטרולוגיה</a>
+    <a href="/editor.html">עורך מסגרות</a>
+    <a href="/mail.html">מיילים</a>
+    <a href="/setup.html">הגדרות</a>
+    <a href="/analytics.html">נתוני שימוש</a>
+  </nav>
+
+  <div class="ad-note">
+    חישוב אסטרונומי אמיתי (לא Math.random) בשיטת Schlyter, מדויק לרמת מזל/בית/היבט. אסטרולוגיה
+    אינה שיטה מנבאת מוכחת — כלי מובנה להרהור ולבידור, פרטי לחשבון שלכם בלבד.
   </div>
-  <iframe class="ext" id="ext-frame" src="/astro/full" title="פענוח אסטרולוגי מלא"></iframe>
-  <div class="ext-fallback" id="ext-fallback">
-    <h2>האסטרולוגיה המלאה דורשת את המחשב</h2>
-    <p>המנוע האסטרולוגי המלא (אפמריס, מפת לידה מפורטת, טרנזיטים) רץ על המחשב שלך.</p>
-    <p>בטלפון, מכל מקום: <a href="/daily.html#astro">"המזל היום" במענה היומי</a> — מזל השמש והירח,
-       הטרנזיטים והיבטים, מחושבים במכשיר.</p>
-    <p style="font-size:0.82rem">לגרסה המלאה בטלפון: הרץ במחשב <code>install\גישה-מרחוק-מכל-מקום.bat</code> (Tailscale).</p>
+
+  <div id="ad-form-wrap">
+    <form class="ad-form" id="ad-form">
+      <h3>פרטי לידה</h3>
+      <div class="ad-row">
+        <label>תאריך לידה <input type="date" id="ad-date" required></label>
+        <label>שעת לידה <input type="time" id="ad-time" value="12:00"></label>
+      </div>
+      <label>עיר לידה <input type="text" id="ad-place" list="ad-cities" placeholder="לדוגמה: רחובות"></label>
+      <datalist id="ad-cities"></datalist>
+      <button class="btn primary" type="submit">חישוב המפה</button>
+      <div class="validate-result" id="ad-form-result"></div>
+    </form>
   </div>
+
+  <div id="ad-result" hidden></div>
+
 </div>
-<script>
-(function () {
-  var frame = document.getElementById("ext-frame");
-  var fb = document.getElementById("ext-fallback");
-  var ok = false;
-  frame.addEventListener("load", function () {
-    // ניווט מוצלח בתוך ה-iframe — בודקים שלא קיבלנו 404 של Vercel
-    try { if (frame.contentDocument && /404|not found/i.test(frame.contentDocument.title || "")) return; } catch (e) {}
-    ok = true;
-  });
-  setTimeout(function () {
-    if (ok) return;
-    // ניסיון ישיר: יש /astro/full?
-    fetch("/astro/full", { method: "HEAD" }).then(function (r) {
-      if (!r.ok) throw new Error();
-    }).catch(function () {
-      frame.style.display = "none";
-      fb.style.display = "flex";
-    });
-  }, 6000);
-})();
-</script>
+<div class="toast" id="toast"></div>
+<script src="/js/astro-deep.js"></script>
 <script src="/js/dockbar.js" defer></script>
 </body>
 </html>

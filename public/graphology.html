@@ -5,45 +5,38 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>גרפולוגיה · HKDELY</title>
 <link rel="stylesheet" href="/css/style.css" />
-<style>
-  body { overflow: hidden; padding-bottom: 0 !important; }
-  .ext-shell { display: flex; flex-direction: column; height: calc(100vh - 46px); }
-  body.dock-collapsed .ext-shell { height: calc(100vh - 26px); }
-  .ext-bar {
-    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-    padding: 11px 20px; border-bottom: 1px solid var(--line); background: var(--surface);
-  }
-  .ext-bar .brand-mini { font-family: var(--font-display); font-weight: 500; font-size: 1.1rem; color: var(--cream); }
-  .ext-bar nav { display: flex; gap: 2px; flex-wrap: wrap; }
-  .ext-bar nav a {
-    text-decoration: none; font-size: 0.82rem; font-weight: 500; padding: 5px 12px;
-    color: var(--cream-dim); border-bottom: 2px solid transparent;
-  }
-  .ext-bar nav a:hover { color: var(--cream); }
-  .ext-bar nav a.active { color: var(--ember); border-bottom-color: var(--ember); }
-  .ext-bar .spring { margin-inline-start: auto; }
-  .ext-bar button {
-    font-family: var(--font-body); font-size: 0.76rem; padding: 6px 13px; cursor: pointer;
-    background: none; color: var(--cream-dim); border: 1px solid var(--line); border-radius: 2px;
-  }
-  .ext-bar button:hover { border-color: var(--brass); color: var(--brass-soft); }
-  iframe.ext { flex: 1; width: 100%; border: 0; background: #12100b; }
-</style>
+<link rel="stylesheet" href="/css/graphology.css" />
 </head>
 <body>
-<div class="ext-shell">
-  <div class="ext-bar">
-    <span class="brand-mini">גרפולוגיה</span>
-    <nav>
-      <a href="/">לוח בקרה</a>
-      <a href="/daily.html">מענה יומי</a>
-      <a href="/jarvis.html">JARVIS</a>
-      <a href="/jobs.html">דרושים</a>
-      <a href="/finance.html">פיננסים</a>
-      <a href="/health.html">בריאות</a>
-      <a href="/fitness.html">כושר</a>
-      <a href="/devops.html">DevOps</a>
-      <a href="/aia.html">עיצוב AIA</a>
+<div class="shell" style="max-width:900px;">
+
+  <header class="top-header">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 34C18 20 22 14 26 14c3 0 3 4 0 8-3 4-5 8-2 8 3 0 8-6 12-10" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="36" cy="12" r="2" fill="currentColor"/>
+      </svg>
+      <div>
+        <h1>גרפולוגיה</h1>
+        <div class="tagline">שאלון מובנה — לא AI, לא צריך מחשב — עובד בכל מקום</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <button class="btn ghost" onclick="location.href='/'">חזרה ללוח הבקרה</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <a href="/">לוח בקרה</a>
+    <a href="/daily.html">מענה יומי</a>
+    <a href="/jarvis.html">עוזר JARVIS</a>
+    <a href="/housing.html">דיור</a>
+    <a href="/jobs.html">דרושים</a>
+    <a href="/finance.html">פיננסים</a>
+    <a href="/health.html">בריאות</a>
+    <a href="/fitness.html">כושר</a>
+    <a href="/devops.html">DevOps</a>
+    <a href="/aia.html">עיצוב AIA</a>
     <a href="/torah.html">ספריית קודש</a>
     <a href="/holidays.html">הלכות חגים</a>
     <a href="/marketing.html">פרסום ושיווק</a>
@@ -51,43 +44,43 @@
     <a href="/business.html">ניהול עסק</a>
     <a href="/social.html">רשתות חברתיות</a>
     <a href="/tv.html">טלוויזיה</a>
-      <a href="/library.html">אוצר לחג</a>
-      <a href="/device.html">המכשיר</a>
-      <a href="/graphology.html" class="active">גרפולוגיה</a>
-      <a href="/astro-full.html">אסטרולוגיה</a>
-    </nav>
-    <span class="spring"></span>
-    <button id="graph-open">פתיחה בחלון</button>
+    <a href="/library.html">אוצר לחג</a>
+    <a href="/device.html">המכשיר</a>
+    <a href="/graphology.html" class="active">גרפולוגיה</a>
+    <a href="/astro-full.html">אסטרולוגיה</a>
+    <a href="/editor.html">עורך מסגרות</a>
+    <a href="/mail.html">מיילים</a>
+    <a href="/setup.html">הגדרות</a>
+    <a href="/analytics.html">נתוני שימוש</a>
+  </nav>
+
+  <div class="gr-tabbar" id="gr-tabbar">
+    <button class="biz-tab active" data-panel="quiz">שאלון חדש</button>
+    <button class="biz-tab" data-panel="history">דוחות קודמים</button>
   </div>
-  <iframe class="ext" id="graph-frame" title="מערכת הגרפולוגיה" referrerpolicy="no-referrer"></iframe>
-  <div id="graph-fallback" style="display:none; flex:1; align-items:center; justify-content:center; text-align:center; padding:30px;">
-    <div style="max-width:440px; color:var(--cream-dim); line-height:1.8; font-family:var(--font-body);">
-      <div style="font-family:var(--font-display); font-size:1.2rem; color:var(--cream); margin-bottom:10px;">מערכת הגרפולוגיה דורשת את המחשב</div>
-      היא רצה ב-Docker על המחשב שלך (פורט 3737) ואינה שירות ענן.<br><br>
-      <b>באותה רשת:</b> ודא שהיא פועלת ושפורט 3737 פתוח (<code class="mono">install\allow-firewall.ps1</code>).<br>
-      <b>מכל מקום בטלפון:</b> הרץ במחשב <code class="mono">install\גישה-מרחוק-מכל-מקום.bat</code> (Tailscale),
-      ואז פתח את הפנקס מכתובת ה-Tailscale.
+
+  <section class="gr-panel" data-panel="quiz">
+    <div class="gr-note">
+      עונים לפי דגימת כתב יד אמיתית שלפניכם (או שלכם). 19 שאלות, כ-5 דקות. גרפולוגיה אינה שיטה
+      מדעית מאומתת — הדו"ח הוא כלי להרהור עצמי ובידור, לא אבחון. הכל מחושב באתר, ללא AI חיצוני.
     </div>
-  </div>
+    <label class="gr-subject">שם/כינוי לדגימה (אופציונלי) <input type="text" id="gr-subject" placeholder="לדוגמה: המכתב מדצמבר"></label>
+    <div id="gr-quiz-body"><div class="validate-result">טוען שאלון…</div></div>
+    <div class="gr-submit-row">
+      <button class="btn primary" id="gr-submit">📝 קבלת הדו"ח</button>
+      <span class="validate-result" id="gr-submit-result"></span>
+    </div>
+  </section>
+
+  <section class="gr-panel" data-panel="history" hidden>
+    <div id="gr-history-list"><div class="validate-result">טוען…</div></div>
+  </section>
+
+  <div id="gr-report" hidden></div>
+
 </div>
-<script>
-  // הכתובת חייבת להיות של המחשב שמריץ את השרת — לא "localhost" (שבטלפון מצביע על הטלפון עצמו).
-  (function () {
-    var host = location.hostname || "localhost";
-    var url = location.protocol + "//" + host + ":3737/";
-    var frame = document.getElementById("graph-frame");
-    var fallback = document.getElementById("graph-fallback");
-    frame.src = url;
-    document.getElementById("graph-open").addEventListener("click", function () { window.open(url, "_blank"); });
-    // אם ה-iframe לא נטען תוך 6ש' (פורט חסום / השירות כבוי) — מציגים הסבר
-    var ok = false;
-    frame.addEventListener("load", function () { ok = true; });
-    fetch(url + "api/health", { mode: "no-cors" }).catch(function () {});
-    setTimeout(function () {
-      if (!ok) { frame.style.display = "none"; fallback.style.display = "flex"; }
-    }, 6000);
-  })();
-</script>
+<div class="toast" id="toast"></div>
+<script src="/js/graphology.js"></script>
 <script src="/js/dockbar.js" defer></script>
 </body>
 </html>

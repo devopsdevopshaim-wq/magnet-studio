@@ -1573,6 +1573,63 @@ app.get("/api/astro/reading", (req, res) => {
   }
 });
 
+// ---------- פענוח אסטרולוגי מלא (מנוע עומק — מפת לידה, בתים, היבטים, נומרולוגיה) ----------
+// פר-חשבון: כל משתמש רשום מזין את פרטי הלידה שלו-עצמו ומקבל את המפה שלו, נפרד מהבעלים.
+app.get("/api/astro/deep/config", (req, res) => {
+  const cfg = astroConfig.readAstroConfig(baseDirFor(req));
+  res.json({
+    configured: !!cfg,
+    birthDate: cfg?.birthDate || null, birthTime: cfg?.birthTime || null, birthPlace: cfg?.birthPlace || null,
+    lat: cfg?.lat ?? null, lon: cfg?.lon ?? null, tzOffsetMinutes: cfg?.tzOffsetMinutes ?? null,
+    cities: Object.keys(astroConfig.CITIES)
+  });
+});
+app.post("/api/astro/deep/config", (req, res) => {
+  try {
+    const saved = astroConfig.writeAstroConfig(req.body || {}, baseDirFor(req));
+    res.json({ ok: true, birthDate: saved.birthDate, birthTime: saved.birthTime, birthPlace: saved.birthPlace });
+  } catch (err) { res.status(400).json({ ok: false, error: err.message }); }
+});
+// ---------- גרפולוגיה — שאלון מבנה דטרמיניסטי (לא AI, לא n8n) — פר-חשבון ----------
+const graphologyEngine = require("./lib/graphologyEngine");
+app.get("/api/graphology/questionnaire", (req, res) => {
+  res.json(graphologyEngine.questionnaireSchema(req.query.lang === "en" ? "en" : "he"));
+});
+app.post("/api/graphology/analyze", (req, res) => {
+  try {
+    const { answers, lang, subjectLabel } = req.body || {};
+    const report = graphologyEngine.runAnalysis(answers, lang === "en" ? "en" : "he");
+    const entry = graphologyEngine.saveToHistory(baseDirFor(req), { subjectLabel, lang, answers, report });
+    res.json({ id: entry.id, report });
+  } catch (err) { res.status(400).json({ error: err.message }); }
+});
+app.get("/api/graphology/history", (req, res) => {
+  res.json({ history: graphologyEngine.listHistory(baseDirFor(req)) });
+});
+app.get("/api/graphology/history/:id", (req, res) => {
+  const e = graphologyEngine.getHistoryEntry(baseDirFor(req), req.params.id);
+  if (!e) return res.status(404).json({ error: "לא נמצא" });
+  res.json(e);
+});
+app.delete("/api/graphology/history/:id", (req, res) => {
+  res.json(graphologyEngine.deleteHistoryEntry(baseDirFor(req), req.params.id));
+});
+
+app.get("/api/astro/deep/reading", (req, res) => {
+  try {
+    const cfg = astroConfig.readAstroConfig(baseDirFor(req));
+    if (!cfg) return res.status(400).json({ error: "צריך להזין פרטי לידה קודם" });
+    const Astro = require("./lib/astroDeepEngine");
+    const [y, m, d] = cfg.birthDate.split("-").map(Number);
+    const [hh, mm] = cfg.birthTime.split(":").map(Number);
+    const tzOffset = Number.isFinite(cfg.tzOffsetMinutes) ? cfg.tzOffsetMinutes / 60 : astroConfig.israelTzOffsetMinutes(cfg.birthDate) / 60;
+    const natal = Astro.chart({ year: y, month: m, day: d, hour: hh, minute: mm, tzOffset, lat: cfg.lat, lon: cfg.lon, place: cfg.birthPlace });
+    const now = new Date();
+    const tr = Astro.transits(natal, now);
+    res.json({ natal, transits: tr, birthPlace: cfg.birthPlace, birthDate: cfg.birthDate, birthTime: cfg.birthTime });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
 // ---------- כושר יומי — ספריית תרגילים + תוכנית שבועית ----------
 
 let _fitnessCache = null;

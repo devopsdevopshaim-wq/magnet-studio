@@ -1,0 +1,59 @@
+.ad-note { font-size: 0.8rem; color: var(--cream-dim); line-height: 1.7; margin: 4px 0 20px; max-width: 720px; }
+
+.ad-form {
+  max-width: 460px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+  padding: 22px; box-shadow: var(--shadow-deep);
+}
+.ad-form h3 { font-family: var(--font-display); margin: 0 0 14px; color: var(--brass-soft); }
+.ad-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.ad-form label { display: block; font-size: 0.8rem; color: var(--cream-dim); margin-bottom: 12px; flex: 1; min-width: 160px; }
+.ad-form input {
+  display: block; width: 100%; margin-top: 5px; background: var(--surface-2); color: var(--cream);
+  border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; font-family: var(--font-body); font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+/* ---------- תוצאה ---------- */
+.ad-hero { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 24px; }
+.ad-hero-card {
+  background: linear-gradient(160deg, var(--surface-2), var(--surface)); border: 1px solid var(--line);
+  border-radius: 14px; padding: 18px; text-align: center; animation: hol-in 0.5s ease backwards;
+}
+.ad-hero-card:nth-child(1) { animation-delay: 0.02s; } .ad-hero-card:nth-child(2) { animation-delay: 0.08s; }
+.ad-hero-card:nth-child(3) { animation-delay: 0.14s; } .ad-hero-card:nth-child(4) { animation-delay: 0.2s; }
+.ad-hero-card .glyph { font-size: 2.2rem; margin-bottom: 6px; display: block; }
+.ad-hero-card .lbl { font-size: 0.74rem; color: var(--cream-dim); text-transform: uppercase; letter-spacing: 0.05em; }
+.ad-hero-card .val { font-family: var(--font-display); font-size: 1.3rem; color: var(--brass-soft); margin: 4px 0 2px; }
+.ad-hero-card .sub { font-size: 0.76rem; color: var(--cream-dim); }
+
+.ad-section { margin-bottom: 26px; }
+.ad-section h3 { font-family: var(--font-display); font-size: 1.05rem; color: var(--brass-soft); margin: 0 0 12px; }
+
+.ad-planets { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.ad-planet-row {
+  display: flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--line);
+  border-radius: 10px; padding: 10px 14px; transition: transform 0.15s, border-color 0.15s;
+}
+.ad-planet-row:hover { transform: translateY(-2px); border-color: var(--brass); }
+.ad-planet-row .g { font-size: 1.3rem; width: 28px; text-align: center; color: var(--ember); }
+.ad-planet-row .info { flex: 1; }
+.ad-planet-row .name { font-size: 0.84rem; color: var(--cream); font-weight: 600; }
+.ad-planet-row .detail { font-size: 0.74rem; color: var(--cream-dim); }
+.ad-planet-row .retro { color: var(--danger); font-size: 0.7rem; }
+
+.ad-aspects { display: flex; flex-direction: column; gap: 6px; }
+.ad-aspect-row {
+  display: flex; align-items: center; gap: 10px; font-size: 0.82rem; padding: 8px 12px;
+  background: var(--surface-2); border-radius: 8px; border-inline-start: 3px solid var(--line);
+}
+.ad-aspect-row.tone-harmon { border-inline-start-color: var(--sage); }
+.ad-aspect-row.tone-metah { border-inline-start-color: var(--danger); }
+.ad-aspect-row .glyph { color: var(--brass-soft); font-size: 1rem; width: 20px; text-align: center; }
+.ad-aspect-row .orb { margin-inline-start: auto; font-family: var(--font-mono); color: var(--cream-dim); font-size: 0.72rem; }
+
+.ad-num-grid { display: flex; gap: 14px; flex-wrap: wrap; }
+.ad-num-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 22px; text-align: center; min-width: 130px; }
+.ad-num-card .n { font-family: var(--font-mono); font-size: 1.8rem; color: var(--ember); font-weight: 700; }
+.ad-num-card .m { font-size: 0.78rem; color: var(--cream-dim); margin-top: 4px; }
+
+.ad-actions { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
