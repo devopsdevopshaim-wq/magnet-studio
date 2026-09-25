@@ -1,6 +1,7 @@
-/* fx-neural.js — רקע "רשת עצבים" חי מאחורי כל עמוד: נקודות מחוברות בקווי אור, שנעות לאט
- * ומגיבות לתנועת העכבר — כמו מסך שקולט אותך (בהשראת Lucy / רקעי shader). קנבס 2D קליל,
- * לא WebGL, נטען פעם אחת דרך dockbar.js. מכבד prefers-reduced-motion ומצטמצם במסכים קטנים.
+/* fx-neural.js — רקע "רשת עצבים" חי מאחורי כל עמוד: נקודות זוהרות מחוברות בקווי אור, שנעות
+ * לאט ומגיבות לתנועת העכבר — האלמנט החזותי המרכזי של המראה ה"הייטק" (לא רק אקצנט נדיר).
+ * קנבס 2D קליל, לא WebGL, נטען פעם אחת דרך dockbar.js. מכבד prefers-reduced-motion ומצטמצם
+ * במסכים קטנים.
  */
 (function () {
   "use strict";
@@ -13,13 +14,13 @@
     var canvas = document.createElement("canvas");
     canvas.id = "fx-neural";
     canvas.setAttribute("aria-hidden", "true");
-    canvas.style.cssText = "position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0.75;";
+    canvas.style.cssText = "position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0.92;";
     document.body.appendChild(canvas);
     var ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    var TECH = "47,227,255";   // var(--tech) — אקצנט ציאן טכנולוגי
-    var BRASS = "198,154,99";  // var(--brass) — נקודה חמה מדי פעם
+    var TECH = "62,198,255";   // var(--brass) — הציאן-כחול הראשי של המערכת
+    var BRASS = "0,212,255";   // var(--ember) — כחול חשמלי, נקודה בהירה יותר מדי פעם
 
     var W = 0, H = 0, DPR = 1;
     function resize() {
@@ -41,7 +42,7 @@
     var pts = [];
     function seed() {
       var area = innerWidth * innerHeight;
-      var count = isTouch ? Math.min(34, Math.floor(area / 30000)) : Math.min(80, Math.floor(area / 16000));
+      var count = isTouch ? Math.min(46, Math.floor(area / 24000)) : Math.min(120, Math.floor(area / 12000));
       pts = [];
       for (var i = 0; i < count; i++) {
         pts.push({
@@ -60,7 +61,7 @@
       if (running) requestAnimationFrame(step);
     });
 
-    var MAXD = 125;
+    var MAXD = 150;
     function step() {
       if (!running) return;
       ctx.clearRect(0, 0, W, H);
@@ -92,7 +93,7 @@
           var ddx = pa.x - pb.x, ddy = pa.y - pb.y;
           var dist = Math.sqrt(ddx * ddx + ddy * ddy);
           if (dist < maxD) {
-            var op = (1 - dist / maxD) * 0.32;
+            var op = (1 - dist / maxD) * 0.5;
             ctx.strokeStyle = "rgba(" + TECH + "," + op.toFixed(3) + ")";
             ctx.lineWidth = DPR;
             ctx.beginPath(); ctx.moveTo(pa.x, pa.y); ctx.lineTo(pb.x, pb.y); ctx.stroke();
@@ -101,8 +102,12 @@
       }
       for (var k = 0; k < pts.length; k++) {
         var pt = pts[k];
-        ctx.fillStyle = "rgba(" + (pt.warm ? BRASS : TECH) + ",0.85)";
+        var col = pt.warm ? BRASS : TECH;
+        ctx.shadowColor = "rgba(" + col + ",0.9)";
+        ctx.shadowBlur = 6 * DPR;
+        ctx.fillStyle = "rgba(" + col + ",0.95)";
         ctx.beginPath(); ctx.arc(pt.x, pt.y, pt.r, 0, Math.PI * 2); ctx.fill();
+        ctx.shadowBlur = 0;
       }
 
       requestAnimationFrame(step);

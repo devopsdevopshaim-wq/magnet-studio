@@ -103,6 +103,16 @@
     $("gr-report").hidden = false;
     $("gr-report").scrollIntoView({ behavior: "smooth", block: "start" });
     $("gr-print").addEventListener("click", () => window.print());
+
+    // מאפשר לכפתור "שתף" (share.js) לשלוח את הדו"ח בפועל, לא רק כותרת העמוד
+    window.__shareContent = () => {
+      const dims = (report.dimensions || []).map((d) => `${d.label}: ${d.score} — ${d.short}`).join("\n");
+      const sections = Object.values(report.sections || {}).map((s) => `${s.title}\n${s.body}`).join("\n\n");
+      return {
+        subject: `דו"ח גרפולוגיה — ${report.archetype?.name || ""}`,
+        text: `${report.disclaimer}\n\n${report.archetype?.name || ""}\n${report.archetype?.blurb || ""}\n\n${report.headline}\n\n${dims}\n\n${sections}`
+      };
+    };
   }
 
   // ---------- היסטוריה ----------

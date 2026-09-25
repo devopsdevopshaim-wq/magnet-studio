@@ -1,0 +1,76 @@
+/* share.css — כפתור "שתף" צף + מודל שליחה במייל/וואטסאפ. עוקב אחרי טוקני style.css (--brass/--tech וכו'). */
+
+#share-fab {
+  position: fixed;
+  bottom: 58px;
+  inset-inline-start: 16px;
+  z-index: 9997;
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--brass);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--tech-glow, 0 0 14px rgba(47,227,255,0.45));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.15s, border-color 0.15s;
+}
+#share-fab:hover { border-color: var(--brass); transform: scale(1.08); }
+
+#share-backdrop {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(2, 6, 14, 0.65);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+#share-backdrop[hidden] { display: none; }
+
+.share-modal {
+  width: 100%; max-width: 420px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px 22px 22px;
+  box-shadow: var(--shadow-deep);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.share-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.share-head h3 { font-family: var(--font-display); font-size: 1.1rem; color: var(--cream); margin: 0; }
+.share-x {
+  background: none; border: none; color: var(--cream-dim); font-size: 1rem; cursor: pointer;
+  width: 28px; height: 28px; border-radius: 50%;
+}
+.share-x:hover { background: var(--surface-2); color: var(--cream); }
+
+.share-tabs { display: flex; gap: 8px; margin-bottom: 14px; }
+.share-tab {
+  flex: 1; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line);
+  background: var(--surface-2); color: var(--cream-dim); font-size: 0.86rem; cursor: pointer;
+  transition: all 0.15s;
+}
+.share-tab.active { background: var(--brass); border-color: var(--brass); color: #04101c; font-weight: 700; }
+
+.share-field { margin-bottom: 12px; }
+.share-field label { display: block; font-size: 0.78rem; color: var(--cream-dim); margin-bottom: 4px; }
+.share-field input, .share-field textarea {
+  width: 100%; background: var(--surface-2); color: var(--cream);
+  border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px;
+  font-family: var(--font-body); font-size: 0.9rem; box-sizing: border-box;
+  resize: vertical;
+}
+.share-field input:focus-visible, .share-field textarea:focus-visible { outline: 2px solid var(--ember); outline-offset: 1px; }
+
+.share-result { font-size: 0.82rem; min-height: 1.2em; margin-bottom: 10px; color: var(--cream-dim); }
+.share-result.ok { color: var(--sage); }
+.share-result.bad { color: var(--danger); }
+
+.share-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+@media (max-width: 480px) {
+  #share-fab { bottom: 64px; inset-inline-start: 10px; width: 42px; height: 42px; }
+}

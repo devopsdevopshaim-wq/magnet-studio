@@ -885,6 +885,11 @@ app.get("/api/email-account/recent", async (req, res) => {
   try { res.json(await emailAccounts.recentMessages(baseDirFor(req), Math.min(parseInt(req.query.limit, 10) || 15, 50))); }
   catch (err) { res.status(400).json({ error: err.message }); }
 });
+// שולח מייל מהתיבה המחוברת — הבסיס לכפתור "שתף" (מייל/וואטסאפ) שבכל לשונית.
+app.post("/api/email-account/send", async (req, res) => {
+  try { res.json(await emailAccounts.sendMail(baseDirFor(req), req.body || {})); }
+  catch (err) { res.status(400).json({ error: err.message }); }
+});
 
 // ---------- פס תחתון: חדשות רצות + המלצת יום + טראק מוזיקה ----------
 

@@ -109,6 +109,15 @@
 
     $("ad-edit").addEventListener("click", () => { $("ad-form-wrap").hidden = false; $("ad-result").hidden = true; });
     $("ad-print").addEventListener("click", () => window.print());
+
+    // מאפשר לכפתור "שתף" (share.js) לשלוח את המפה בפועל, לא רק כותרת העמוד
+    window.__shareContent = () => {
+      const planets = BODY_ORDER.map((k) => n.bodies[k] ? `${n.bodies[k].name}: ${n.bodies[k].formatted} · בית ${n.bodies[k].house}` : "").filter(Boolean).join("\n");
+      return {
+        subject: `מפת לידה — ${esc(data.birthDate)} ${esc(data.birthPlace)}`,
+        text: `שמש: ${n.sun.signName} ${n.sun.formatted}\nירח: ${n.moon.signName} ${n.moon.formatted}\nעולה: ${n.ascendant.signName} ${n.ascendant.formatted}\nרום השמיים: ${n.midheaven.signName} ${n.midheaven.formatted}\n\n${planets}\n\nמבוסס על: ${data.birthDate} ${data.birthTime}, ${data.birthPlace}.`
+      };
+    };
   }
 
   $("ad-form").addEventListener("submit", async (e) => {

@@ -1,40 +1,40 @@
 @import url("https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Assistant:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
 
 :root {
-  /* "חדר עבודה בערב" — אור נר על עץ אגוז ונייר עתיק. כל גוון ניטרלי מוסט לחום. */
-  --bg: #1b1611;            /* אגוז כהה בצל */
-  --bg-texture: #211a14;
-  --surface: #241d16;       /* פאנל מוגבה, חום עמוק */
-  --surface-2: #2c231a;     /* פאנל מודגש */
-  --parchment: #e7dbc2;     /* נייר מיושן */
+  /* "חדר בקרה הייטק" — כחול עמוק, זכוכית כהה, קווי אור ציאן. החלפה מלאה מהפלטה החמה
+     הקודמת ("חדר עבודה בערב") לבקשת הבעלים: מראה טכנולוגי, לא חם/עתיק. */
+  --bg: #060a14;             /* כחול-שחור עמוק */
+  --bg-texture: #08101f;
+  --surface: rgba(11, 21, 38, 0.82);        /* פאנל מוגבה, כחול-נייבי כהה — שקוף חלקית, "זכוכית" מעל רשת הנקודות */
+  --surface-2: rgba(16, 31, 56, 0.86);      /* פאנל מודגש */
+  --parchment: #d9e6f5;      /* "נייר דיגיטלי" בהיר — ברירת מחדל; לשוניות עם עיצוב ייעודי (תנ"ך) דורסות מקומית */
 
-  --brass: #c69a63;         /* פליז עתיק — אקצנט ראשי, קווים, סימנים */
-  --brass-soft: #ddc39a;
-  --ember: #db8b42;         /* גחלת/להבה — מצב פעיל, קשת האופק */
-  --ember-deep: #b06a2c;
-  --sage: #8ba07c;          /* נקודת נגד קרירה יחידה — תקין/רגוע, שמיים */
-  --accent-warm: #e0a34a;   /* ענבר לאזהרות רכות */
+  --brass: #3ec6ff;          /* אקצנט ראשי — ציאן-כחול, קווים וסימנים (היה פליז) */
+  --brass-soft: #8fdcff;
+  --ember: #00d4ff;          /* מצב פעיל / הדגשה חדה — כחול חשמלי (היה גחלת) */
+  --ember-deep: #0090b8;
+  --sage: #4ee0b0;           /* נקודת-נגד — תקין/רגוע, ירוק-טורקיז טכנולוגי */
+  --accent-warm: #f0b429;    /* ענבר לאזהרות רכות — נשאר חם בכוונה, ניגוד לאזהרה */
 
-  --cream: #f1e7d4;         /* טקסט ראשי — לבן־שבור חמים, כמו אור נר */
-  --cream-dim: #a3927a;     /* טקסט משני — חום־בז' */
+  --cream: #e6f1fb;          /* טקסט ראשי — לבן-כחלחל קריר, כמו מסך */
+  --cream-dim: #7f93ab;      /* טקסט משני — כחול-אפור */
 
-  --line: rgba(198, 154, 99, 0.16);   /* קו שיער פליז */
-  --line-soft: rgba(198, 154, 99, 0.09);
-  --success: #8ba07c;
-  --danger: #c9564c;        /* לבנה עמומה, לא צעקנית */
+  --line: rgba(62, 198, 255, 0.18);   /* קו שיער ציאן */
+  --line-soft: rgba(62, 198, 255, 0.09);
+  --success: #4ee0b0;
+  --danger: #ff5470;         /* אדום-ורוד בהיר יותר — ניגוד לרקע הכהה החדש */
 
-  --shadow-deep: 0 16px 44px -16px rgba(0, 0, 0, 0.62);
-  --shadow-soft: 0 8px 24px -12px rgba(0, 0, 0, 0.5);
-  /* השם --glow נשמר לתאימות, אך עכשיו זו רק הדגשת מסגרת רכה — בלי זוהר */
-  --glow: 0 0 0 1px rgba(198, 154, 99, 0.35);
-  --glow-warm: 0 0 0 1px rgba(219, 139, 66, 0.4);
+  --shadow-deep: 0 16px 44px -16px rgba(0, 0, 0, 0.7);
+  --shadow-soft: 0 8px 24px -12px rgba(0, 0, 0, 0.55);
+  --glow: 0 0 0 1px rgba(62, 198, 255, 0.4);
+  --glow-warm: 0 0 0 1px rgba(0, 212, 255, 0.45);
 
   --radius-card: 3px;
 
-  /* אקצנט טכנולוגי משני — למצבי "מערכת חיה" (סטטוס, פוקוס, קו-סריקה). נשאר נדיר ומכוון, לא מחליף את הפליז. */
+  /* --tech נשאר, אך כעת הוא הליבה של הפלטה כולה — לא אקצנט נדיר. */
   --tech: #2fe3ff;
   --tech-dim: rgba(47, 227, 255, 0.35);
-  --tech-glow: 0 0 14px rgba(47, 227, 255, 0.45);
+  --tech-glow: 0 0 14px rgba(47, 227, 255, 0.55);
 
   /* Frank Ruhl Libre = הסריף הספרותי של העברית · Assistant = גוף הומניסטי · IBM Plex Mono = נתונים */
   --font-display: "Frank Ruhl Libre", "David Libre", Georgia, serif;
@@ -1432,3 +1432,11 @@ h1, h2 { line-height: 1.25; }
 .mkt-mini-row .up, #market-mood .up { color: var(--sage); }
 .mkt-mini-row .down, #market-mood .down { color: var(--danger); }
 #market-mood b { color: var(--cream); }
+
+/* ---------- זכוכית הייטק: מטשטש את רשת הנקודות הזזה (fx-neural.js) מבעד לפאנלים ---------- */
+.panel, .block, .card, .ft-card, .do-card, .gr-group, .gr-archetype, .mail-account-card,
+.mail-item, .mail-reader, .ft-ex, .biz-card, .toast, .modal, .jarvis-modal, .do-modal-box,
+[class$="-card"], [class*="-card "] {
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
