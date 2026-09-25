@@ -1139,30 +1139,16 @@ app.post("/api/ambient/add", (req, res) => {
   }
 });
 
-// ---------- n8n מקומי (Docker) - צ'אט AI עצמו נשאר מול n8n Cloud ----------
+// ---------- תשתית Docker נלווית (לא n8n - כל n8n באפליקציה עובד מול n8n Cloud) ----------
 
-const MS_N8N_COMPOSE = path.join(__dirname, "n8n", "docker-compose.yml");
 const DIRA_COMPOSE = path.join(__dirname, "..", "housing-system", "infra", "docker-compose.local.yml");
-
-app.get("/api/n8n/local-status", async (req, res) => {
-  const [c5678, c5680] = await Promise.all([
-    dockerServices.reachable("http://localhost:5678/healthz"),
-    dockerServices.reachable("http://localhost:5680/healthz")
-  ]);
-  res.json({ n8n5678: c5678, n8n5680: c5680, dockerAvailable: await dockerServices.dockerAvailable() });
-});
-
-app.post("/api/n8n/local-up", async (req, res) => {
-  const r = await dockerServices.ensureUp(MS_N8N_COMPOSE, { healthUrl: "http://localhost:5680/healthz" });
-  res.status(r.ok ? 200 : 502).json(r);
-});
 
 app.post("/api/housing/stack-up", async (req, res) => {
   const r = await dockerServices.ensureUp(DIRA_COMPOSE, { envFile: ".env.local" });
   res.status(r.ok ? 200 : 502).json(r);
 });
 
-// ---------- DevOps Hub (n8n מקומי · infra · פרויקטים · CI) ----------
+// ---------- DevOps Hub (n8n Cloud · infra · פרויקטים · CI) ----------
 
 const devops = require("./lib/devops");
 
@@ -1834,24 +1820,6 @@ function startServer(retriesLeft = 5) {
         else if (r.skipped) console.log(`${label}: דילוג (${r.error || "לא זמין"})`);
         else console.log(`${label}: נכשל (${(r.error || "").slice(0, 120)})`);
       };
-      dockerServices
-        .ensureUp(MS_N8N_COMPOSE, { healthUrl: "http://localhost:5680/healthz" })
-        .then(logResult("n8n מקומי (5680)"))
-        .then(() =>
-          dockerServices
-            .importN8nWorkflow(
-              "magnet-studio-n8n",
-              path.join(__dirname, "n8n", "workflows", "jarvis-local.json"),
-              "jarvisLocal00001"
-            )
-            .then((r) => {
-              if (r.alreadyPresent) console.log("JARVIS Local workflow: קיים ופעיל");
-              else if (r.imported) console.log("JARVIS Local workflow: יובא והופעל (ייתכן שידרוש restart לקונטיינר)");
-              else if (r.error) console.log(`JARVIS Local workflow: ${r.error}`);
-            })
-            .catch(() => {})
-        )
-        .catch(() => {});
       dockerServices
         .ensureUp(DIRA_COMPOSE, { envFile: ".env.local" })
         .then(logResult("סטאק DiraFinder"))

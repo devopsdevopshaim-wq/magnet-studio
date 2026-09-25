@@ -660,38 +660,7 @@ document.getElementById("btn-endpoint").addEventListener("click", () => {
   toast(`הכתובת הועתקה: ${url}`);
 });
 
-// ---------- n8n מקומי (Docker) ----------
-
-async function loadN8nLocal() {
-  const el = document.getElementById("n8n-local-status");
-  if (!el) return;
-  try {
-    const s = await fetch("/api/n8n/local-status").then((r) => r.json());
-    const parts = [];
-    parts.push(`n8n ראשי (5678): ${s.n8n5678 ? "✓ פעיל" : "✗ כבוי"}`);
-    parts.push(`magnet-studio-n8n (5680): ${s.n8n5680 ? "✓ פעיל" : "✗ כבוי"}`);
-    if (!s.dockerAvailable) parts.push("· Docker Desktop לא פעיל");
-    el.textContent = parts.join("  ");
-  } catch {
-    el.textContent = "לא הצלחתי לבדוק את n8n המקומי";
-  }
-}
-
-document.getElementById("btn-n8n-open")?.addEventListener("click", () => window.open("http://localhost:5680", "_blank"));
 document.getElementById("btn-openclaw-open")?.addEventListener("click", () => window.open("http://127.0.0.1:18789/", "_blank"));
-
-document.getElementById("btn-n8n-up")?.addEventListener("click", async (e) => {
-  e.target.disabled = true;
-  e.target.textContent = "מפעיל…";
-  const r = await fetch("/api/n8n/local-up", { method: "POST" }).then((r) => r.json()).catch(() => ({ ok: false }));
-  e.target.disabled = false;
-  e.target.textContent = "הפעל n8n";
-  toast(r.ok ? "n8n המקומי הופעל" : r.error || "לא הצלחתי (Docker Desktop פתוח?)", !r.ok);
-  setTimeout(loadN8nLocal, 4000);
-});
-
-loadN8nLocal();
-setInterval(loadN8nLocal, 60000);
 
 loadApps();
 loadEvents();
