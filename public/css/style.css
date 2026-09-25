@@ -57,10 +57,13 @@ html, body {
 }
 
 body {
-  /* אור נר עמום מפינה אחת + חום נמוך מלמטה — טקסטורה כמעט בלתי נראית, לא רשת */
+  /* רקע ברירת מחדל (עמודים בלי משפחת-צבע ייעודית, ראו tab-themes.css): זוהר ציאן טכנולוגי
+     + רשת קווים עדינה — "חדר בקרה". עמודים עם class ייעודי דורסים את זה. */
   background-image:
-    radial-gradient(70ch 50ch at 82% -8%, rgba(219, 139, 66, 0.10), transparent 60%),
-    radial-gradient(60ch 60ch at 0% 108%, rgba(139, 160, 124, 0.05), transparent 55%);
+    radial-gradient(80ch 55ch at 85% -10%, rgba(47, 227, 255, 0.14), transparent 60%),
+    radial-gradient(60ch 60ch at 0% 108%, rgba(47, 227, 255, 0.07), transparent 55%),
+    repeating-linear-gradient(0deg, rgba(62, 198, 255, 0.035) 0, rgba(62, 198, 255, 0.035) 1px, transparent 1px, transparent 64px),
+    repeating-linear-gradient(90deg, rgba(62, 198, 255, 0.035) 0, rgba(62, 198, 255, 0.035) 1px, transparent 1px, transparent 64px);
   background-attachment: fixed;
 }
 

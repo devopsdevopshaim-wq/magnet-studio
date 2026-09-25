@@ -1,71 +1,132 @@
-/* tab-themes.css — לכל לשונית "משפחת צבע" משלה שמתאימה לתוכן שלה, בתוך אותה מסגרת הייטק
- * כחולה-כהה אחידה. הטכניקה: כל עמוד מקבל class על ה-body, וכאן דורסים מקומית את משתני
- * --brass/--brass-soft/--ember/--ember-deep (האקצנטים שכל קובצי ה-CSS בכל עמוד כבר משתמשים
- * בהם) — כך כל הרכיבים הקיימים (כותרות, טאב פעיל, כפתורים, מסגרות כרטיסים) מקבלים את הצבע
- * החדש אוטומטית, בלי לגעת בכל קובץ CSS בנפרד. --bg/--surface הכהים נשארים משותפים לכולם.
+/* tab-themes.css — לכל לשונית רקע וצבע אקצנט משלה, שמתאימים לתוכן שלה, בתוך אותה מסגרת
+ * הייטק כחולה-כהה אחידה (--bg/--surface משותפים לכולם).
+ *
+ * שתי שכבות לכל לשונית:
+ * 1) --brass/--brass-soft/--ember/--ember-deep — האקצנטים שכל קובצי ה-CSS הקיימים כבר
+ *    משתמשים בהם (כותרות, טאב פעיל, כפתורים, מסגרות כרטיסים) — משתנים אוטומטית בכל מקום.
+ * 2) background-image על ה-body עצמו — רקע אמיתי וניכר (זוהר/רשת/דוגמה), לא רק שינוי צבע
+ *    טקסט. זה מה שהיה חסר בסבב הקודם: משתני הצבע השפיעו על הרכיבים, אבל הרקע עצמו
+ *    (שמוגדר פעם אחת ב-style.css) נשאר אותו רקע כחול-ציאן בכל עמוד.
  */
 
-/* פיננסים + ניהול עסק — ירוק "מסוף מסחר" */
+/* פיננסים + ניהול עסק — ירוק "מסוף מסחר", רשת עולה כמו גרף מניות */
 body.theme-ledger {
   --brass: #3ecf8e; --brass-soft: #8fe8bc; --ember: #00e0a0; --ember-deep: #00a878;
+  background-image:
+    radial-gradient(70ch 50ch at 85% -8%, rgba(62, 207, 142, 0.20), transparent 60%),
+    radial-gradient(55ch 55ch at 5% 105%, rgba(0, 224, 160, 0.10), transparent 55%),
+    repeating-linear-gradient(115deg, rgba(62, 207, 142, 0.05) 0, rgba(62, 207, 142, 0.05) 1px, transparent 1px, transparent 46px);
+  background-attachment: fixed;
 }
 
-/* דיור + דרושים — כחול-אפור "מסמכים מקצועיים" */
+/* דיור + דרושים — כחול-אפור "בלופרינט אדריכלי" */
 body.theme-professional {
   --brass: #8ba3c7; --brass-soft: #c2d0e5; --ember: #5f85c4; --ember-deep: #3f5f94;
+  background-image:
+    radial-gradient(70ch 50ch at 85% -8%, rgba(139, 163, 199, 0.16), transparent 60%),
+    repeating-linear-gradient(0deg, rgba(139, 163, 199, 0.06) 0, rgba(139, 163, 199, 0.06) 1px, transparent 1px, transparent 40px),
+    repeating-linear-gradient(90deg, rgba(139, 163, 199, 0.06) 0, rgba(139, 163, 199, 0.06) 1px, transparent 1px, transparent 40px);
+  background-attachment: fixed;
 }
 
-/* עיצוב AIA + לוגו + עורך מסגרות — סגול-ורוד "סטודיו יצירתי" */
+/* עיצוב AIA + לוגו + עורך מסגרות — סגול-ורוד "סטודיו יצירתי", כתמי צבע רכים */
 body.theme-studio {
   --brass: #e066ff; --brass-soft: #f0a8ff; --ember: #ff4fd8; --ember-deep: #b82fa0;
+  background-image:
+    radial-gradient(60ch 45ch at 88% -6%, rgba(224, 102, 255, 0.24), transparent 60%),
+    radial-gradient(50ch 50ch at 4% 18%, rgba(255, 79, 216, 0.14), transparent 55%),
+    radial-gradient(55ch 50ch at 15% 105%, rgba(47, 227, 255, 0.10), transparent 55%);
+  background-attachment: fixed;
 }
 
-/* בריאות — מנטה-תכלת "קליני, רגוע" */
+/* בריאות — מנטה-תכלת "קליני, רגוע", טבעות דופק מרוכזות */
 body.theme-clinical {
   --brass: #5ee0c0; --brass-soft: #a8f0dc; --ember: #2fd4b0; --ember-deep: #1a9c82;
+  background-image:
+    radial-gradient(38ch 38ch at 50% -4%, rgba(94, 224, 192, 0.22), transparent 62%),
+    radial-gradient(60ch 46ch at 85% 15%, rgba(94, 224, 192, 0.10), transparent 60%),
+    radial-gradient(50ch 50ch at 10% 100%, rgba(47, 212, 176, 0.10), transparent 55%);
+  background-attachment: fixed;
 }
 
-/* כושר — כתום-אדום "אנרגיה" */
+/* כושר — כתום-אדום "אנרגיה", פסי תנועה אלכסוניים */
 body.theme-energy {
   --brass: #ff8a3e; --brass-soft: #ffc08f; --ember: #ff5722; --ember-deep: #c23e0f;
+  background-image:
+    radial-gradient(65ch 48ch at 88% -8%, rgba(255, 87, 34, 0.20), transparent 60%),
+    repeating-linear-gradient(-35deg, rgba(255, 138, 62, 0.055) 0, rgba(255, 138, 62, 0.055) 3px, transparent 3px, transparent 34px);
+  background-attachment: fixed;
 }
 
-/* DevOps + המכשיר — ירוק "טרמינל/מסוף" */
+/* DevOps + המכשיר — ירוק "טרמינל", scanlines אופקיים + רשת */
 body.theme-terminal {
   --brass: #3eff7a; --brass-soft: #9dffc0; --ember: #00ff66; --ember-deep: #00b347;
+  background-image:
+    radial-gradient(60ch 46ch at 85% -8%, rgba(62, 255, 122, 0.16), transparent 60%),
+    repeating-linear-gradient(0deg, rgba(62, 255, 122, 0.045) 0, rgba(62, 255, 122, 0.045) 1px, transparent 1px, transparent 5px),
+    repeating-linear-gradient(90deg, rgba(62, 255, 122, 0.03) 0, rgba(62, 255, 122, 0.03) 1px, transparent 1px, transparent 48px);
+  background-attachment: fixed;
 }
 
-/* הלכות חגים + אוצר לחג — זהב חם, בן-משפחה קליל יותר של ערכת התנ"ך */
+/* הלכות חגים + אוצר לחג — זהב חם, בן-משפחה קליל יותר של ערכת התנ"ך, זוהר נרות */
 body.theme-scripture-light {
   --brass: #e0b04a; --brass-soft: #f0d38f; --ember: #d89020; --ember-deep: #a86c10;
+  background-image:
+    radial-gradient(45ch 40ch at 12% -6%, rgba(224, 176, 74, 0.22), transparent 60%),
+    radial-gradient(45ch 40ch at 90% 8%, rgba(224, 176, 74, 0.16), transparent 60%),
+    radial-gradient(60ch 50ch at 50% 105%, rgba(216, 144, 32, 0.10), transparent 55%);
+  background-attachment: fixed;
 }
 
-/* פרסום ושיווק — ורוד-כתום בועט, "פרסומת" */
+/* פרסום ושיווק — ורוד-כתום בועט, "זרקור פרסומת" */
 body.theme-adpop {
   --brass: #ff4fa0; --brass-soft: #ff9dc8; --ember: #ff2f80; --ember-deep: #c21f5e;
+  background-image:
+    conic-gradient(from 200deg at 85% -10%, rgba(255, 79, 160, 0.22), transparent 35%),
+    radial-gradient(55ch 46ch at 6% 100%, rgba(255, 47, 128, 0.14), transparent 55%);
+  background-attachment: fixed;
 }
 
-/* רשתות חברתיות — ורוד-כתום חם, מרובה-פלטפורמות */
+/* רשתות חברתיות — בועות חופפות רכות, ורוד-כתום מרובה-פלטפורמות */
 body.theme-social {
   --brass: #ff6fa8; --brass-soft: #ffb3d1; --ember: #ffb347; --ember-deep: #d98a1f;
+  background-image:
+    radial-gradient(30ch 30ch at 82% -2%, rgba(255, 111, 168, 0.20), transparent 65%),
+    radial-gradient(26ch 26ch at 62% 6%, rgba(255, 179, 71, 0.16), transparent 65%),
+    radial-gradient(34ch 34ch at 8% 96%, rgba(255, 111, 168, 0.12), transparent 60%);
+  background-attachment: fixed;
 }
 
-/* טלוויזיה — אדום-שחור "קולנוע" */
+/* טלוויזיה — אדום-שחור "קולנוע", זרקור במה מלמעלה + וינייטה */
 body.theme-cinema {
   --brass: #ff3b3b; --brass-soft: #ff8f8f; --ember: #e60000; --ember-deep: #a80000;
+  background-image:
+    radial-gradient(55ch 60ch at 50% -20%, rgba(255, 59, 59, 0.22), transparent 55%),
+    radial-gradient(90ch 60ch at 50% 120%, rgba(0, 0, 0, 0.5), transparent 60%);
+  background-attachment: fixed;
 }
 
-/* נתוני שימוש — אינדיגו "ויזואליזציית נתונים" */
+/* נתוני שימוש — אינדיגו "ויזואליזציית נתונים", עמודות גרף עדינות */
 body.theme-data {
   --brass: #7a8fff; --brass-soft: #b0bcff; --ember: #5566ff; --ember-deep: #3344cc;
+  background-image:
+    radial-gradient(65ch 48ch at 85% -8%, rgba(122, 143, 255, 0.18), transparent 60%),
+    repeating-linear-gradient(90deg, rgba(122, 143, 255, 0.06) 0, rgba(122, 143, 255, 0.06) 14px, transparent 14px, transparent 58px);
+  background-attachment: fixed;
 }
 
-/* הגדרות — נייטרלי, כמעט ללא סטייה מהבסיס */
+/* הגדרות — נייטרלי, כמעט ללא סטייה מהבסיס, וינייטה רכה בלבד */
 body.theme-neutral {
   --brass: #9fb0c7; --brass-soft: #c8d4e2; --ember: #7d93ad; --ember-deep: #5a7288;
+  background-image: radial-gradient(70ch 55ch at 85% -8%, rgba(159, 176, 199, 0.10), transparent 60%);
+  background-attachment: fixed;
 }
 
-/* צ'אט AI — ציאן-ירוק "מסוף בינה" */
+/* צ'אט AI — ציאן-ירוק "מסוף בינה", scanlines + רשת עדינה */
 body.theme-console {
   --brass: #39ff8f; --brass-soft: #9dffc7; --ember: #00e5ff; --ember-deep: #00a8ba;
+  background-image:
+    radial-gradient(50ch 60ch at 50% -12%, rgba(0, 229, 255, 0.18), transparent 58%),
+    repeating-linear-gradient(0deg, rgba(57, 255, 143, 0.04) 0, rgba(57, 255, 143, 0.04) 1px, transparent 1px, transparent 6px);
+  background-attachment: fixed;
 }

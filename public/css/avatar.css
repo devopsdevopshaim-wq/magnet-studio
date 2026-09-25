@@ -52,8 +52,8 @@
 
 /* גדלים */
 .jarvis-face-wrap { position: relative; display: inline-flex; }
-.jarvis-face-wrap.lg { width: 190px; height: 190px; }
-.jarvis-face-wrap.sm { width: 54px; height: 54px; }
+.jarvis-face-wrap.lg { width: 190px; height: 209px; }
+.jarvis-face-wrap.sm { width: 54px; height: 59px; }
 
 .jarvis-face-caption {
   text-align: center;
