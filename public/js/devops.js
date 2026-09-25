@@ -244,6 +244,72 @@
     ].join("") + `</div>`;
   }
 
+  // ---------- אשף AI ----------
+  let wizMessages = [];
+  let wizSessionId = "devops-wizard-" + Date.now();
+  let wizBusy = false;
+
+  function wizRenderThread() {
+    $("wiz-thread").innerHTML = wizMessages.map((m) => `
+      <div class="wiz-msg ${m.role}"><div class="b">${esc(m.text)}</div></div>
+    `).join("");
+    $("wiz-thread").scrollTop = $("wiz-thread").scrollHeight;
+  }
+
+  async function wizSend() {
+    const input = $("wiz-input");
+    const text = input.value.trim();
+    if (!text || wizBusy) return;
+    wizMessages.push({ role: "user", text });
+    wizRenderThread();
+    input.value = "";
+    wizBusy = true;
+    const btn = $("wiz-send");
+    btn.disabled = true; btn.textContent = "חושב…";
+    try {
+      const r = await fetch("/api/devops/wizard/ask", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: wizMessages, sessionId: wizSessionId })
+      }).then((x) => x.json());
+      if (!r.ok) {
+        wizMessages.push({ role: "assistant", text: "✗ " + (r.error || "שגיאה בפנייה לצ'אט AI") });
+        wizRenderThread();
+      } else if (r.done) {
+        wizMessages.push({ role: "assistant", text: "✓ הכנתי מפרט מלא — ראו למטה." });
+        wizRenderThread();
+        $("wiz-result-title").textContent = r.json.title || "התוצאה";
+        $("wiz-json").textContent = JSON.stringify(r.json, null, 2);
+        $("wiz-result").hidden = false;
+        $("wiz-result").scrollIntoView({ behavior: "smooth", block: "nearest" });
+      } else {
+        wizMessages.push({ role: "assistant", text: r.question });
+        wizRenderThread();
+      }
+    } catch (err) {
+      wizMessages.push({ role: "assistant", text: "✗ שגיאת רשת: " + err.message });
+      wizRenderThread();
+    } finally {
+      wizBusy = false;
+      btn.disabled = false; btn.textContent = "שלח";
+      input.focus();
+    }
+  }
+  $("wiz-send").addEventListener("click", wizSend);
+  $("wiz-input").addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); wizSend(); }
+  });
+  $("wiz-copy").addEventListener("click", () => {
+    navigator.clipboard?.writeText($("wiz-json").textContent).then(() => toast("הועתק")).catch(() => toast("ההעתקה נכשלה", true));
+  });
+  $("wiz-download").addEventListener("click", () => {
+    const blob = new Blob([$("wiz-json").textContent], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = (($("wiz-result-title").textContent || "devops-spec").replace(/[\\/:*?"<>|]/g, "_")) + ".json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
   // ---------- boot ----------
   async function boot() {
     try {

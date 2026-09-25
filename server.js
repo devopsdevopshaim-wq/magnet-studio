@@ -1211,6 +1211,18 @@ app.get("/api/devops/projects/:id/pipeline", (req, res) => {
   res.json(devops.pipelineStatus(req.params.id) || { steps: [], running: false });
 });
 
+// ---------- אשף AI של DevOps — שיחה עם צ'אט AI שמכירה את מצב המחשב האמיתי, ומגיעה ל-JSON ----------
+const devopsWizard = require("./lib/devopsWizard");
+app.post("/api/devops/wizard/ask", async (req, res) => {
+  try {
+    const { messages, sessionId } = req.body || {};
+    if (!Array.isArray(messages) || !messages.length) return res.status(400).json({ ok: false, error: "אין הודעות" });
+    res.json(await devopsWizard.ask(baseDirFor(req), messages, sessionId));
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
 // ---------- סטודיו עיצוב AIA (חבילת הפקה מ-AI: קונספט · פרומפטים · סטוריבורד · וידאו) ----------
 
 const aiaStudioFactory = require("./lib/aiaStudio");

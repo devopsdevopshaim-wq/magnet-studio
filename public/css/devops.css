@@ -162,6 +162,33 @@ html[dir="rtl"] .do-toggle.on::after { transform: translateX(18px); }
 .do-modal-head button { background: none; border: none; color: var(--cream-dim); font-size: 1.1rem; cursor: pointer; }
 .do-modal-body { margin: 0; padding: 14px 16px; overflow: auto; font-family: var(--font-mono); font-size: 0.76rem; color: var(--cream-dim); line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
 
+/* אשף AI */
+.wiz-thread {
+  display: flex; flex-direction: column; gap: 8px; max-height: 340px; overflow-y: auto;
+  margin: 14px 0; padding-inline-end: 4px;
+}
+.wiz-msg { display: flex; }
+.wiz-msg .b {
+  max-width: 82%; padding: 9px 13px; border-radius: 10px; font-size: 0.88rem; line-height: 1.6;
+  white-space: pre-wrap; word-break: break-word;
+}
+.wiz-msg.user { justify-content: flex-end; }
+.wiz-msg.user .b { background: var(--brass); color: var(--bg); }
+.wiz-msg.assistant .b { background: var(--surface-2); border: 1px solid var(--line); color: var(--cream); }
+
+.wiz-composer { display: flex; gap: 10px; align-items: flex-end; }
+.wiz-composer textarea {
+  flex: 1; resize: vertical; background: var(--surface-2); color: var(--cream);
+  border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px;
+  font-family: var(--font-body); font-size: 0.9rem;
+}
+
+.wiz-json {
+  margin: 10px 0 0; padding: 14px 16px; background: var(--bg-texture); border: 1px solid var(--line);
+  border-radius: 8px; font-family: var(--font-mono); font-size: 0.78rem; color: var(--cream);
+  line-height: 1.6; overflow-x: auto; white-space: pre-wrap; word-break: break-word; max-height: 420px;
+}
+
 @media (max-width: 620px) {
   .do-wrap { padding: 0 12px 60px; }
   .do-tab { padding: 9px 11px; font-size: 0.84rem; }

@@ -59,6 +59,7 @@
 
   <div class="do-tabbar">
     <button class="do-tab active" data-panel="ops">מבט־על</button>
+    <button class="do-tab" data-panel="wizard">אשף AI</button>
     <button class="do-tab" data-panel="n8n">n8n</button>
     <button class="do-tab" data-panel="projects">פרויקטים</button>
     <button class="do-tab" data-panel="infra">תשתית</button>
@@ -73,6 +74,34 @@
       <div class="do-card" id="ops-pipeline-card" hidden>
         <h3>הרצת CI אחרונה</h3>
         <div id="ops-pipeline"></div>
+      </div>
+    </section>
+
+    <!-- אשף AI -->
+    <section class="do-panel" id="panel-wizard" hidden>
+      <div class="do-card">
+        <h3>אשף DevOps</h3>
+        <p class="do-muted">
+          תארו במילים שלכם מה אתם רוצים להקים או איזו תקלה יש לכם (למשל: "אני רוצה להקים שרת n8n
+          חדש", "יש לי תקלת תקשורת בין הקונטיינרים"). היועץ מכיר את המצב האמיתי של המחשב הזה
+          (קונטיינרים, פרויקטים, n8n) — הוא ישאל שאלות המשך לפי הצורך, ובסוף ייתן קובץ JSON מלא
+          עם צעדים לביצוע ובדיקות לאימות. פועל דרך צ'אט AI (n8n Cloud).
+        </p>
+        <div id="wiz-thread" class="wiz-thread"></div>
+        <div class="wiz-composer">
+          <textarea id="wiz-input" rows="2" placeholder="למשל: אני רוצה להקים שרת n8n נוסף לצורך בדיקות…"></textarea>
+          <button class="btn primary" id="wiz-send">שלח</button>
+        </div>
+        <div id="wiz-result" hidden>
+          <div class="do-card-head">
+            <h3 id="wiz-result-title">התוצאה</h3>
+            <div class="do-card-actions">
+              <button class="do-linkbtn" id="wiz-copy">העתק JSON</button>
+              <button class="do-linkbtn" id="wiz-download">הורדת JSON ↓</button>
+            </div>
+          </div>
+          <pre class="wiz-json" id="wiz-json"></pre>
+        </div>
       </div>
     </section>
 
