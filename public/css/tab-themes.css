@@ -1,0 +1,71 @@
+/* tab-themes.css — לכל לשונית "משפחת צבע" משלה שמתאימה לתוכן שלה, בתוך אותה מסגרת הייטק
+ * כחולה-כהה אחידה. הטכניקה: כל עמוד מקבל class על ה-body, וכאן דורסים מקומית את משתני
+ * --brass/--brass-soft/--ember/--ember-deep (האקצנטים שכל קובצי ה-CSS בכל עמוד כבר משתמשים
+ * בהם) — כך כל הרכיבים הקיימים (כותרות, טאב פעיל, כפתורים, מסגרות כרטיסים) מקבלים את הצבע
+ * החדש אוטומטית, בלי לגעת בכל קובץ CSS בנפרד. --bg/--surface הכהים נשארים משותפים לכולם.
+ */
+
+/* פיננסים + ניהול עסק — ירוק "מסוף מסחר" */
+body.theme-ledger {
+  --brass: #3ecf8e; --brass-soft: #8fe8bc; --ember: #00e0a0; --ember-deep: #00a878;
+}
+
+/* דיור + דרושים — כחול-אפור "מסמכים מקצועיים" */
+body.theme-professional {
+  --brass: #8ba3c7; --brass-soft: #c2d0e5; --ember: #5f85c4; --ember-deep: #3f5f94;
+}
+
+/* עיצוב AIA + לוגו + עורך מסגרות — סגול-ורוד "סטודיו יצירתי" */
+body.theme-studio {
+  --brass: #e066ff; --brass-soft: #f0a8ff; --ember: #ff4fd8; --ember-deep: #b82fa0;
+}
+
+/* בריאות — מנטה-תכלת "קליני, רגוע" */
+body.theme-clinical {
+  --brass: #5ee0c0; --brass-soft: #a8f0dc; --ember: #2fd4b0; --ember-deep: #1a9c82;
+}
+
+/* כושר — כתום-אדום "אנרגיה" */
+body.theme-energy {
+  --brass: #ff8a3e; --brass-soft: #ffc08f; --ember: #ff5722; --ember-deep: #c23e0f;
+}
+
+/* DevOps + המכשיר — ירוק "טרמינל/מסוף" */
+body.theme-terminal {
+  --brass: #3eff7a; --brass-soft: #9dffc0; --ember: #00ff66; --ember-deep: #00b347;
+}
+
+/* הלכות חגים + אוצר לחג — זהב חם, בן-משפחה קליל יותר של ערכת התנ"ך */
+body.theme-scripture-light {
+  --brass: #e0b04a; --brass-soft: #f0d38f; --ember: #d89020; --ember-deep: #a86c10;
+}
+
+/* פרסום ושיווק — ורוד-כתום בועט, "פרסומת" */
+body.theme-adpop {
+  --brass: #ff4fa0; --brass-soft: #ff9dc8; --ember: #ff2f80; --ember-deep: #c21f5e;
+}
+
+/* רשתות חברתיות — ורוד-כתום חם, מרובה-פלטפורמות */
+body.theme-social {
+  --brass: #ff6fa8; --brass-soft: #ffb3d1; --ember: #ffb347; --ember-deep: #d98a1f;
+}
+
+/* טלוויזיה — אדום-שחור "קולנוע" */
+body.theme-cinema {
+  --brass: #ff3b3b; --brass-soft: #ff8f8f; --ember: #e60000; --ember-deep: #a80000;
+}
+
+/* נתוני שימוש — אינדיגו "ויזואליזציית נתונים" */
+body.theme-data {
+  --brass: #7a8fff; --brass-soft: #b0bcff; --ember: #5566ff; --ember-deep: #3344cc;
+}
+
+/* הגדרות — נייטרלי, כמעט ללא סטייה מהבסיס */
+body.theme-neutral {
+  --brass: #9fb0c7; --brass-soft: #c8d4e2; --ember: #7d93ad; --ember-deep: #5a7288;
+}
+
+/* צ'אט AI — ציאן-ירוק "מסוף בינה" */
+body.theme-console {
+  --brass: #39ff8f; --brass-soft: #9dffc7; --ember: #00e5ff; --ember-deep: #00a8ba;
+}
