@@ -1,0 +1,51 @@
+/* torah-theme.css — עיצוב ייעודי ל"ספריית קודש": אזור הקריאה עצמו נראה כמו קלף/מגילה עתיקה
+ * (ניגוד מכוון לעיצוב ההייטק הכחול של שאר האתר — כמו לפתוח ספר עתיק בתוך ממשק מודרני).
+ * מסגרת הניווט/הלשוניות למעלה נשארת בעיצוב ההייטק הרגיל — רק אזור התוכן משתנה. */
+
+.tr-main {
+  background:
+    radial-gradient(ellipse at top, rgba(255,250,235,0.06), transparent 60%),
+    linear-gradient(180deg, #ede1c3, #e4d5ad 45%, #ddc99a);
+  border: 1px solid rgba(120, 90, 40, 0.35);
+  border-radius: 6px;
+  padding: 28px clamp(16px, 4vw, 48px) 60px;
+  box-shadow: inset 0 0 60px rgba(90, 60, 20, 0.18), var(--shadow-deep);
+  color: #3a2c14;
+}
+
+.tr-main .tr-grp-l,
+.tr-main .rd-label { color: #7a4e14; }
+
+.tr-main .tr-chip {
+  background: rgba(255, 250, 235, 0.5);
+  border-color: rgba(120, 90, 40, 0.3);
+  color: #5a4322;
+}
+.tr-main .tr-chip:hover { border-color: #9c6a1f; color: #3a2c14; }
+.tr-main .tr-chip.on { background: rgba(156, 106, 31, 0.18); border-color: #9c6a1f; color: #7a4e14; }
+
+.tr-main .tr-controls { border-color: rgba(120, 90, 40, 0.28); }
+.tr-main .tr-controls label { color: #5a4322; }
+.tr-main .tr-controls input, .tr-main .tr-controls select {
+  background: rgba(255, 250, 235, 0.6); color: #3a2c14; border-color: rgba(120, 90, 40, 0.3);
+}
+.tr-main .tr-check { color: #5a4322; }
+
+.tr-main .tr-tree { border-color: rgba(120, 90, 40, 0.3); }
+.tr-main .tr-node summary { color: #7a4e14; }
+.tr-main .tr-node summary:hover { background: rgba(156, 106, 31, 0.12); }
+.tr-main .tr-leaf { color: #5a4322; }
+.tr-main .tr-leaf:hover { background: rgba(156, 106, 31, 0.12); color: #3a2c14; }
+.tr-main .tr-leaf.on { background: rgba(156, 106, 31, 0.22); color: #7a4e14; }
+
+.tr-main .rd-verses { color: #2c2110; font-family: var(--font-display); }
+.tr-main .rd-verse sup { color: #9c6a1f; }
+.tr-main .rd-text p { color: #2c2110; }
+.tr-main .rd-comm-block, .tr-main .tr-comm-block { color: #5a4322; border-color: rgba(120, 90, 40, 0.35); }
+
+.tr-main .tr-megillot { border-color: rgba(120, 90, 40, 0.3); }
+.tr-main .tr-meg-chip small { color: #7a5f3a; }
+
+@media (prefers-color-scheme: light) {
+  .tr-main { color: #3a2c14; }
+}

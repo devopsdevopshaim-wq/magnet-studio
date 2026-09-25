@@ -1,3 +1,19 @@
+/* ---------- ערכת נושא קוסמית: זהב + סגול, מעל רשת הכוכבים (astro-starfield.js) ---------- */
+.ad-hero-card, .ad-num-card {
+  border-color: rgba(200, 170, 255, 0.28);
+  box-shadow: 0 0 22px -8px rgba(200, 170, 255, 0.25);
+}
+.ad-hero-card .val { color: #e8c97a; }
+.ad-hero-card .glyph { color: #c8aaff; text-shadow: 0 0 12px rgba(200, 170, 255, 0.6); }
+.ad-planet-row { border-color: rgba(200, 170, 255, 0.22); }
+.ad-planet-row:hover { border-color: #c8aaff; }
+.ad-planet-row .g { color: #e8c97a; text-shadow: 0 0 8px rgba(232, 201, 122, 0.5); }
+.ad-aspect-row.tone-harmon { border-inline-start-color: #8fe0c0; }
+.ad-aspect-row .glyph { color: #c8aaff; }
+.ad-num-card .n { color: #e8c97a; text-shadow: 0 0 10px rgba(232, 201, 122, 0.4); }
+.ad-section h3 { color: #c8aaff; }
+.ad-form h3 { color: #c8aaff; }
+
 .ad-note { font-size: 0.8rem; color: var(--cream-dim); line-height: 1.7; margin: 4px 0 20px; max-width: 720px; }
 
 .ad-form {

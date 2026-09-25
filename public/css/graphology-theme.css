@@ -1,0 +1,63 @@
+/* graphology-theme.css — עיצוב ייעודי לגרפולוגיה: אזור השאלון/הדו"ח נראה כמו דף מחברת עם
+ * כתב יד בדיו — קווים מנוקדים כרקע, "דיו" כחול-סגול עמוק על נייר בהיר, כרטיסים מעט מוטים
+ * כמו פתק שנכתב ביד. ניגוד מכוון לעיצוב ההייטק הכחול-כהה של שאר האתר. */
+
+.gr-panel, #gr-report {
+  background:
+    repeating-linear-gradient(to bottom, transparent, transparent 27px, rgba(90, 70, 150, 0.14) 28px),
+    linear-gradient(180deg, #f3efe6, #ece4d4);
+  border: 1px solid rgba(90, 70, 150, 0.25);
+  border-radius: 6px;
+  padding: 24px clamp(14px, 4vw, 40px) 40px;
+  box-shadow: inset 0 0 50px rgba(60, 40, 90, 0.12), var(--shadow-deep);
+  color: #2c2440;
+}
+
+.gr-note { color: #4a4066; }
+.gr-subject { color: #4a4066; }
+.gr-subject input {
+  background: rgba(255, 255, 255, 0.55); color: #2c2440; border-color: rgba(90, 70, 150, 0.3);
+}
+
+.gr-group {
+  background: rgba(255, 255, 255, 0.4);
+  border-color: rgba(90, 70, 150, 0.22);
+  transform: rotate(-0.15deg);
+}
+.gr-group:nth-child(even) { transform: rotate(0.15deg); }
+.gr-group h3 { color: #5a3e8c; font-style: italic; }
+.gr-group .hint { color: #6b6088; }
+
+.gr-q .qlabel { color: #2c2440; }
+.gr-q .qhelp { color: #6b6088; }
+.gr-opt {
+  background: rgba(255, 255, 255, 0.55); border-color: rgba(90, 70, 150, 0.28); color: #4a4066;
+}
+.gr-opt:hover { border-color: #5a3e8c; color: #2c2440; }
+.gr-opt.picked { background: #5a3e8c; border-color: #5a3e8c; color: #f3efe6; }
+
+.gr-archetype {
+  background: linear-gradient(160deg, rgba(255,255,255,0.5), rgba(243,239,230,0.3));
+  border-color: rgba(90, 70, 150, 0.3);
+}
+.gr-archetype .name { color: #5a3e8c; font-style: italic; }
+.gr-archetype .blurb { color: #4a4066; }
+.gr-headline { color: #2c2440; }
+
+.gr-dim { background: rgba(255, 255, 255, 0.45); border-color: rgba(90, 70, 150, 0.22); }
+.gr-dim .lbl { color: #2c2440; }
+.gr-dim .score { color: #8c5e2f; }
+.gr-dim .bar { background: rgba(90, 70, 150, 0.15); }
+.gr-dim .bar-fill { background: linear-gradient(90deg, #5a3e8c, #8c5e2f); }
+.gr-dim .short { color: #6b6088; }
+
+.gr-section { background: rgba(255, 255, 255, 0.4); }
+.gr-section h4 { color: #5a3e8c; font-style: italic; }
+.gr-section p { color: #4a4066; }
+
+.gr-hist-row { background: rgba(255, 255, 255, 0.45); border-color: rgba(90, 70, 150, 0.22); }
+.gr-hist-row:hover { border-color: #5a3e8c; }
+.gr-hist-row .t { color: #2c2440; }
+.gr-hist-row .d { color: #6b6088; }
+
+.gr-disclaimer { background: rgba(140, 94, 47, 0.1); border-color: rgba(140, 94, 47, 0.35); color: #8c5e2f; }

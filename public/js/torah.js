@@ -17,7 +17,12 @@
   }
 
   function verseBlock(ref, heRef, verses) {
-    if (!verses || !verses.length) return `<div class="rd-loading">לא נמצא טקסט עבור ${esc(ref)}.</div>`;
+    if (!verses || !verses.length) { window.__shareContent = null; return `<div class="rd-loading">לא נמצא טקסט עבור ${esc(ref)}.</div>`; }
+    // מאפשר לכפתור "שתף" (share.js) לשלוח את הקטע המוצג בפועל
+    window.__shareContent = () => ({
+      subject: heRef || ref,
+      text: `${heRef || ref}\n\n${verses.map((v, i) => `${i + 1}. ${v}`).join("\n")}`
+    });
     return `<div class="rd-hero"><div class="sub">${esc(heRef || ref)}</div></div>
       <p class="rd-verses">${verses.map((v, i) => `<span class="rd-verse js-speak" data-speak="${esc(v)}"><sup>${i + 1}</sup> ${esc(v)}</span> `).join("")}</p>`;
   }
