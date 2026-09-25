@@ -77,13 +77,14 @@
 
   function renderWorkflows(list) {
     $("n8n-count").textContent = `${list.filter((w) => w.active).length} פעילים · ${list.length} סה״כ`;
+    const base = (STATE.n8n.base || "").replace(/\/+$/, "");
     $("n8n-wf-list").innerHTML = list.map((w) => `
       <div class="do-wf" data-id="${esc(w.id)}">
         <div class="do-toggle ${w.active ? "on" : ""}" data-act="toggle" title="הפעל/כבה"></div>
         <span class="name">${esc(w.name)}</span>
         ${w.trigger ? `<span class="trg">${esc(String(w.trigger).replace(/^n8n-nodes-base\./, ""))}</span>` : ""}
         <span class="meta">${w.nodes} nodes</span>
-        <button class="do-runbtn" data-act="run">הרץ עכשיו</button>
+        <a class="do-runbtn" href="${esc(base)}/workflow/${esc(w.id)}" target="_blank" rel="noopener">פתח עורך ↗</a>
       </div>`).join("") || `<div class="do-muted">אין workflows.</div>`;
 
     $("n8n-wf-list").querySelectorAll(".do-wf").forEach((row) => {
@@ -97,15 +98,6 @@
           if (r.error) throw new Error(r.error);
           toast(to ? "ה-workflow הופעל" : "ה-workflow כובה");
         } catch (err) { el.classList.toggle("on", !to); toast(err.message, true); }
-      });
-      row.querySelector('[data-act="run"]').addEventListener("click", async (e) => {
-        const btn = e.currentTarget; btn.disabled = true; btn.textContent = "רץ…";
-        try {
-          const r = await fetch("/api/devops/n8n/run", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id }) }).then((x) => x.json());
-          showModal("הרצת workflow", r.output || (r.ok ? "בוצע" : r.error || "נכשל"));
-          toast(r.ok ? "הורץ" : "נכשל", !r.ok);
-        } catch (err) { toast(err.message, true); }
-        finally { btn.disabled = false; btn.textContent = "הרץ עכשיו"; }
       });
     });
   }

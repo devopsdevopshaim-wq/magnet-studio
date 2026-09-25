@@ -1182,10 +1182,6 @@ app.post("/api/devops/n8n/activate", async (req, res) => {
   try { res.json(await devops.n8nSetActive(req.body.id, !!req.body.active)); }
   catch (err) { res.status(502).json({ error: err.message }); }
 });
-app.post("/api/devops/n8n/run", async (req, res) => {
-  try { res.json(await devops.n8nRun(req.body.id)); }
-  catch (err) { res.status(502).json({ ok: false, error: err.message }); }
-});
 app.post("/api/devops/config", (req, res) => {
   try { res.json(devops.writeConfig(req.body || {})); }
   catch (err) { res.status(400).json({ error: err.message }); }

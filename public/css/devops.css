@@ -83,6 +83,7 @@ html[dir="rtl"] .do-toggle.on::after { transform: translateX(18px); }
 .do-runbtn {
   background: none; border: 1px solid var(--line); color: var(--brass-soft);
   border-radius: 6px; padding: 4px 10px; font-size: 0.76rem; cursor: pointer; flex: none;
+  text-decoration: none; display: inline-block;
 }
 .do-runbtn:hover { border-color: var(--brass); }
 .do-runbtn:disabled { opacity: 0.5; cursor: default; }
