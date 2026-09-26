@@ -598,10 +598,11 @@ async function loadUsersList() {
     el.innerHTML = `<div style="display:flex; flex-direction:column; gap:8px;">` + users.map((u) => `
       <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 14px; background:var(--surface-2); border:1px solid var(--line); border-radius:8px;">
         <div>
-          <div style="font-weight:600;">${esc(u.name)}</div>
-          <div style="font-size:0.76rem; color:var(--cream-dim);">נרשם: ${esc((u.createdAt || "").slice(0, 10))}</div>
+          <div style="font-weight:600;">${esc(u.name)} ${u.is_admin ? '<span style="color:var(--brass-soft);">· מנהל</span>' : ""}</div>
+          <div style="font-size:0.76rem; color:var(--cream-dim);" dir="ltr">${esc(u.email || "")}</div>
+          <div style="font-size:0.76rem; color:var(--cream-dim);">נרשם: ${esc((u.created_at || "").slice(0, 10))} · סטטוס: ${esc(u.account_status || "")}</div>
         </div>
-        <button class="btn ghost" data-del="${esc(u.id)}" style="color:var(--danger); border-color:var(--danger);">הסרת חשבון</button>
+        ${u.is_admin ? "" : `<button class="btn ghost" data-del="${esc(u.id)}" style="color:var(--danger); border-color:var(--danger);">הסרת חשבון</button>`}
       </div>`).join("") + `</div>`;
     el.querySelectorAll("[data-del]").forEach((btn) => {
       btn.addEventListener("click", async () => {

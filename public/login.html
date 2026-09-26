@@ -74,9 +74,13 @@
     </div>
 
     <form id="f">
+      <div class="field" id="nameField" hidden>
+        <label for="name">שם מלא</label>
+        <input type="text" id="name" autocomplete="name" />
+      </div>
       <div class="field">
-        <label for="name" id="nameLabel">שם (השאירו ריק לכניסת הבעלים)</label>
-        <input type="text" id="name" autocomplete="username" />
+        <label for="email">כתובת מייל</label>
+        <input type="email" id="email" autocomplete="username" dir="ltr" />
       </div>
       <div class="field">
         <label for="pw">סיסמה</label>
@@ -95,7 +99,7 @@
     var mode = "login";
     var f = document.getElementById("f"), msg = document.getElementById("msg"), btn = document.getElementById("btn");
     var tabLogin = document.getElementById("tabLogin"), tabRegister = document.getElementById("tabRegister");
-    var nameLabel = document.getElementById("nameLabel"), pw2Field = document.getElementById("pw2Field");
+    var nameField = document.getElementById("nameField"), pw2Field = document.getElementById("pw2Field");
     var sub = document.getElementById("sub"), hint = document.getElementById("hint");
     var next = new URLSearchParams(location.search).get("next") || "/daily.html";
     if (!/^\/[^\/]/.test(next)) next = "/daily.html";
@@ -106,13 +110,13 @@
       tabLogin.classList.toggle("active", m === "login");
       tabRegister.classList.toggle("active", m === "register");
       if (m === "login") {
-        nameLabel.textContent = "שם (השאירו ריק לכניסת הבעלים)";
+        nameField.hidden = true;
         pw2Field.hidden = true;
         btn.textContent = "כניסה";
         sub.textContent = "מערכת ניהול אישית — לכל אחד הנתונים שלו.";
         hint.textContent = "משתמש חדש? עברו ללשונית \"משתמש חדש\" למעלה כדי ליצור חשבון פרטי משלכם — עם נתונים, לקוחות וחשבוניות נפרדים לגמרי מכל חשבון אחר במערכת.";
       } else {
-        nameLabel.textContent = "שם מלא";
+        nameField.hidden = false;
         pw2Field.hidden = false;
         btn.textContent = "יצירת חשבון";
         sub.textContent = "יצירת חשבון פרטי — הנתונים שלכם יהיו שלכם בלבד.";
@@ -125,11 +129,14 @@
     f.addEventListener("submit", async function (e) {
       e.preventDefault();
       msg.className = "msg"; msg.textContent = "";
-      var name = document.getElementById("name").value.trim();
+      var email = document.getElementById("email").value.trim();
       var pw = document.getElementById("pw").value;
+      var name = document.getElementById("name").value.trim();
 
+      if (!email) { msg.textContent = "צריך להזין כתובת מייל"; return; }
       if (mode === "register") {
         if (!name) { msg.textContent = "צריך להזין שם"; return; }
+        if (pw.length < 8) { msg.textContent = "הסיסמה חייבת להיות לפחות 8 תווים"; return; }
         var pw2 = document.getElementById("pw2").value;
         if (pw !== pw2) { msg.textContent = "הסיסמאות לא תואמות"; return; }
       }
@@ -137,9 +144,10 @@
       btn.disabled = true;
       try {
         var url = mode === "register" ? "/api/auth/register" : "/api/auth/login";
+        var body = mode === "register" ? { email: email, password: pw, name: name } : { email: email, password: pw };
         var r = await fetch(url, {
           method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name: name, password: pw })
+          body: JSON.stringify(body)
         });
         var j = await r.json();
         if (r.ok && j.ok) {

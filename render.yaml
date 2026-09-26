@@ -32,6 +32,11 @@ services:
         sync: false        # מגדירים ידנית בלוח של Render — לא נשמר ב-git
       - key: PNKS_AUTH_SECRET
         generateValue: true
+      # חובה למערכת הרב-משתמשית (חשבונות/פאנל מנהל) — מגדירים ידנית בלוח של Render:
+      - key: DATABASE_URL   # מחרוזת חיבור Postgres (Neon) — ראו lib/db.js, lib/accounts.js
+        sync: false
+      - key: ADMIN_EMAIL    # המייל שמזהה את חשבון המנהל — ראו lib/accounts.js (isAdminEmail)
+        sync: false
       # אופציונלי — הקראה אנושית יותר:
       - key: AZURE_SPEECH_KEY
         sync: false

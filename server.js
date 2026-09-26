@@ -43,28 +43,32 @@ const app = express();
 app.set("trust proxy", 1); // מאחורי proxy של שירות אחסון (Render/Railway) — לזיהוי https נכון
 app.use(express.json({ limit: "45mb" }));
 
-// ---------- הזדהות רב-משתמשית אופציונלית (מופעלת רק כשמוגדרת סיסמת בעלים — ראו lib/auth.js) ----------
+// ---------- הזדהות רב-משתמשית אופציונלית (מופעלת רק כשמוגדרת סיסמת שער — ראו lib/auth.js) ----------
+// זהות אישית (מי מחובר) היא תמיד מייל+סיסמה מול Postgres (lib/accounts.js), בין אם שער-הסיסמה
+// הכללי פעיל ובין אם לא.
 const auth = require("./lib/auth");
+const accounts = require("./lib/accounts");
 const pnksUsers = require("./lib/users");
 app.get("/api/auth/status", (req, res) => {
   const u = auth.currentUser(req);
   res.json({ enabled: auth.config().enabled, authed: !!u, user: u });
 });
-app.post("/api/auth/login", (req, res) => {
-  if (!auth.config().enabled) return res.json({ ok: true, disabled: true });
-  const { name, password } = req.body || {};
-  const user = auth.login(name, password);
-  if (!user) return res.status(401).json({ ok: false, error: "שם או סיסמה שגויים" });
-  auth.setSession(res, user.id);
-  res.json({ ok: true, user });
-});
-app.post("/api/auth/register", (req, res) => {
-  if (!auth.config().enabled) return res.status(400).json({ ok: false, error: "הרשמה לא נדרשת — המערכת פתוחה" });
+app.post("/api/auth/login", async (req, res) => {
+  const { email, password } = req.body || {};
+  if (!email || !password) return res.status(400).json({ ok: false, error: "נא למלא מייל וסיסמה" });
   try {
-    const { name, password } = req.body || {};
-    const user = pnksUsers.register(name, password);
+    const r = await auth.login(email, password, req.ip);
+    if (!r.ok) return res.status(r.limited ? 429 : 401).json(r);
+    auth.setSession(res, r.user);
+    res.json({ ok: true, user: r.user });
+  } catch (err) { res.status(500).json({ ok: false, error: err.message }); }
+});
+app.post("/api/auth/register", async (req, res) => {
+  try {
+    const { email, password, name } = req.body || {};
+    const user = await accounts.register(email, password, name);
     require("./lib/profile").write({ displayName: user.name }, pnksUsers.userDir(user.id));
-    auth.setSession(res, user.id);
+    auth.setSession(res, user);
     res.json({ ok: true, user });
   } catch (err) { res.status(400).json({ ok: false, error: err.message }); }
 });
@@ -73,28 +77,40 @@ app.get("/login", (req, res) => res.sendFile(path.join(__dirname, "public", "log
 // בדיקת חיות לשירות האחסון — לפני שער ההזדהות
 app.get("/healthz", (req, res) => res.json({ ok: true, ts: Date.now() }));
 app.use(auth.gate);
-// מזהה המשתמש המחובר זמין לכל הנתיבים מכאן והלאה — req.pnksUser = {id,name} או null (מערכת פתוחה)
+// מזהה המשתמש המחובר זמין לכל הנתיבים מכאן והלאה — req.pnksUser = {id,email,name,is_admin} או null
 app.use((req, res, next) => { req.pnksUser = auth.currentUser(req); next(); });
-// תיקיית הנתונים הפרטית של המשתמש המחובר — PERSIST_DIR לבעלים/מערכת פתוחה, תיקייה נפרדת לכל חשבון רשום
+// תיקיית הנתונים הפרטית של המשתמש המחובר — PERSIST_DIR לאדמין/מערכת פתוחה, תיקייה נפרדת לכל חשבון
 function baseDirFor(req) {
   const u = req.pnksUser;
-  if (!u || u.id === auth.OWNER_ID) return PERSIST_DIR;
+  if (!u || u.is_admin) return PERSIST_DIR;
   return pnksUsers.userDir(u.id);
 }
-function isOwner(req) { return !req.pnksUser || req.pnksUser.id === auth.OWNER_ID; }
+function isOwner(req) { return !req.pnksUser || req.pnksUser.is_admin; }
 function requireOwner(req, res, next) {
-  if (!isOwner(req)) return res.status(403).json({ error: "פעולה זו שמורה לבעל המערכת בלבד" });
+  if (!isOwner(req)) return res.status(403).json({ error: "פעולה זו שמורה למנהל המערכת בלבד" });
   next();
 }
 
-// ---------- ניהול משתמשים (רק לבעל המערכת) ----------
-app.get("/api/admin/users", requireOwner, (req, res) => {
-  res.json({ users: pnksUsers.listUsers() });
+// ---------- ניהול חשבונות (רק למנהל המערכת) ----------
+app.get("/api/admin/users", requireOwner, async (req, res) => {
+  try { res.json({ users: await accounts.listAccounts() }); }
+  catch (err) { res.status(500).json({ error: err.message }); }
 });
-app.delete("/api/admin/users/:id", requireOwner, (req, res) => {
+app.get("/api/admin/users/:id/usage", requireOwner, async (req, res) => {
+  try { res.json(await accounts.usageSummary(req.params.id)); }
+  catch (err) { res.status(500).json({ error: err.message }); }
+});
+app.post("/api/admin/users/:id/status", requireOwner, async (req, res) => {
+  try { res.json(await accounts.setAccountStatus(req.params.id, (req.body || {}).status)); }
+  catch (err) { res.status(400).json({ error: err.message }); }
+});
+app.delete("/api/admin/users/:id", requireOwner, async (req, res) => {
   try {
-    if (req.params.id === auth.OWNER_ID) throw new Error("אי אפשר למחוק את חשבון הבעלים");
-    res.json(pnksUsers.deleteUser(req.params.id));
+    const target = await accounts.getAccount(req.params.id);
+    if (target && target.is_admin) throw new Error("אי אפשר למחוק חשבון מנהל");
+    await accounts.deleteAccount(req.params.id);
+    pnksUsers.deleteUserData(req.params.id);
+    res.json({ ok: true });
   } catch (err) { res.status(400).json({ error: err.message }); }
 });
 
@@ -137,9 +153,11 @@ app.post("/api/admin/integrations/import", requireOwner, (req, res) => {
 });
 
 // אנליטיקס פרטי — כניסות/מבקרים ייחודיים לפי עמוד. רק עמודי HTML אמיתיים, לא API/assets.
+// באותה הזדמנות: תיעוד שימוש פר-חשבון (אילו לשוניות, מתי) לפאנל המנהל — רק כשיש חשבון מחובר.
 app.use((req, res, next) => {
   if (req.method === "GET" && req.path.endsWith(".html")) {
     try { require("./lib/analytics").track(req.path, auth.visitorToken(req)); } catch { /* לא קריטי */ }
+    if (req.pnksUser) accounts.trackUsage(req.pnksUser.id, req.path).catch(() => {});
   }
   next();
 });
@@ -1242,7 +1260,7 @@ const aiaDirFor = (req) => path.join(baseDirFor(req), "aia");
 setInterval(() => {
   try { aiaStudioFactory(PERSIST_DIR).purgeStaging(); } catch {}
   try {
-    for (const uid of pnksUsers.listUsers().map((u) => u.id)) {
+    for (const uid of pnksUsers.listUserDirs()) {
       aiaStudioFactory(pnksUsers.userDir(uid)).purgeStaging();
     }
   } catch {}
