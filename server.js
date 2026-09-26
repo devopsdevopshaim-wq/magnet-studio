@@ -260,6 +260,19 @@ app.post("/api/backup/import", (req, res) => {
   }
 });
 
+// גיבוי מלא של כל PERSIST_DIR (כל החשבונות, כל הנתונים) — לפני מיגרציה גדולה או כרשת ביטחון
+// כללית. שונה מ-/api/backup/export (שהוא רק להעברת הגדרות אישיות בין מחשבים, allowlist צר).
+app.get("/api/admin/full-backup", requireOwner, (req, res) => {
+  const { spawn } = require("child_process");
+  const fname = `magnet-studio-full-backup-${new Date().toISOString().replace(/[:.]/g, "-")}.tar.gz`;
+  res.setHeader("Content-Type", "application/gzip");
+  res.setHeader("Content-Disposition", `attachment; filename="${fname}"`);
+  const tar = spawn("tar", ["-czf", "-", "-C", PERSIST_DIR, "."]);
+  tar.stdout.pipe(res);
+  tar.stderr.on("data", (d) => console.error("full-backup tar stderr:", d.toString()));
+  tar.on("error", (err) => { if (!res.headersSent) res.status(500).json({ error: err.message }); });
+});
+
 // כתובת ה-LAN + כתובת מלאה להתקנת ה-PWA בטלפון (אותה רשת Wi-Fi)
 app.get("/api/network/access", (req, res) => {
   const ifaces = os.networkInterfaces();
