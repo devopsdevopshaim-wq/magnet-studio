@@ -24,6 +24,17 @@
 
   // --- כפתור יציאה: מופיע רק כשהמערכת מוגנת בסיסמה (פריסה ציבורית) ---
   fetch("/api/auth/status").then((r) => r.json()).then((a) => {
+    // קישור ניהול משתמשים — רק למנהל המערכת, מוזרק לניווט הקיים אם עוד לא קיים בעמוד
+    if (a && a.user && a.user.is_admin && !document.querySelector('nav.tabs a[href="/admin.html"]')) {
+      const nav = document.querySelector("nav.tabs");
+      if (nav) {
+        const link = document.createElement("a");
+        link.href = "/admin.html";
+        link.textContent = "ניהול משתמשים";
+        if (location.pathname === "/admin.html") link.className = "active";
+        nav.appendChild(link);
+      }
+    }
     if (!a || !a.enabled) return;
     const b = document.createElement("button");
     b.type = "button";

@@ -130,3 +130,13 @@ body.theme-console {
     repeating-linear-gradient(0deg, rgba(57, 255, 143, 0.04) 0, rgba(57, 255, 143, 0.04) 1px, transparent 1px, transparent 6px);
   background-attachment: fixed;
 }
+
+/* ניהול משתמשים — זהב-ענבר "מפקדה/סמכות", זוהר מרכזי + רשת עדינה */
+body.theme-admin {
+  --brass: #ffb020; --brass-soft: #ffd27a; --ember: #ff9500; --ember-deep: #c26e00;
+  background-image:
+    radial-gradient(60ch 50ch at 50% -10%, rgba(255, 176, 32, 0.22), transparent 60%),
+    repeating-linear-gradient(0deg, rgba(255, 176, 32, 0.035) 0, rgba(255, 176, 32, 0.035) 1px, transparent 1px, transparent 56px),
+    repeating-linear-gradient(90deg, rgba(255, 176, 32, 0.035) 0, rgba(255, 176, 32, 0.035) 1px, transparent 1px, transparent 56px);
+  background-attachment: fixed;
+}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ניהול משתמשים · HKDAILY</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/tab-themes.css" />
+<link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body class="theme-admin">
+<div class="ad2-wrap">
+
+  <header class="top-header">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="24,4 41,14 41,34 24,44 7,34 7,14" stroke="currentColor" stroke-width="2.5"/>
+        <path d="M24 13l5.5 3.2v8.6c0 5-2.4 8-5.5 9.6-3.1-1.6-5.5-4.6-5.5-9.6v-8.6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M20.5 23.5l2.3 2.3 4.7-4.7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <h1>ניהול משתמשים</h1>
+        <div class="tagline">פאנל מנהל · חשבונות, סטטוס, ומעקב שימוש</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <button class="btn ghost" id="ad2-refresh">רענן</button>
+      <button class="btn ghost" onclick="location.href='/'">חזרה ללוח הבקרה</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <a href="/">לוח בקרה</a>
+    <a href="/daily.html">מענה יומי</a>
+    <a href="/jarvis.html">צ'אט AI</a>
+    <a href="/housing.html">דיור</a>
+    <a href="/jobs.html">דרושים</a>
+    <a href="/finance.html">פיננסים</a>
+    <a href="/health.html">בריאות</a>
+    <a href="/fitness.html">כושר</a>
+    <a href="/devops.html">DevOps</a>
+    <a href="/aia.html">עיצוב AIA</a>
+    <a href="/torah.html">ספריית קודש</a>
+    <a href="/holidays.html">הלכות חגים</a>
+    <a href="/marketing.html">פרסום ושיווק</a>
+    <a href="/logo.html">לוגו</a>
+    <a href="/business.html">ניהול עסק</a>
+    <a href="/social.html">רשתות חברתיות</a>
+    <a href="/tv.html">טלוויזיה</a>
+    <a href="/library.html">אוצר לחג</a>
+    <a href="/device.html">המכשיר</a>
+    <a href="/graphology.html">גרפולוגיה</a>
+    <a href="/astro-full.html">אסטרולוגיה</a>
+    <a href="/editor.html">עורך מסגרות</a>
+    <a href="/mail.html">מיילים</a>
+    <a href="/setup.html">הגדרות</a>
+    <a href="/analytics.html">נתוני שימוש</a>
+  </nav>
+
+  <div id="ad2-denied" class="ad2-denied" hidden>
+    <div class="ad2-denied-icon">⛔</div>
+    <h2>אין לך הרשאת גישה</h2>
+    <p>העמוד הזה שמור למנהל המערכת בלבד.</p>
+  </div>
+
+  <div id="ad2-content" hidden>
+    <div class="ad2-stats" id="ad2-stats"></div>
+
+    <div class="ad2-toolbar">
+      <input type="text" id="ad2-search" placeholder="חיפוש לפי שם או מייל…" />
+      <span class="ad2-count" id="ad2-count"></span>
+    </div>
+
+    <div class="ad2-list" id="ad2-list">
+      <div class="ad2-loading">טוען חשבונות…</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- מודל אישור מחיקה -->
+<div class="ad2-modal-backdrop" id="ad2-del-modal" hidden>
+  <div class="ad2-modal">
+    <h3>מחיקת חשבון</h3>
+    <p id="ad2-del-text"></p>
+    <p class="ad2-warn">פעולה זו בלתי הפיכה — כל הנתונים הפרטיים של החשבון יימחקו לצמיתות.</p>
+    <div class="ad2-modal-actions">
+      <button class="btn ghost" id="ad2-del-cancel">ביטול</button>
+      <button class="btn danger" id="ad2-del-confirm">מחיקה לצמיתות</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="/js/admin.js"></script>
+<script src="/js/dockbar.js" defer></script>
+<script src="/js/share.js" defer></script>
+</body>
+</html>
