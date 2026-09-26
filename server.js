@@ -61,7 +61,10 @@ app.post("/api/auth/login", async (req, res) => {
     if (!r.ok) return res.status(r.limited ? 429 : 401).json(r);
     auth.setSession(res, r.user);
     res.json({ ok: true, user: r.user });
-  } catch (err) { res.status(500).json({ ok: false, error: err.message }); }
+  } catch (err) {
+    console.error("שגיאה ב-/api/auth/login:", err);
+    res.status(500).json({ ok: false, error: err.message || err.code || String(err) });
+  }
 });
 app.post("/api/auth/register", async (req, res) => {
   try {
@@ -70,7 +73,10 @@ app.post("/api/auth/register", async (req, res) => {
     require("./lib/profile").write({ displayName: user.name }, pnksUsers.userDir(user.id));
     auth.setSession(res, user);
     res.json({ ok: true, user });
-  } catch (err) { res.status(400).json({ ok: false, error: err.message }); }
+  } catch (err) {
+    console.error("שגיאה ב-/api/auth/register:", err);
+    res.status(400).json({ ok: false, error: err.message || err.code || String(err) });
+  }
 });
 app.post("/api/auth/logout", (req, res) => { auth.clearSession(res); res.json({ ok: true }); });
 app.get("/login", (req, res) => res.sendFile(path.join(__dirname, "public", "login.html")));
