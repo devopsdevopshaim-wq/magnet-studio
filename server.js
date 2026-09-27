@@ -928,6 +928,54 @@ app.post("/api/email-account/send", async (req, res) => {
   catch (err) { res.status(400).json({ error: err.message }); }
 });
 
+// ---------- יומן Google (OAuth אמיתי, פר-חשבון) ----------
+const googleCalendar = require("./lib/googleCalendar");
+app.get("/api/calendar/google/connect", (req, res) => {
+  if (!req.pnksUser) return res.status(401).json({ error: "נדרשת התחברות" });
+  try { res.redirect(googleCalendar.getAuthUrl(req, req.pnksUser.id)); }
+  catch (err) { res.status(500).send("שגיאת הגדרה: " + err.message); }
+});
+app.get("/api/calendar/google/callback", async (req, res) => {
+  if (!req.pnksUser) return res.redirect("/login");
+  const { code, state, error } = req.query;
+  if (error) return res.redirect("/setup.html?calendar=denied");
+  if (!code || state !== req.pnksUser.id) return res.redirect("/setup.html?calendar=error");
+  try {
+    await googleCalendar.connect(baseDirFor(req), req, code);
+    res.redirect("/setup.html?calendar=connected");
+  } catch (err) {
+    console.error("שגיאה בחיבור Google Calendar:", err);
+    res.redirect("/setup.html?calendar=error");
+  }
+});
+app.get("/api/calendar/google/status", (req, res) => res.json(googleCalendar.status(baseDirFor(req))));
+app.post("/api/calendar/google/disconnect", (req, res) => res.json(googleCalendar.disconnect(baseDirFor(req))));
+app.get("/api/calendar/google/events", async (req, res) => {
+  try { res.json({ events: await googleCalendar.listUpcomingEvents(baseDirFor(req), { maxResults: 15 }) }); }
+  catch (err) { res.status(400).json({ error: err.message }); }
+});
+
+// ---------- התראות פר-חשבון (מייל חדש / יומן קרוב) — נאספות ברקע, ראו lib/backgroundSync.js ----------
+const notifications = require("./lib/notifications");
+app.get("/api/notifications", async (req, res) => {
+  if (!req.pnksUser) return res.json({ items: [], unread: 0 });
+  try {
+    const [items, unread] = await Promise.all([
+      notifications.listRecent(req.pnksUser.id),
+      notifications.unreadCount(req.pnksUser.id)
+    ]);
+    res.json({ items, unread });
+  } catch (err) { res.status(500).json({ items: [], unread: 0, error: err.message }); }
+});
+app.post("/api/notifications/:id/read", async (req, res) => {
+  if (!req.pnksUser) return res.status(401).json({ error: "נדרשת התחברות" });
+  res.json(await notifications.markRead(req.pnksUser.id, req.params.id));
+});
+app.post("/api/notifications/read-all", async (req, res) => {
+  if (!req.pnksUser) return res.status(401).json({ error: "נדרשת התחברות" });
+  res.json(await notifications.markAllRead(req.pnksUser.id));
+});
+
 // ---------- פס תחתון: חדשות רצות + המלצת יום + טראק מוזיקה ----------
 
 app.get("/api/news", async (req, res) => {
@@ -1860,6 +1908,7 @@ function startServer(retriesLeft = 5) {
       console.log('סריקת Outlook אוטומטית כבויה - הגדירו חשבון ב-Outlook והפעילו עם ENABLE_OUTLOOK_AUTOSCAN=1, או לחצו "רענן עכשיו" בלוח הבקרה');
     }
     liveSync.start();
+    require("./lib/backgroundSync").start(); // מיילים/יומן פר-חשבון — רץ תמיד, גם כשאף מכשיר לא מחובר
 
     // הרמת שירותי Docker נלווים ברקע (best-effort, לא חוסם את השרת).
     // אם השירות כבר נגיש - מדלגים, כדי לא להתנגש בקונטיינר קיים.

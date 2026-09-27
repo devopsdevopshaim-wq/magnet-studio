@@ -33,3 +33,19 @@ CREATE TABLE IF NOT EXISTS usage_events (
   occurred_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS idx_usage_events_account_time ON usage_events (account_id, occurred_at DESC);
+
+-- התראות פר-חשבון (מייל חדש, אירוע יומן קרוב, הערה שהוזנה) — מיוצרות ברקע ע"י לולאת הסנכרון
+-- השרתית (server.js), נשלפות ע"י הלקוח בכל טעינת עמוד ("בכל הפעלה"). source_key מונע כפילויות
+-- (אותו מייל/אירוע לא ייווצר כהתראה פעמיים).
+CREATE TABLE IF NOT EXISTS notifications (
+  id BIGSERIAL PRIMARY KEY,
+  account_id UUID NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+  type TEXT NOT NULL, -- email | calendar | note
+  title TEXT NOT NULL,
+  body TEXT,
+  source_key TEXT NOT NULL,
+  read_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE (account_id, source_key)
+);
+CREATE INDEX IF NOT EXISTS idx_notifications_account_unread ON notifications (account_id, read_at, created_at DESC);

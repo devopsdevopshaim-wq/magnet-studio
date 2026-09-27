@@ -663,6 +663,51 @@ if (btnImportInt) {
   });
 }
 
+// ---------- יומן Google (OAuth פר-חשבון) ----------
+async function loadCalendarSection() {
+  const statusEl = document.getElementById("cal-status");
+  const actionsEl = document.getElementById("cal-actions");
+  const eventsEl = document.getElementById("cal-events");
+  if (!statusEl) return;
+
+  const qs = new URLSearchParams(location.search);
+  if (qs.get("calendar") === "connected") { toast("היומן חובר בהצלחה"); history.replaceState(null, "", location.pathname); }
+  else if (qs.get("calendar") === "error") { toast("החיבור ליומן נכשל — נסו שוב", true); history.replaceState(null, "", location.pathname); }
+  else if (qs.get("calendar") === "denied") { toast("הגישה ליומן לא אושרה", true); history.replaceState(null, "", location.pathname); }
+
+  try {
+    const st = await fetch("/api/calendar/google/status").then((r) => r.json());
+    if (st.connected) {
+      statusEl.textContent = "✓ מחובר" + (st.connectedAt ? " · מאז " + new Date(st.connectedAt).toLocaleDateString("he-IL") : "");
+      statusEl.className = "validate-result ok";
+      actionsEl.innerHTML = `<button class="btn ghost" id="cal-disconnect">נתק יומן</button>`;
+      document.getElementById("cal-disconnect").addEventListener("click", async () => {
+        await fetch("/api/calendar/google/disconnect", { method: "POST" });
+        toast("היומן נותק");
+        loadCalendarSection();
+      });
+      try {
+        const { events } = await fetch("/api/calendar/google/events").then((r) => r.json());
+        eventsEl.innerHTML = (events && events.length)
+          ? `<div class="validate-result" style="margin-bottom:6px;">אירועים קרובים:</div>` + events.slice(0, 6).map((e) => {
+              const when = e.allDay ? e.start : new Date(e.start).toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+              return `<div style="padding:6px 0; border-top:1px solid var(--line); font-size:0.84rem;"><b>${esc(e.title)}</b> — ${esc(when)}</div>`;
+            }).join("")
+          : `<div class="validate-result">אין אירועים קרובים.</div>`;
+      } catch { eventsEl.innerHTML = ""; }
+    } else {
+      statusEl.textContent = "לא מחובר";
+      statusEl.className = "validate-result";
+      actionsEl.innerHTML = `<button class="btn primary" id="cal-connect">חיבור יומן Google</button>`;
+      document.getElementById("cal-connect").addEventListener("click", () => { location.href = "/api/calendar/google/connect"; });
+      eventsEl.innerHTML = "";
+    }
+  } catch {
+    statusEl.textContent = "שגיאה בבדיקת חיבור היומן";
+    statusEl.className = "validate-result error";
+  }
+}
+
 (async () => {
   await loadStatus();
   await loadInstalledApps();
@@ -671,4 +716,5 @@ if (btnImportInt) {
   loadPhoneInstall();
   loadIntegrations();
   loadUsersSection();
+  loadCalendarSection();
 })();

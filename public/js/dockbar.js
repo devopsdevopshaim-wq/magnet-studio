@@ -35,6 +35,7 @@
         nav.appendChild(link);
       }
     }
+    if (a && a.user) initNotifications();
     if (!a || !a.enabled) return;
     const b = document.createElement("button");
     b.type = "button";
@@ -430,4 +431,86 @@
   loadNews();
   setInterval(loadNews, 10 * 60 * 1000);
   loadMoods().then(() => { buildMoodMenu(); initPlayer(); });
+
+  // ---------- התראות (מייל חדש / יומן קרוב) — פעמון גלובלי לכל חשבון מחובר ----------
+  function initNotifications() {
+    if (window.__pnksNotif) return;
+    window.__pnksNotif = true;
+
+    if (!document.querySelector('link[href="/css/notifications.css"]')) {
+      const l = document.createElement("link");
+      l.rel = "stylesheet";
+      l.href = "/css/notifications.css";
+      document.head.appendChild(l);
+    }
+
+    const ICON = { email: "✉️", calendar: "📅", note: "📝" };
+    const escN = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const ago = (iso) => {
+      const min = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+      if (min < 1) return "עכשיו";
+      if (min < 60) return `לפני ${min} ד'`;
+      const h = Math.round(min / 60);
+      if (h < 24) return `לפני ${h} ש'`;
+      return `לפני ${Math.round(h / 24)} י'`;
+    };
+
+    const bell = document.createElement("button");
+    bell.type = "button";
+    bell.id = "notif-bell";
+    bell.setAttribute("aria-label", "התראות");
+    bell.innerHTML = `🔔<span class="notif-count" id="notif-count" hidden>0</span>`;
+    document.body.appendChild(bell);
+
+    const panel = document.createElement("div");
+    panel.id = "notif-panel";
+    panel.hidden = true;
+    panel.innerHTML = `
+      <div class="notif-head"><h3>התראות</h3><button type="button" id="notif-readall">סמן הכל כנקרא</button></div>
+      <div class="notif-list" id="notif-list"><div class="notif-empty">טוען…</div></div>`;
+    document.body.appendChild(panel);
+
+    async function load() {
+      try {
+        const data = await fetch("/api/notifications").then((r) => r.json());
+        const count = document.getElementById("notif-count");
+        if (data.unread > 0) { count.hidden = false; count.textContent = data.unread > 99 ? "99+" : data.unread; }
+        else count.hidden = true;
+
+        const list = document.getElementById("notif-list");
+        if (!data.items || !data.items.length) {
+          list.innerHTML = `<div class="notif-empty">אין עדיין התראות. מיילים ואירועי יומן חדשים יופיעו כאן אוטומטית.</div>`;
+          return;
+        }
+        list.innerHTML = data.items.map((n) => `
+          <div class="notif-item ${n.read_at ? "" : "unread"}" data-id="${n.id}">
+            <span class="notif-icon">${ICON[n.type] || "🔔"}</span>
+            <div class="notif-body">
+              <div class="notif-title">${escN(n.title)}</div>
+              ${n.body ? `<div class="notif-sub">${escN(n.body)}</div>` : ""}
+              <div class="notif-time">${ago(n.created_at)}</div>
+            </div>
+          </div>`).join("");
+        list.querySelectorAll(".notif-item.unread").forEach((el) => {
+          el.addEventListener("click", () => {
+            fetch(`/api/notifications/${el.dataset.id}/read`, { method: "POST" }).then(load).catch(() => {});
+          });
+        });
+      } catch { /* לא קריטי */ }
+    }
+
+    bell.addEventListener("click", () => {
+      panel.hidden = !panel.hidden;
+      if (!panel.hidden) load();
+    });
+    document.addEventListener("click", (e) => {
+      if (!panel.hidden && !panel.contains(e.target) && e.target !== bell) panel.hidden = true;
+    });
+    document.getElementById("notif-readall").addEventListener("click", () => {
+      fetch("/api/notifications/read-all", { method: "POST" }).then(load).catch(() => {});
+    });
+
+    load();
+    setInterval(load, 90 * 1000);
+  }
 })();
