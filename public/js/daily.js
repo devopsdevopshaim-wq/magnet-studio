@@ -440,6 +440,21 @@ function astroReadingBody(a) {
 function renderStatusGrid(b) {
   const grid = [];
 
+  const w = b.weekCalendar;
+  if (w && w.configured) {
+    const upcoming = (w.days || [])
+      .filter((d) => !d.isToday)
+      .flatMap((d) => d.events.map((e) => row(`${d.weekday} · ${e.summary}`, e.when, e.link)))
+      .slice(0, 5);
+    grid.push(
+      card(
+        "היומן השבוע",
+        { text: String(w.totalEvents || 0) },
+        (listOrEmpty(upcoming, "אין עוד אירועים השבוע") || "") + `<div class="daily-sub" style="margin-top:8px"><a href="#week" style="color:var(--brass-soft)">לוח שבועי מלא →</a></div>`
+      )
+    );
+  }
+
   const calToday = (b.calendar?.today || []).map((e) => row(e.summary, e.when, e.link));
   const calTomorrow = (b.calendar?.tomorrow || []).map((e) => row("מחר · " + e.summary, e.when, e.link));
   grid.push(
@@ -722,10 +737,83 @@ function ensureAvatar() {
   dailyAvatar.setState("idle");
 }
 
-function render(b) {
+// ---------- מצב לקוח: סיכום אישי קליל (מייל/יומן שהוא-עצמו חיבר, בלי נתוני המנהל) ----------
+
+function renderClient(b) {
   const now = new Date();
   ensureAvatar();
-  document.getElementById("greeting").textContent = greetingForHour(now.getHours()) + ", חיים";
+  document.getElementById("greeting").textContent = greetingForHour(now.getHours()) + (b.displayName ? ", " + b.displayName : "");
+
+  const heb = b.hebrew || {};
+  const sublineParts = [];
+  if (heb.hebrewDate) sublineParts.push(heb.hebrewDate);
+  if (heb.parasha) sublineParts.push(heb.parasha);
+  const nextHoliday = (heb.holidays || []).find((h) => h.isMajor && h.daysAway >= 0);
+  if (nextHoliday) sublineParts.push(`${nextHoliday.title} בעוד ${nextHoliday.daysAway} ימים`);
+  document.getElementById("subline").textContent =
+    sublineParts.join(" · ") || now.toLocaleDateString("he-IL", { weekday: "long", day: "numeric", month: "long" });
+
+  const CLIENT_ANCHORS = [["today", "מבט מהיר"], ["week", "השבוע"]];
+  const parts = [];
+  parts.push(`<nav class="daily-anchors">${CLIENT_ANCHORS.map(([id, l]) => `<a href="#${id}">${l}</a>`).join("")}</nav>`);
+
+  const cal = b.calendar || { connected: false, today: [], week: [] };
+  const email = b.email || { connected: false, recent: [] };
+  const grid = [];
+
+  if (!cal.connected) {
+    grid.push(
+      card("היומן שלי", null,
+        `<div class="daily-empty">היומן עוד לא מחובר. <a href="/setup.html" style="color:var(--brass-soft)">חברו את יומן Google שלכם</a> כדי לראות כאן את אירועי היום.</div>`)
+    );
+  } else {
+    const items = (cal.today || []).map((e) => row(e.summary, e.when));
+    grid.push(card("אירועי היום", { text: String((cal.today || []).length) }, listOrEmpty(items, "אין אירועים היום ביומן שלכם")));
+  }
+
+  if (!email.connected) {
+    grid.push(
+      card("המייל שלי", null,
+        `<div class="daily-empty">תיבת המייל עוד לא מחוברת. <a href="/mail.html" style="color:var(--brass-soft)">חברו את תיבת המייל שלכם</a> כדי לראות כאן מיילים שלא נקראו.</div>`)
+    );
+  } else {
+    const rec = (email.recent || []).map((m) => row(m.subject, m.sender));
+    grid.push(
+      card(
+        "מיילים שלא נקראו",
+        { text: String(email.unreadCount ?? 0), cls: (email.unreadCount || 0) > 0 ? "warn" : "ok" },
+        listOrEmpty(rec, "אין מיילים חדשים 🎉")
+      )
+    );
+  }
+
+  parts.push(section("today", "מבט מהיר על היום", `<div class="daily-grid">${grid.join("")}</div>`));
+
+  if (cal.connected) {
+    const week = cal.week || [];
+    const items = week.map((e) => row(`${e.weekday} · ${e.summary}`, e.when));
+    parts.push(section("week", "השבוע שלי", `<div class="daily-card">${listOrEmpty(items, "אין אירועים השבוע ביומן שלכם")}</div>`));
+  }
+
+  if (b.proverb) {
+    parts.push(
+      `<div class="daily-narrative"><div class="label">פתגם היום</div><div class="text">"${esc(b.proverb.text)}"${b.proverb.source ? " — " + esc(b.proverb.source) : ""}</div></div>`
+    );
+  }
+
+  document.getElementById("content").innerHTML = parts.join("");
+  wireScrollSpy();
+
+  try {
+    localStorage.setItem("dailyBriefSeen", b.date || new Date().toISOString().slice(0, 10));
+  } catch { /* localStorage לא זמין */ }
+}
+
+function render(b) {
+  if (b.mode === "client") { renderClient(b); return; }
+  const now = new Date();
+  ensureAvatar();
+  document.getElementById("greeting").textContent = greetingForHour(now.getHours()) + (b.displayName ? ", " + b.displayName : ", חיים");
 
   const heb = b.hebrew || {};
   const sublineParts = [];

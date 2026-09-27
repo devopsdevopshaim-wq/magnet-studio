@@ -169,6 +169,9 @@ app.use((req, res, next) => {
 });
 app.get("/", (req, res, next) => {
   try { require("./lib/analytics").track("/", auth.visitorToken(req)); } catch { /* לא קריטי */ }
+  // לוח הבקרה (index.html) הוא מרכז השליטה האישי של המנהל — n8n, הגרלה, מצב מערכת, אבטחה.
+  // חשבון לקוח (לא-אדמין) מקבל דף בית משלו: המענה היומי (מבוסס על המייל/יומן שהוא-עצמו חיבר).
+  if (req.pnksUser && !req.pnksUser.is_admin) return res.redirect("/daily.html");
   next();
 });
 
@@ -815,8 +818,15 @@ app.get("/api/n8n/inbox", (req, res) => {
 
 app.get("/api/daily-brief", async (req, res) => {
   try {
+    if (!isOwner(req)) {
+      // חשבון לקוח: סיכום אישי מהמייל/יומן שהוא-עצמו חיבר בלבד — בלי נתוני הבעלים
+      const clientBrief = require("./lib/clientBrief");
+      const brief = await clientBrief.build(baseDirFor(req), req.pnksUser.name);
+      return res.json(brief);
+    }
     const refresh = req.query.refresh === "1" || req.query.refresh === "true";
     const brief = await buildBrief({ refresh });
+    if (req.pnksUser) brief.displayName = req.pnksUser.name;
     res.json(brief);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -1743,6 +1753,7 @@ app.get("/api/jobs/boards", (req, res) => {
 });
 
 app.get("/api/jobs/emails", (req, res) => {
+  if (!isOwner(req)) return res.json({ configured: false, byField: {}, items: [] });
   try {
     const status = JSON.parse(fs.readFileSync(EMAIL_STATUS_FILE, "utf8") || "null");
     if (!status) return res.json({ configured: false, byField: {}, items: [] });

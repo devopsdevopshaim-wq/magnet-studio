@@ -17,8 +17,8 @@
     ["AllJobs", function (q) { return "https://www.alljobs.co.il/SearchResultsGuest.aspx?page=1&position=&type=&freetxt=" + encodeURIComponent(q) + "&city=&region="; }],
     ["דרושים", function (q) { return "https://www.drushim.co.il/jobs/search/" + encodeURIComponent(q) + "/"; }],
     ["JobMaster", function (q) { return "https://www.jobmaster.co.il/jobs/?q=" + encodeURIComponent(q); }],
-    ["LinkedIn", function (q) { return "https://www.linkedin.com/jobs/search/?keywords=" + encodeURIComponent(q) + "&location=Israel"; }],
-    ["Indeed", function (q) { return "https://il.indeed.com/jobs?q=" + encodeURIComponent(q); }],
+    ["LinkedIn", function (q) { return "https://www.linkedin.com/jobs/search/?keywords=" + encodeURIComponent(q) + "&location=Israel&sortBy=DD"; }],
+    ["Indeed", function (q) { return "https://il.indeed.com/jobs?q=" + encodeURIComponent(q) + "&sort=date"; }],
     ["Google Jobs", function (q) { return "https://www.google.com/search?q=" + encodeURIComponent(q + " דרושים") + "&ibp=htl;jobs"; }]
   ];
   var FIELD_QUERY = {
