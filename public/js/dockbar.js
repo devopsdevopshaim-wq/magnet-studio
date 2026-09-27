@@ -12,6 +12,12 @@
     l.href = "/css/dockbar.css";
     document.head.appendChild(l);
   }
+  if (!document.querySelector('link[href="/css/nav-icons.css"]')) {
+    const l2 = document.createElement("link");
+    l2.rel = "stylesheet";
+    l2.href = "/css/nav-icons.css";
+    document.head.appendChild(l2);
+  }
 
   // --- מודולים גלובליים: התקנה כאפליקציה + דיבוב קולי בכל עמוד ---
   ["/js/pwa.js", "/js/voice.js", "/js/fx-neural.js"].forEach((src) => {
