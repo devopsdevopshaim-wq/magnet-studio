@@ -1875,6 +1875,24 @@ app.get("/housing/landing", (req, res) => {
   res.type("html").send(html);
 });
 
+// דף "מסע · מערכת לניהול חופשות" — חי ב-repo נפרד (devops-hub/vacation-hub), מוגש דרך
+// raw.githubusercontent.com בלי תלות בהפעלת GitHub Pages. ראו lib/vacationProxy.js.
+app.get("/vacation/landing", async (req, res) => {
+  try {
+    res.type("html").send(await require("./lib/vacationProxy").landingHtml());
+  } catch (err) {
+    res.status(502).send("לא הצלחתי לטעון את אתר החופשות מ-GitHub: " + err.message);
+  }
+});
+app.get(/^\/vacation\/asset\/(.+)$/, async (req, res) => {
+  try {
+    const { buf, contentType } = await require("./lib/vacationProxy").asset(req.params[0]);
+    res.type(contentType).send(buf);
+  } catch (err) {
+    res.status(404).send("קובץ לא נמצא: " + err.message);
+  }
+});
+
 // סריקת Outlook אוטומטית כל 5 דקות - לא דורסת נתונים קיימים אם הסריקה נכשלת (לדוגמה Outlook סגור)
 const OUTLOOK_SCAN_INTERVAL_MS = 5 * 60 * 1000;
 async function runOutlookScan() {

@@ -131,6 +131,16 @@ body.theme-console {
   background-attachment: fixed;
 }
 
+/* חופשות — תכלת-אלמוג "חוף/אוקיינוס", זוהר רך עם נגיעת שקיעה */
+body.theme-travel {
+  --brass: #2fd8d0; --brass-soft: #8ef0ea; --ember: #ff8f6b; --ember-deep: #d95f3e;
+  background-image:
+    radial-gradient(60ch 46ch at 85% -8%, rgba(47, 216, 208, 0.20), transparent 60%),
+    radial-gradient(50ch 44ch at 6% 100%, rgba(255, 143, 107, 0.14), transparent 55%),
+    radial-gradient(70ch 40ch at 50% 40%, rgba(47, 216, 208, 0.06), transparent 60%);
+  background-attachment: fixed;
+}
+
 /* ניהול משתמשים — זהב-ענבר "מפקדה/סמכות", זוהר מרכזי + רשת עדינה */
 body.theme-admin {
   --brass: #ffb020; --brass-soft: #ffd27a; --ember: #ff9500; --ember-deep: #c26e00;
