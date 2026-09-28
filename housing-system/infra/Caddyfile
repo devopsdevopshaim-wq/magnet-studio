@@ -1,0 +1,9 @@
+{$DOMAIN} {
+	encode gzip
+	reverse_proxy n8n:5678
+
+	# rate-limit the public API paths (needs the caddy-ratelimit build in prod;
+	# otherwise enforce in WF04 with a Code node + Redis/DataTable counter)
+	@publicapi path /webhook/search* /webhook/compare* /webhook/mortgage* /webhook/assistant*
+	header @publicapi X-Robots-Tag "noindex"
+}

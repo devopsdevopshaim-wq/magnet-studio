@@ -1241,7 +1241,7 @@ app.post("/api/ambient/add", (req, res) => {
 
 // ---------- תשתית Docker נלווית (לא n8n - כל n8n באפליקציה עובד מול n8n Cloud) ----------
 
-const DIRA_COMPOSE = path.join(__dirname, "..", "housing-system", "infra", "docker-compose.local.yml");
+const DIRA_COMPOSE = path.join(__dirname, "housing-system", "infra", "docker-compose.local.yml");
 
 app.post("/api/housing/stack-up", async (req, res) => {
   const r = await dockerServices.ensureUp(DIRA_COMPOSE, { envFile: ".env.local" });
@@ -1859,7 +1859,7 @@ app.get("/astro/full", (req, res) => {
   res.status(404).send("עמוד הפענוח האסטרולוגי לא נמצא (astrology-system/web/)");
 });
 
-const HOUSING_LANDING = path.join(__dirname, "..", "housing-system", "site", "landing.html");
+const HOUSING_LANDING = path.join(__dirname, "housing-system", "site", "landing.html");
 app.get("/housing/landing", (req, res) => {
   if (!fs.existsSync(HOUSING_LANDING)) {
     return res.status(404).send("דף הנחיתה של DiraFinder לא נמצא (housing-system/site/landing.html)");
