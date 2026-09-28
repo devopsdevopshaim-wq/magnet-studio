@@ -450,7 +450,7 @@
       document.head.appendChild(l);
     }
 
-    const ICON = { email: "✉️", calendar: "📅", note: "📝" };
+    const ICON = { email: "✉️", calendar: "📅", note: "📝", vacation: "✈️" };
     const escN = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
     const ago = (iso) => {
       const min = Math.round((Date.now() - new Date(iso).getTime()) / 60000);

@@ -1893,6 +1893,20 @@ app.get(/^\/vacation\/asset\/(.+)$/, async (req, res) => {
   }
 });
 
+// "החופשות שלי" — עותק שרתי פר-חשבון של localStorage.trips מאתר מסע (מוזרק דרך vacationProxy),
+// כדי שהחופשות ישרדו מעבר למכשיר אחד ו-backgroundSync יוכל להתריע על תאריכים קרובים.
+app.get("/api/vacations/sync", (req, res) => {
+  res.json(require("./lib/vacationTrips").read(baseDirFor(req)));
+});
+app.post("/api/vacations/sync", (req, res) => {
+  try {
+    const trips = Array.isArray(req.body) ? req.body : (req.body && req.body.trips) || [];
+    res.json(require("./lib/vacationTrips").write(baseDirFor(req), trips));
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 // סריקת Outlook אוטומטית כל 5 דקות - לא דורסת נתונים קיימים אם הסריקה נכשלת (לדוגמה Outlook סגור)
 const OUTLOOK_SCAN_INTERVAL_MS = 5 * 60 * 1000;
 async function runOutlookScan() {
