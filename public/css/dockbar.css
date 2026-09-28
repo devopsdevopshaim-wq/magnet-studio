@@ -203,7 +203,7 @@ body.dock-collapsed { padding-bottom: 26px; }
   accent-color: var(--brass);
   cursor: pointer;
 }
-.dock-collapsed .dock-vol, .dock-collapsed .dock-next { display: none; }
+.dock-collapsed .dock-vol, .dock-collapsed .dock-next, .dock-collapsed .dock-video { display: none; }
 
 .dock-collapse {
   flex: none;
@@ -242,7 +242,35 @@ body.dock-collapsed { padding-bottom: 26px; }
 html.pwa-standalone body { padding-bottom: calc(46px + env(safe-area-inset-bottom, 0px)); }
 html.pwa-standalone .dockbar { padding-bottom: env(safe-area-inset-bottom, 0px); height: calc(46px + env(safe-area-inset-bottom, 0px)); }
 
-#dock-yt { position: fixed; width: 0; height: 0; overflow: hidden; left: -9999px; bottom: 0; }
+#dock-yt { position: fixed; width: 0; height: 0; overflow: hidden; left: -9999px; bottom: 0; transition: none; }
+#dock-yt iframe { width: 100% !important; height: 100% !important; display: block; }
+
+/* וידאו מיני — פינה צפה, אפשר לעבור אליה בלי לעצור את הצפייה בשאר האתר */
+body.dock-video-mini #dock-yt {
+  left: auto; inset-inline-end: 16px; bottom: 58px; top: auto;
+  width: min(340px, 42vw); height: min(191px, 24vw);
+  border-radius: 14px; overflow: hidden; z-index: 9990;
+  box-shadow: 0 12px 32px -8px rgba(0,0,0,0.6), 0 0 0 1px var(--line);
+}
+
+/* וידאו מסך מלא — שכבה עליונה, סוגרים בלחיצה על הרקע או על כפתור הסגירה */
+body.dock-video-full { overflow: hidden; }
+body.dock-video-full #dock-yt {
+  left: 0; inset-inline-end: 0; top: 0; bottom: 0;
+  width: 100vw; height: 100vh; z-index: 99990; background: #000;
+}
+.dock-video-backdrop {
+  position: fixed; inset: 0; z-index: 99980; background: rgba(0,0,0,0.86);
+}
+.dock-video-close {
+  position: fixed; top: 18px; inset-inline-end: 18px; z-index: 99991;
+  width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(0,0,0,0.5); color: #fff; font-size: 1.1rem; cursor: pointer;
+}
+.dock-video-close:hover { background: rgba(0,0,0,0.75); }
+
+.dock-video { position: relative; }
+.dock-video.on { color: var(--brass-soft); border-color: var(--brass); }
 
 @media (max-width: 560px) {
   .dock-name { max-width: 96px; }

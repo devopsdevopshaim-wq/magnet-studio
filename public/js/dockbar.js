@@ -101,6 +101,7 @@
       <button class="dock-play" id="dock-play" title="נגן/עצור">▶</button>
       <span class="dock-name" id="dock-name">מוזיקת רקע</span>
       <button class="dock-mood" id="dock-mood" title="מצב רוח מוזיקלי">🎵</button>
+      <button class="dock-video" id="dock-video" title="הצג את הווידאו">📺</button>
       <button class="dock-next" id="dock-next" title="טראק אחר">⏭</button>
       <input type="range" class="dock-vol" id="dock-vol" min="0" max="100" step="1" title="עוצמה">
     </div>
@@ -364,7 +365,7 @@
 
     player = new YT.Player("dock-yt", {
       videoId: current.id,
-      playerVars: { autoplay: 0, controls: 0, disablekb: 1, playsinline: 1, modestbranding: 1, rel: 0, start: Math.floor(startAt) },
+      playerVars: { autoplay: 0, controls: 1, disablekb: 1, playsinline: 1, modestbranding: 1, rel: 0, start: Math.floor(startAt) },
       events: {
         onReady: () => {
           ready = true;
@@ -408,6 +409,64 @@
     const nxt = await fetchNext();
     if (nxt) playTrack(nxt, { autoplay: true });
   });
+
+  // ---------- וידאו: אודיו-בלבד (ברירת מחדל) → מיני (פינה) → מסך מלא ----------
+  let videoMode = "off";
+  let videoBackdrop = null, videoCloseBtn = null;
+
+  function applyVideoSize() {
+    if (!player || !ready) return;
+    const el = $("dock-yt");
+    const r = el.getBoundingClientRect();
+    if (r.width > 0 && r.height > 0) player.setSize(Math.round(r.width), Math.round(r.height));
+  }
+
+  function setVideoMode(mode) {
+    videoMode = mode;
+    document.body.classList.toggle("dock-video-mini", mode === "mini");
+    document.body.classList.toggle("dock-video-full", mode === "full");
+
+    if (mode === "full") {
+      if (!videoBackdrop) {
+        videoBackdrop = document.createElement("div");
+        videoBackdrop.className = "dock-video-backdrop";
+        videoBackdrop.addEventListener("click", () => setVideoMode("mini"));
+        document.body.appendChild(videoBackdrop);
+      }
+      if (!videoCloseBtn) {
+        videoCloseBtn = document.createElement("button");
+        videoCloseBtn.type = "button";
+        videoCloseBtn.className = "dock-video-close";
+        videoCloseBtn.title = "סגירת מסך מלא";
+        videoCloseBtn.textContent = "✕";
+        videoCloseBtn.addEventListener("click", () => setVideoMode("mini"));
+        document.body.appendChild(videoCloseBtn);
+      }
+      videoBackdrop.hidden = false; videoCloseBtn.hidden = false;
+    } else {
+      if (videoBackdrop) videoBackdrop.hidden = true;
+      if (videoCloseBtn) videoCloseBtn.hidden = true;
+    }
+
+    const vb = $("dock-video");
+    if (vb) {
+      vb.classList.toggle("on", mode !== "off");
+      vb.textContent = mode === "full" ? "🔳" : mode === "mini" ? "🖼️" : "📺";
+      vb.title = mode === "off" ? "הצג את הווידאו" : mode === "mini" ? "הגדל למסך מלא" : "חזרה לתצוגה מוקטנת";
+    }
+    requestAnimationFrame(applyVideoSize);
+    setTimeout(applyVideoSize, 260); // אחרי מעבר ה-CSS transition/reflow
+  }
+
+  $("dock-video").addEventListener("click", () => {
+    setVideoMode(videoMode === "off" ? "mini" : videoMode === "mini" ? "full" : "off");
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && videoMode === "full") setVideoMode("mini");
+  });
+
+  window.addEventListener("resize", () => { if (videoMode !== "off") applyVideoSize(); });
 
   $("dock-mood").addEventListener("click", (e) => {
     e.stopPropagation();

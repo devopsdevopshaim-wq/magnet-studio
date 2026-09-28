@@ -72,6 +72,42 @@
       "he": "קלאסי",
       "emoji": "🎻",
       "desc": "קלאסי לריכוז"
+    },
+    {
+      "key": "israeli",
+      "he": "ישראלי",
+      "emoji": "🇮🇱",
+      "desc": "מוזיקה ישראלית · עברית"
+    },
+    {
+      "key": "acoustic",
+      "he": "אקוסטי",
+      "emoji": "🎸",
+      "desc": "פולק · אינדי · גיטרה אקוסטית"
+    },
+    {
+      "key": "edm",
+      "he": "אלקטרונית",
+      "emoji": "🪩",
+      "desc": "EDM · דאנס · האוס עולה"
+    },
+    {
+      "key": "pop",
+      "he": "פופ",
+      "emoji": "⭐",
+      "desc": "להיטים · פופ בינלאומי"
+    },
+    {
+      "key": "rock",
+      "he": "רוק",
+      "emoji": "🤘",
+      "desc": "רוק קלאסי · רוק'נרול"
+    },
+    {
+      "key": "hiphop",
+      "he": "היפ הופ",
+      "emoji": "🎤",
+      "desc": "רפ · R&B · ביטים"
     }
   ],
   "tracks": [
@@ -339,6 +375,96 @@
       "id": "77ZozI0rw7w",
       "title": "Relaxing classical & piano",
       "mood": "classical"
+    },
+    {
+      "id": "famnDaun2hs",
+      "title": "רדיו מוזיקה ישראלית — 24/7 להיטים ללא הפסקה",
+      "mood": "israeli"
+    },
+    {
+      "id": "3rbUQ7nwAhY",
+      "title": "Relax/Chill 24/7 Live Radio — peaceful vibes, acoustic & indie folk",
+      "mood": "acoustic"
+    },
+    {
+      "id": "C74RpJwE4XI",
+      "title": "Calm Your Mind — Relaxing Acoustic Guitar Music (24/7)",
+      "mood": "acoustic"
+    },
+    {
+      "id": "c6JAn-IGX6o",
+      "title": "Indie Folk 24/7 Live Radio — coffeehouse music",
+      "mood": "acoustic"
+    },
+    {
+      "id": "gmv54pfxk0Q",
+      "title": "College Music — 24/7 Live Radio, chilled beats indie",
+      "mood": "acoustic"
+    },
+    {
+      "id": "Pec5ci8gKMg",
+      "title": "EDM Live Radio — 24/7 electro house & club dance",
+      "mood": "edm"
+    },
+    {
+      "id": "blENSl1GTKw",
+      "title": "SYNE Radio — 24/7 dance & house music",
+      "mood": "edm"
+    },
+    {
+      "id": "cJMayL6NN0E",
+      "title": "EDM Radio Live — electronic music & club dance mix",
+      "mood": "edm"
+    },
+    {
+      "id": "whACSpi2zQ8",
+      "title": "Epidemic Electronic — 24/7 future bass, EDM & dance",
+      "mood": "edm"
+    },
+    {
+      "id": "xf9Ejt4OmWQ",
+      "title": "Spinnin' Records — 24/7 live radio, best dance music",
+      "mood": "edm"
+    },
+    {
+      "id": "I4FclAh5dsg",
+      "title": "Dance Hits Live Radio — 24/7 EDM, house & electro mix",
+      "mood": "edm"
+    },
+    {
+      "id": "uOaSXyuvDK4",
+      "title": "Hits Pop Radio — 24/7 non-stop pop hits",
+      "mood": "pop"
+    },
+    {
+      "id": "BHRvPZRDNJ0",
+      "title": "Pop Music Mix — live radio 24/7, best new songs",
+      "mood": "pop"
+    },
+    {
+      "id": "h-0jQ7cis4w",
+      "title": "POP Hits Mix Radio 1 — 24/7 live",
+      "mood": "pop"
+    },
+    {
+      "id": "jKhjCCI1MeU",
+      "title": "Classic Rock Radio — 24/7 live, Lynyrd Skynyrd, The Who, Tom Petty",
+      "mood": "rock"
+    },
+    {
+      "id": "mNgSEOsWDmc",
+      "title": "Rap Radio & Hip-Hop Live — 24/7 stream",
+      "mood": "hiphop"
+    },
+    {
+      "id": "DU97WQY_GLs",
+      "title": "Rap Radio — 24/7 hip hop & R&B",
+      "mood": "hiphop"
+    },
+    {
+      "id": "OB67pohCtAQ",
+      "title": "R&B / Hip Hop Radio — 24/7 live stream",
+      "mood": "hiphop"
     }
   ]
 }
