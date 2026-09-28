@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>עיצוב פנים · HKDAILY</title>
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/tab-themes.css" />
+<style>
+  .int-hero {
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+    margin: 28px 0 24px;
+  }
+  .int-hero h1 { font-family: var(--font-display); font-size: 1.7rem; margin: 0 0 6px; }
+  .int-hero p { color: var(--cream-dim); font-size: 0.9rem; max-width: 560px; line-height: 1.6; margin: 0; }
+  .int-count { font-family: var(--font-mono); font-size: 0.78rem; color: var(--brass-soft); }
+
+  .int-filters { display: flex; flex-direction: column; gap: 10px; margin-bottom: 26px; }
+  .int-filter-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .int-filter-label { font-size: 0.76rem; color: var(--cream-dim); min-width: 52px; }
+  .int-chip {
+    font-family: var(--font-body); font-size: 0.82rem; padding: 7px 15px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--surface-2); color: var(--cream-dim); cursor: pointer;
+    transition: transform 0.15s ease, border-color 0.15s ease, color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+  }
+  .int-chip:hover { transform: translateY(-2px); border-color: var(--brass); color: var(--cream); }
+  .int-chip.on {
+    border-color: var(--brass); color: var(--bg); background: linear-gradient(135deg, var(--brass), var(--ember));
+    box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--brass) 60%, transparent); font-weight: 600;
+  }
+
+  .int-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px;
+    perspective: 1200px;
+  }
+  .int-card {
+    position: relative; border-radius: 16px; overflow: hidden; background: var(--surface);
+    border: 1px solid var(--line); cursor: pointer; opacity: 0; transform: translateY(16px);
+    animation: intIn 0.5s ease forwards;
+    transition: transform 0.35s cubic-bezier(.2,.8,.2,1), box-shadow 0.35s ease, border-color 0.35s ease;
+  }
+  @keyframes intIn { to { opacity: 1; transform: translateY(0); } }
+  .int-card:hover {
+    transform: translateY(-6px) rotateX(2deg) rotateY(-2deg) scale(1.02);
+    box-shadow: 0 22px 44px -16px rgba(0,0,0,0.55), 0 0 0 1px var(--brass);
+    z-index: 2;
+  }
+  .int-card .ph {
+    position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--surface-2);
+  }
+  .int-card img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    filter: saturate(1.08) contrast(1.03);
+    transition: transform 0.5s cubic-bezier(.2,.8,.2,1), filter 0.5s ease;
+  }
+  .int-card:hover img { transform: scale(1.12); filter: saturate(1.2) contrast(1.06) brightness(1.03); }
+  .int-card .ph::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 55%, rgba(0,0,0,0.65) 100%);
+    pointer-events: none;
+  }
+  .int-card .tag {
+    position: absolute; top: 10px; inset-inline-start: 10px; z-index: 1;
+    font-size: 0.68rem; font-family: var(--font-mono); padding: 3px 9px; border-radius: 999px;
+    background: rgba(0,0,0,0.45); color: #fff; backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.18);
+  }
+  .int-card .cap {
+    position: absolute; bottom: 10px; inset-inline-start: 12px; inset-inline-end: 12px; z-index: 1;
+    color: #fff; display: flex; align-items: flex-end; justify-content: space-between; gap: 8px;
+  }
+  .int-card .cap b { font-family: var(--font-display); font-size: 1rem; text-shadow: 0 2px 6px rgba(0,0,0,0.6); }
+  .int-card .cap span { font-size: 0.74rem; opacity: 0.85; }
+  .int-card .full {
+    display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 0.85rem;
+    flex: none; transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .int-card:hover .full { background: var(--brass); transform: scale(1.1); }
+
+  .int-empty { padding: 60px 20px; text-align: center; color: var(--cream-dim); }
+
+  @media (max-width: 560px) {
+    .int-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  }
+</style>
+</head>
+<body class="theme-interior">
+  <header class="top-header">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="24,4 41,14 41,34 24,44 7,34 7,14" stroke="currentColor" stroke-width="2.5"/>
+        <path d="M14 30V18l10-6 10 6v12" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M19 30v-8h10v8" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <h1>עיצוב פנים</h1>
+        <div class="tagline">30 הדמיות מתאר · 6 סגנונות × 5 חדרים</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <button class="btn ghost" onclick="location.href='/'">חזרה ללוח הבקרה</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <a href="/">לוח בקרה</a>
+    <a href="/daily.html">מענה יומי</a>
+    <a href="/jarvis.html">צ'אט AI</a>
+    <a href="/housing.html">דיור</a>
+    <a href="/vacation.html">חופשות</a>
+    <a href="/interior.html" class="active">עיצוב פנים</a>
+    <a href="/jobs.html">דרושים</a>
+    <a href="/finance.html">פיננסים</a>
+    <a href="/health.html">בריאות</a>
+    <a href="/fitness.html">כושר</a>
+    <a href="/devops.html">DevOps</a>
+    <a href="/aia.html">עיצוב AIA</a>
+    <a href="/torah.html">ספריית קודש</a>
+    <a href="/holidays.html">הלכות חגים</a>
+    <a href="/marketing.html">פרסום ושיווק</a>
+    <a href="/logo.html">לוגו</a>
+    <a href="/business.html">ניהול עסק</a>
+    <a href="/social.html">רשתות חברתיות</a>
+    <a href="/tv.html">טלוויזיה</a>
+    <a href="/library.html">אוצר לחג</a>
+    <a href="/device.html">המכשיר</a>
+    <a href="/graphology.html">גרפולוגיה</a>
+    <a href="/astro-full.html">אסטרולוגיה</a>
+    <a href="/editor.html">עורך מסגרות</a>
+    <a href="/mail.html">מיילים</a>
+    <a href="/setup.html">הגדרות</a>
+    <a href="/analytics.html">נתוני שימוש</a>
+  </nav>
+
+  <div class="int-hero">
+    <div>
+      <h1>גלריית הדמיות מתאר</h1>
+      <p>30 הדמיות שנוצרו ב-AI לפי סגנון וחדר — לגלוש, לסנן, ולפתוח כל הדמיה בגודל מלא. מוסיפים סגנון או חדר חדש פשוט על ידי הוספת תמונה לתיקייה — הגלריה מתעדכנת אוטומטית.</p>
+    </div>
+    <div class="int-count" id="int-count"></div>
+  </div>
+
+  <div class="int-filters">
+    <div class="int-filter-row"><span class="int-filter-label">סגנון</span><div class="int-filter-row" id="int-styles"></div></div>
+    <div class="int-filter-row"><span class="int-filter-label">חדר</span><div class="int-filter-row" id="int-rooms"></div></div>
+  </div>
+
+  <div class="int-grid" id="int-grid"></div>
+
+<div class="toast" id="toast"></div>
+<script>
+  const STYLES = [
+    ["scandi", "סקנדינבי"], ["modern", "מודרני"], ["japandi", "ג'פנדי"],
+    ["industrial", "תעשייתי"], ["classic", "קלאסי מודרני"], ["boho", "בוהו"]
+  ];
+  const ROOMS = [
+    ["living", "סלון"], ["kitchen", "מטבח ופינת אוכל"], ["master", "חדר שינה הורים"],
+    ["kid", "חדר ילדים"], ["bath", "חדר רחצה"]
+  ];
+  const CANVA = {
+    "scandi-living":"https://www.canva.com/M/MAHWfKma5zY","scandi-kitchen":"https://www.canva.com/M/MAHWfI39u-g",
+    "scandi-master":"https://www.canva.com/M/MAHWfHtC6mI","scandi-kid":"https://www.canva.com/M/MAHWfKqsK6A",
+    "scandi-bath":"https://www.canva.com/M/MAHWfAjrYgk","modern-living":"https://www.canva.com/M/MAHWfb7_umY",
+    "modern-kitchen":"https://www.canva.com/M/MAHWfa_bGmY","modern-master":"https://www.canva.com/M/MAHWfSRrreg",
+    "modern-kid":"https://www.canva.com/M/MAHWfZaPppM","modern-bath":"https://www.canva.com/M/MAHWfW_NXPU",
+    "japandi-living":"https://www.canva.com/M/MAHWfXwRPm4","japandi-kitchen":"https://www.canva.com/M/MAHWfYgY51c",
+    "japandi-master":"https://www.canva.com/M/MAHWfX6RKp4","japandi-kid":"https://www.canva.com/M/MAHWfdZFVu8",
+    "japandi-bath":"https://www.canva.com/M/MAHWfQisWto","industrial-living":"https://www.canva.com/M/MAHWfYdPg9k",
+    "industrial-kitchen":"https://www.canva.com/M/MAHWfd1t4Yo","industrial-master":"https://www.canva.com/M/MAHWfZTKSWA",
+    "industrial-kid":"https://www.canva.com/M/MAHWfV9Bx2c","industrial-bath":"https://www.canva.com/M/MAHWfQ01Dtk",
+    "classic-living":"https://www.canva.com/M/MAHWfSnnTNU","classic-kitchen":"https://www.canva.com/M/MAHWfd6pC6g",
+    "classic-master":"https://www.canva.com/M/MAHWfcEdWk4","classic-kid":"https://www.canva.com/M/MAHWfclZ1ig",
+    "classic-bath":"https://www.canva.com/M/MAHWfQconIE","boho-living":"https://www.canva.com/M/MAHWff59MuE",
+    "boho-kitchen":"https://www.canva.com/M/MAHWfaUPuBo","boho-master":"https://www.canva.com/M/MAHWfTIrn10",
+    "boho-kid":"https://www.canva.com/M/MAHWfYp7QIo","boho-bath":"https://www.canva.com/M/MAHWfbYC3So"
+  };
+  const styleName = Object.fromEntries(STYLES);
+  const roomName = Object.fromEntries(ROOMS);
+
+  let items = [];
+  for (const [sKey] of STYLES) for (const [rKey] of ROOMS) items.push({ style: sKey, room: rKey, id: `${sKey}-${rKey}` });
+
+  const state = { style: null, room: null };
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  function chipsRow(container, list, key) {
+    container.innerHTML = list.map(([k, label]) =>
+      `<button type="button" class="int-chip${state[key] === k ? " on" : ""}" data-k="${esc(k)}">${esc(label)}</button>`
+    ).join("");
+    container.querySelectorAll(".int-chip").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        state[key] = state[key] === btn.dataset.k ? null : btn.dataset.k;
+        chipsRow(container, list, key);
+        render();
+      });
+    });
+  }
+
+  function render() {
+    const filtered = items.filter((it) => (!state.style || it.style === state.style) && (!state.room || it.room === state.room));
+    $("int-count").textContent = `${filtered.length} הדמיות`;
+    if (!filtered.length) {
+      $("int-grid").innerHTML = `<div class="int-empty">אין הדמיות התואמות לסינון הזה.</div>`;
+      return;
+    }
+    $("int-grid").innerHTML = filtered.map((it, i) => `
+      <div class="int-card" style="animation-delay:${Math.min(i * 35, 400)}ms" data-id="${esc(it.id)}">
+        <div class="ph">
+          <img src="/img/interior/previews/${esc(it.id)}.jpg" alt="${esc(styleName[it.style])} · ${esc(roomName[it.room])}" loading="lazy">
+          <span class="tag">${esc(styleName[it.style])}</span>
+          <div class="cap"><b>${esc(roomName[it.room])}</b><span class="full">⤢</span></div>
+        </div>
+      </div>`
+    ).join("");
+    $("int-grid").querySelectorAll(".int-card").forEach((card) => {
+      card.addEventListener("click", () => {
+        const url = CANVA[card.dataset.id];
+        if (url) window.open(url, "_blank", "noopener");
+      });
+    });
+  }
+
+  chipsRow($("int-styles"), STYLES, "style");
+  chipsRow($("int-rooms"), ROOMS, "room");
+  render();
+</script>
+<script src="/js/dockbar.js" defer></script>
+<script src="/js/share.js" defer></script>
+</body>
+</html>

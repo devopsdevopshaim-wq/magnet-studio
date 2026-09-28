@@ -131,6 +131,15 @@ body.theme-console {
   background-attachment: fixed;
 }
 
+/* עיצוב פנים — חימר-טרה-קוטה חם "אור טבעי בסלון", זוהר עדין וחם */
+body.theme-interior {
+  --brass: #e0925a; --brass-soft: #f0c19a; --ember: #c86a3a; --ember-deep: #96481f;
+  background-image:
+    radial-gradient(60ch 46ch at 85% -8%, rgba(224, 146, 90, 0.20), transparent 60%),
+    radial-gradient(50ch 44ch at 6% 100%, rgba(200, 106, 58, 0.12), transparent 55%);
+  background-attachment: fixed;
+}
+
 /* חופשות — תכלת-אלמוג "חוף/אוקיינוס", זוהר רך עם נגיעת שקיעה */
 body.theme-travel {
   --brass: #2fd8d0; --brass-soft: #8ef0ea; --ember: #ff8f6b; --ember-deep: #d95f3e;

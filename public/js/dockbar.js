@@ -78,7 +78,12 @@
     get collapsed() { try { return localStorage.getItem("dockCollapsed") === "1"; } catch { return false; } },
     set collapsed(v) { try { localStorage.setItem("dockCollapsed", v ? "1" : "0"); } catch {} },
     get mood() { try { return localStorage.getItem("dockMood") || "all"; } catch { return "all"; } },
-    set mood(v) { try { localStorage.setItem("dockMood", v || "all"); } catch {} }
+    set mood(v) { try { localStorage.setItem("dockMood", v || "all"); } catch {} },
+    // מסך מלא לא נשמר בכוונה — פתיחה מלאה אוטומטית בכל ניווט לעמוד חדש תהיה מפתיעה/פולשנית.
+    get videoMode() {
+      try { const v = localStorage.getItem("dockVideoMode"); return v === "mini" ? "mini" : "off"; } catch { return "off"; }
+    },
+    set videoMode(v) { try { localStorage.setItem("dockVideoMode", v === "mini" ? "mini" : "off"); } catch {} }
   };
 
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -411,7 +416,8 @@
   });
 
   // ---------- וידאו: אודיו-בלבד (ברירת מחדל) → מיני (פינה) → מסך מלא ----------
-  let videoMode = "off";
+  // מצב "מיני" נשמר בין דפים (שליטה אמיתית — לא מתאפס כל ניווט); "מסך מלא" תמיד חוזר ל"מיני" בסגירה.
+  let videoMode = LS.videoMode;
   let videoBackdrop = null, videoCloseBtn = null;
 
   function applyVideoSize() {
@@ -423,6 +429,7 @@
 
   function setVideoMode(mode) {
     videoMode = mode;
+    if (mode !== "full") LS.videoMode = mode; // "מלא" תמיד זמני, לא נשמר
     document.body.classList.toggle("dock-video-mini", mode === "mini");
     document.body.classList.toggle("dock-video-full", mode === "full");
 
@@ -430,16 +437,16 @@
       if (!videoBackdrop) {
         videoBackdrop = document.createElement("div");
         videoBackdrop.className = "dock-video-backdrop";
-        videoBackdrop.addEventListener("click", () => setVideoMode("mini"));
+        videoBackdrop.addEventListener("click", () => setVideoMode("off"));
         document.body.appendChild(videoBackdrop);
       }
       if (!videoCloseBtn) {
         videoCloseBtn = document.createElement("button");
         videoCloseBtn.type = "button";
         videoCloseBtn.className = "dock-video-close";
-        videoCloseBtn.title = "סגירת מסך מלא";
+        videoCloseBtn.title = "סגירת הווידאו";
         videoCloseBtn.textContent = "✕";
-        videoCloseBtn.addEventListener("click", () => setVideoMode("mini"));
+        videoCloseBtn.addEventListener("click", () => setVideoMode("off"));
         document.body.appendChild(videoCloseBtn);
       }
       videoBackdrop.hidden = false; videoCloseBtn.hidden = false;
@@ -463,8 +470,11 @@
   });
 
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && videoMode === "full") setVideoMode("mini");
+    if (e.key === "Escape" && videoMode !== "off") setVideoMode("off");
   });
+
+  // שחזור מצב "מיני" שנשמר מעמוד קודם — רק אחרי שהנגן מוכן (צריך current+player).
+  if (videoMode === "mini") setTimeout(() => setVideoMode("mini"), 400);
 
   window.addEventListener("resize", () => { if (videoMode !== "off") applyVideoSize(); });
 

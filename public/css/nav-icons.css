@@ -28,11 +28,24 @@ nav.tabs a {
   background-blend-mode: normal, normal, normal;
   clip-path: none;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+  overflow: hidden;
+  isolation: isolate;
   transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, background 0.16s ease;
 }
 
+/* ברק שחולף באלכסון בהובר — תחושת "זכוכית" חיה */
+nav.tabs a::after {
+  content: "";
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.16) 46%, rgba(255,255,255,0.28) 50%, rgba(255,255,255,0.16) 54%, transparent 70%);
+  transform: translateX(-140%);
+  transition: transform 0.55s cubic-bezier(.2,.7,.3,1);
+}
+nav.tabs a:hover::after { transform: translateX(140%); }
+
 nav.tabs a::before {
   content: "";
+  position: relative; z-index: 1;
   flex: none;
   width: 17px;
   height: 17px;
@@ -41,7 +54,10 @@ nav.tabs a::before {
   background-repeat: no-repeat;
   background-position: center;
   filter: drop-shadow(0 0 3px color-mix(in srgb, var(--nav-accent) 55%, transparent));
+  transition: transform 0.25s cubic-bezier(.3,1.4,.6,1);
 }
+nav.tabs a span, nav.tabs a { position: relative; }
+nav.tabs a:hover::before { transform: scale(1.16) rotate(-4deg); }
 
 nav.tabs a:hover {
   transform: translateY(-2px);
@@ -60,9 +76,18 @@ nav.tabs a.active {
   background:
     linear-gradient(135deg, var(--nav-accent), var(--nav-accent2)),
     var(--surface-2);
-  box-shadow: 0 6px 18px -5px color-mix(in srgb, var(--nav-accent) 60%, transparent);
+  animation: navActiveGlow 2.6s ease-in-out infinite;
 }
 nav.tabs a.active::before { filter: drop-shadow(0 0 3px rgba(0,0,0,0.35)) brightness(0) invert(1); }
+
+@keyframes navActiveGlow {
+  0%, 100% { box-shadow: 0 6px 18px -5px color-mix(in srgb, var(--nav-accent) 60%, transparent); }
+  50% { box-shadow: 0 8px 22px -4px color-mix(in srgb, var(--nav-accent) 80%, transparent); }
+}
+@media (prefers-reduced-motion: reduce) {
+  nav.tabs a.active { animation: none; }
+  nav.tabs a::after, nav.tabs a::before { transition: none; }
+}
 
 /* מפרידי קבוצות — נשמר מהעיצוב הקודם, רק מותאם ללחצנים המעוגלים החדשים */
 nav.tabs a:nth-of-type(3), nav.tabs a:nth-of-type(8), nav.tabs a:nth-of-type(12),
@@ -84,6 +109,10 @@ nav.tabs a[href="/finance.html"], nav.tabs a[href="/business.html"] {
 nav.tabs a[href="/vacation.html"] {
   --nav-accent: #2fd8d0; --nav-accent2: #ff8f6b;
   --nav-pattern: radial-gradient(55% 55% at 30% 10%, rgba(47,216,208,0.22), transparent 70%);
+}
+nav.tabs a[href="/interior.html"] {
+  --nav-accent: #e0925a; --nav-accent2: #c86a3a;
+  --nav-pattern: radial-gradient(55% 55% at 30% 10%, rgba(224,146,90,0.22), transparent 70%);
 }
 nav.tabs a[href="/housing.html"], nav.tabs a[href="/jobs.html"] {
   --nav-accent: #8ba3c7; --nav-accent2: #5f85c4;
@@ -166,6 +195,9 @@ nav.tabs a[href="/jarvis.html"] {
 }
 nav.tabs a[href="/housing.html"] {
   --nav-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238ba3c7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 11l9-7 9 7'/%3E%3Cpath d='M5 10v10h14V10'/%3E%3Cpath d='M10 20v-6h4v6'/%3E%3C/svg%3E");
+}
+nav.tabs a[href="/interior.html"] {
+  --nav-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e0925a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 11V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4'/%3E%3Crect x='3' y='11' width='18' height='7' rx='2'/%3E%3Cpath d='M5 18v2M19 18v2'/%3E%3C/svg%3E");
 }
 nav.tabs a[href="/jobs.html"] {
   --nav-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238ba3c7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='7' width='18' height='12' rx='2'/%3E%3Cpath d='M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'/%3E%3Cpath d='M3 12h18'/%3E%3C/svg%3E");
