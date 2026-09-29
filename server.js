@@ -1875,25 +1875,65 @@ app.get("/housing/landing", (req, res) => {
   res.type("html").send(html);
 });
 
-// דף "מסע · מערכת לניהול חופשות" — חי ב-repo נפרד (devops-hub/vacation-hub), מוגש דרך
-// raw.githubusercontent.com בלי תלות בהפעלת GitHub Pages. ראו lib/vacationProxy.js.
-app.get("/vacation/landing", async (req, res) => {
-  try {
-    res.type("html").send(await require("./lib/vacationProxy").landingHtml());
-  } catch (err) {
-    res.status(502).send("לא הצלחתי לטעון את אתר החופשות מ-GitHub: " + err.message);
+// אתרים חיצוניים שחיים ב-repo נפרד (devops-hub) ומוגשים דרך proxy — ראו lib/hubProxy.js.
+// חופשות ועיצוב פנים כבר מפורסמים ב-GitHub Pages (branch gh-pages); סטודיו הספרים עדיין רק
+// ב-main (טרם סונכרן ל-gh-pages) — ה-proxy שולף ישירות מה-branch הנכון בכל מקרה, בלי תלות
+// בזמינות Pages עצמו.
+const { createHubProxy } = require("./lib/hubProxy");
+
+// "החופשות שלי" באתר מסע נשמר רק ב-localStorage — הסקריפט הזה מוזרק לעמוד ומסנכרן גם
+// ל-/api/vacations/sync (אותו origin דרך ה-proxy) כדי שההרשמה תשרוד מעבר למכשיר אחד
+// ותאפשר ל-backgroundSync להתריע "דקה 90" גם כשהמכשיר כבוי.
+const vacationSyncScript = () => `
+<script>
+(function(){
+  var KEY = "masa.trips";
+  function readLocal(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e){ return []; } }
+  function writeLocal(t){ try { localStorage.setItem(KEY, JSON.stringify(t)); } catch(e){} }
+  var lastSynced = null;
+  function pushIfChanged(){
+    var trips = readLocal();
+    var s = JSON.stringify(trips);
+    if (s === lastSynced) return;
+    lastSynced = s;
+    fetch("/api/vacations/sync", { method: "POST", headers: { "Content-Type": "application/json" }, credentials: "same-origin", body: s }).catch(function(){});
   }
-});
-app.get(/^\/vacation\/asset\/(.+)$/, async (req, res) => {
-  try {
-    const { buf, contentType } = await require("./lib/vacationProxy").asset(req.params[0]);
-    res.type(contentType).send(buf);
-  } catch (err) {
-    res.status(404).send("קובץ לא נמצא: " + err.message);
-  }
+  fetch("/api/vacations/sync", { credentials: "same-origin" }).then(function(r){ return r.json(); }).then(function(data){
+    var serverTrips = (data && data.trips) || [];
+    var local = readLocal();
+    if (!local.length && serverTrips.length) { writeLocal(serverTrips); location.reload(); }
+    else { lastSynced = JSON.stringify(local); }
+  }).catch(function(){});
+  setInterval(pushIfChanged, 4000);
+  window.addEventListener("beforeunload", pushIfChanged);
+})();
+</script>`;
+
+const HUB_SITES = {
+  vacation: createHubProxy({ branch: "gh-pages", basePath: "", proxyPrefix: "/vacation", extraScript: vacationSyncScript }),
+  interior: createHubProxy({ branch: "gh-pages", basePath: "interior", proxyPrefix: "/interior" }),
+  books: createHubProxy({ branch: "main", basePath: "book-studio", proxyPrefix: "/books" })
+};
+
+Object.entries(HUB_SITES).forEach(([key, proxy]) => {
+  app.get(`/${key}/landing`, async (req, res) => {
+    try {
+      res.type("html").send(await proxy.landingHtml());
+    } catch (err) {
+      res.status(502).send("לא הצלחתי לטעון את האתר מ-GitHub: " + err.message);
+    }
+  });
+  app.get(new RegExp(`^/${key}/asset/(.+)$`), async (req, res) => {
+    try {
+      const { buf, contentType } = await proxy.asset(req.params[0]);
+      res.type(contentType).send(buf);
+    } catch (err) {
+      res.status(404).send("קובץ לא נמצא: " + err.message);
+    }
+  });
 });
 
-// "החופשות שלי" — עותק שרתי פר-חשבון של localStorage.trips מאתר מסע (מוזרק דרך vacationProxy),
+// "החופשות שלי" — עותק שרתי פר-חשבון של localStorage.trips מאתר מסע (מוזרק דרך HUB_SITES.vacation),
 // כדי שהחופשות ישרדו מעבר למכשיר אחד ו-backgroundSync יוכל להתריע על תאריכים קרובים.
 app.get("/api/vacations/sync", (req, res) => {
   res.json(require("./lib/vacationTrips").read(baseDirFor(req)));

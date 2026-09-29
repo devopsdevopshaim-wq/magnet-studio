@@ -3,51 +3,55 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>חופשות · HKDAILY</title>
+<title>סטודיו ספרים · HKDAILY</title>
 <link rel="stylesheet" href="/css/style.css" />
 <link rel="stylesheet" href="/css/tab-themes.css" />
 <style>
   body { overflow: hidden; padding-bottom: 0 !important; }
-  .vac-shell { display: flex; flex-direction: column; height: calc(100vh - 46px); }
-  body.dock-collapsed .vac-shell { height: calc(100vh - 26px); }
-  .vac-bar {
+  .bk-shell { display: flex; flex-direction: column; height: calc(100vh - 46px); }
+  body.dock-collapsed .bk-shell { height: calc(100vh - 26px); }
+  .bk-bar {
     display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
     padding: 11px 20px; border-bottom: 1px solid var(--line); background: var(--surface);
   }
-  .vac-bar .brand-mini { font-family: var(--font-display); font-weight: 500; font-size: 1.1rem; color: var(--cream); }
-  .vac-bar nav { display: flex; gap: 2px; flex-wrap: wrap; }
-  .vac-bar nav a {
+  .bk-bar .brand-mini { font-family: var(--font-display); font-weight: 500; font-size: 1.1rem; color: var(--cream); }
+  .bk-bar nav { display: flex; gap: 2px; flex-wrap: wrap; }
+  .bk-bar nav a {
     text-decoration: none; font-size: 0.82rem; font-weight: 500; padding: 5px 12px; color: var(--cream-dim);
     border-bottom: 2px solid transparent;
   }
-  .vac-bar nav a:hover { color: var(--cream); }
-  .vac-bar nav a.active { color: var(--ember); border-bottom-color: var(--ember); }
-  .vac-bar .status-pill {
+  .bk-bar nav a:hover { color: var(--cream); }
+  .bk-bar nav a.active { color: var(--ember); border-bottom-color: var(--ember); }
+  .bk-bar .status-pill {
     margin-inline-start: auto; font-family: var(--font-mono); font-size: 0.74rem;
     padding: 4px 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--cream-dim);
   }
-  .vac-bar .status-pill.up { border-color: var(--sage); color: var(--sage); }
-  .vac-bar .status-pill.down { border-color: var(--danger); color: var(--danger); }
-  .vac-bar button {
+  .bk-bar .status-pill.up { border-color: var(--sage); color: var(--sage); }
+  .bk-bar .status-pill.down { border-color: var(--danger); color: var(--danger); }
+  .bk-bar button {
     font-family: var(--font-body); font-size: 0.76rem; padding: 6px 13px; cursor: pointer;
     background: none; color: var(--cream-dim); border: 1px solid var(--line); border-radius: 2px;
   }
-  .vac-bar button:hover { border-color: var(--brass); color: var(--brass-soft); }
-  iframe#vac { flex: 1; width: 100%; border: 0; background: #f2f3f6; }
+  .bk-bar button:hover { border-color: var(--brass); color: var(--brass-soft); }
+  .bk-note {
+    font-size: 0.76rem; color: var(--cream-dim); padding: 7px 20px; border-bottom: 1px solid var(--line-soft);
+    background: var(--surface-2);
+  }
+  iframe#bk { flex: 1; width: 100%; border: 0; background: #f2f3f6; }
 </style>
 </head>
-<body class="theme-travel">
-<div class="vac-shell">
-  <div class="vac-bar">
-    <span class="brand-mini">חופשות</span>
+<body class="theme-books">
+<div class="bk-shell">
+  <div class="bk-bar">
+    <span class="brand-mini">סטודיו ספרים</span>
     <nav>
       <a href="/">לוח בקרה</a>
       <a href="/daily.html">מענה יומי</a>
       <a href="/jarvis.html">צ'אט AI</a>
       <a href="/housing.html">דיור</a>
-      <a href="/vacation.html" class="active">חופשות</a>
+      <a href="/vacation.html">חופשות</a>
       <a href="/interior.html">עיצוב פנים</a>
-      <a href="/books.html">סטודיו ספרים</a>
+      <a href="/books.html" class="active">סטודיו ספרים</a>
       <a href="/jobs.html">דרושים</a>
       <a href="/finance.html">פיננסים</a>
       <a href="/health.html">בריאות</a>
@@ -65,18 +69,23 @@
       <a href="/device.html">המכשיר</a>
       <a href="/graphology.html">גרפולוגיה</a>
       <a href="/astro-full.html">אסטרולוגיה</a>
+      <a href="/editor.html">עורך מסגרות</a>
+      <a href="/mail.html">מיילים</a>
+      <a href="/setup.html">הגדרות</a>
+      <a href="/analytics.html">נתוני שימוש</a>
     </nav>
     <span class="status-pill" id="status-pill">טוען…</span>
-    <button id="btn-open" onclick="window.open('/vacation/landing','_blank')">פתיחה בחלון</button>
+    <button id="btn-open" onclick="window.open('/books/landing','_blank')">פתיחה בחלון</button>
   </div>
+  <div class="bk-note">מצב "העתק-הדבק": כתיבת פרקים דורשת העתקת הנחיה מוכנה ל-Claude.ai והדבקת התשובה בחזרה — עימוד, תמונות ו-PDF עובדים ישירות באתר. כתיבה אוטומטית מלאה דורשת שרת נפרד עם מפתח Anthropic — אפשר להוסיף בהמשך אם תרצו.</div>
 
-  <iframe id="vac" src="/vacation/landing" title="מסע · מערכת לניהול חופשות"></iframe>
+  <iframe id="bk" src="/books/landing" title="סטודיו לכתיבת ספרים"></iframe>
 </div>
 
 <script>
   const pill = document.getElementById("status-pill");
-  const vac = document.getElementById("vac");
-  vac.addEventListener("load", () => { pill.textContent = "מחובר"; pill.className = "status-pill up"; });
+  const el = document.getElementById("bk");
+  el.addEventListener("load", () => { pill.textContent = "מחובר"; pill.className = "status-pill up"; });
   setTimeout(() => { if (pill.textContent === "טוען…") { pill.textContent = "לא זמין כרגע"; pill.className = "status-pill down"; } }, 12000);
 </script>
 <script src="/js/dockbar.js" defer></script>
