@@ -1,0 +1,60 @@
+/* nav-groups.css — ניווט מקובץ: לשוניות ליבה נשארות שטוחות, שאר הלשוניות מקובצות לפי נושא
+ * (עסקים / עיצוב / יהדות / בריאות וכושר / חיים אישיים) מאחורי כפתור שנפתח לתפריט צף.
+ * מוזרק גלובלית ע"י dockbar.js, שגם בונה מחדש את מבנה ה-DOM של nav.tabs בזמן ריצה.
+ * הלשוניות עצמן (<a>) נשארות אותו אלמנט בדיוק — nav-icons.css ממשיך לעבוד עליהן ללא שינוי.
+ */
+
+nav.tabs.grouped { align-items: flex-start; }
+
+.nav-group { position: relative; }
+
+.nav-group-btn {
+  --mx: 50%; --my: 50%;
+  position: relative;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 14px; border-radius: 12px; cursor: pointer;
+  font-family: var(--font-body); font-size: 0.86rem; color: var(--cream-dim);
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(90px circle at var(--mx) var(--my), rgba(255,255,255,0.14), transparent 65%),
+    var(--surface-2);
+  overflow: hidden;
+  transition: transform 0.16s ease, border-color 0.16s ease, color 0.16s ease, box-shadow 0.16s ease;
+}
+.nav-group-btn:hover { transform: translateY(-2px); border-color: var(--brass); color: var(--cream); }
+.nav-group-btn .e { font-size: 1rem; }
+.nav-group-btn .n {
+  font-family: var(--font-mono); font-size: 0.68rem; color: var(--cream-dim);
+  background: rgba(255,255,255,0.06); border-radius: 999px; padding: 1px 6px;
+}
+.nav-group-btn .caret { font-size: 0.65rem; transition: transform 0.2s ease; opacity: 0.7; }
+.nav-group.open .nav-group-btn .caret { transform: rotate(180deg); }
+
+/* מסמן שהלשונית הפעילה נמצאת בתוך הקטגוריה הזו, גם כשהתפריט סגור */
+.nav-group.has-active .nav-group-btn {
+  border-color: var(--ember); color: var(--ember);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ember) 35%, transparent);
+}
+
+.nav-group-panel {
+  position: absolute; top: calc(100% + 8px); inset-inline-start: 0; z-index: 40;
+  display: flex; flex-direction: column; gap: 6px;
+  min-width: 220px; padding: 10px; border-radius: 14px;
+  background: var(--surface); border: 1px solid var(--line);
+  box-shadow: 0 18px 40px -12px rgba(0,0,0,0.55);
+  opacity: 0; visibility: hidden; transform: translateY(-6px) scale(0.98);
+  transform-origin: top right;
+  transition: opacity 0.16s ease, transform 0.16s cubic-bezier(.2,.8,.2,1), visibility 0s linear 0.16s;
+}
+.nav-group.open .nav-group-panel {
+  opacity: 1; visibility: visible; transform: translateY(0) scale(1);
+  transition: opacity 0.16s ease, transform 0.16s cubic-bezier(.2,.8,.2,1), visibility 0s;
+}
+.nav-group-panel a { width: 100%; }
+
+@media (max-width: 640px) {
+  .nav-group-panel { inset-inline-start: auto; inset-inline-end: 0; min-width: 190px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-group-panel { transition: opacity 0.12s ease; transform: none !important; }
+}

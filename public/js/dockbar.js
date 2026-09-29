@@ -18,6 +18,87 @@
     l2.href = "/css/nav-icons.css";
     document.head.appendChild(l2);
   }
+  if (!document.querySelector('link[href="/css/nav-groups.css"]')) {
+    const l3 = document.createElement("link");
+    l3.rel = "stylesheet";
+    l3.href = "/css/nav-groups.css";
+    document.head.appendChild(l3);
+  }
+
+  // --- ניווט מקובץ: הליבה נשארת שטוחה, השאר מתקבץ לפי נושא מאחורי כפתור נפתח ---
+  // בונה מחדש את ה-DOM של nav.tabs (אותם אלמנטי <a> בדיוק, רק מקובצים) — אם JS לא רץ,
+  // הניווט המקורי השטוח נשאר עובד כרגיל (שום קישור לא נמחק, רק אורגן מחדש).
+  (function groupNav() {
+    const nav = document.querySelector("nav.tabs");
+    if (!nav || nav.dataset.grouped) return;
+    const links = Array.from(nav.children).filter((el) => el.tagName === "A");
+    if (links.length < 6) return; // ניווט קצר מדי לא שווה לקבץ
+
+    const CATS = [
+      { key: "business", label: "עסקים", icon: "💼", hrefs: ["/finance.html", "/devops.html", "/marketing.html", "/business.html", "/social.html", "/device.html", "/jobs.html", "/analytics.html"] },
+      { key: "design", label: "עיצוב", icon: "🎨", hrefs: ["/interior.html", "/books.html", "/aia.html", "/logo.html", "/editor.html"] },
+      { key: "religion", label: "יהדות", icon: "✡️", hrefs: ["/torah.html", "/holidays.html", "/library.html"] },
+      { key: "health", label: "בריאות וכושר", icon: "💪", hrefs: ["/health.html", "/fitness.html"] },
+      { key: "personal", label: "חיים אישיים", icon: "🏡", hrefs: ["/housing.html", "/vacation.html", "/graphology.html", "/astro-full.html", "/tv.html"] }
+    ];
+    const hrefToCat = {};
+    CATS.forEach((c) => c.hrefs.forEach((h) => { hrefToCat[h] = c.key; }));
+
+    const coreLinks = [];
+    const catLinks = {};
+    links.forEach((a) => {
+      const cat = hrefToCat[a.getAttribute("href")];
+      if (cat) (catLinks[cat] = catLinks[cat] || []).push(a);
+      else coreLinks.push(a);
+    });
+    if (Object.keys(catLinks).length < 2) return; // כמעט כלום לקבץ — לא שווה
+
+    nav.dataset.grouped = "1";
+    const frag = document.createDocumentFragment();
+    coreLinks.forEach((a) => frag.appendChild(a));
+
+    CATS.forEach((c) => {
+      const items = catLinks[c.key];
+      if (!items || !items.length) return;
+      const hasActive = items.some((a) => a.classList.contains("active"));
+      const wrap = document.createElement("div");
+      wrap.className = "nav-group" + (hasActive ? " has-active" : "");
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "nav-group-btn";
+      btn.innerHTML = `<span class="e">${c.icon}</span><span class="l">${c.label}</span><span class="n">${items.length}</span><span class="caret">▾</span>`;
+      const panel = document.createElement("div");
+      panel.className = "nav-group-panel";
+      items.forEach((a) => panel.appendChild(a));
+
+      btn.addEventListener("mousemove", (e) => {
+        const r = btn.getBoundingClientRect();
+        btn.style.setProperty("--mx", (e.clientX - r.left) + "px");
+        btn.style.setProperty("--my", (e.clientY - r.top) + "px");
+      });
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const willOpen = !wrap.classList.contains("open");
+        nav.querySelectorAll(".nav-group.open").forEach((g) => { if (g !== wrap) g.classList.remove("open"); });
+        wrap.classList.toggle("open", willOpen);
+      });
+
+      wrap.appendChild(btn);
+      wrap.appendChild(panel);
+      frag.appendChild(wrap);
+    });
+
+    nav.innerHTML = "";
+    nav.appendChild(frag);
+    nav.classList.add("grouped");
+
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".nav-group")) nav.querySelectorAll(".nav-group.open").forEach((g) => g.classList.remove("open"));
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") nav.querySelectorAll(".nav-group.open").forEach((g) => g.classList.remove("open"));
+    });
+  })();
 
   // --- מודולים גלובליים: התקנה כאפליקציה + דיבוב קולי בכל עמוד ---
   ["/js/pwa.js", "/js/voice.js", "/js/fx-neural.js"].forEach((src) => {
